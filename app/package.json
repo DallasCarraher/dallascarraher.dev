@@ -19,6 +19,12 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "CI=true yarn test",
+      "pre-push": "CI=true yarn test"
+    }
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -33,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "husky": "^4.2.5"
   }
 }
