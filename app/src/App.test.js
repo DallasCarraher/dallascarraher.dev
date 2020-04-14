@@ -2,8 +2,8 @@ import React from "react";
 import { render } from "@testing-library/react";
 import App from "./App";
 
-test("renders app and navbar", () => {
+test("renders appBar Title", () => {
   const { getByText } = render(<App />);
-  const navbarTitle = getByText(/Dallas Carraher/i);
-  expect(navbarTitle).toBeInTheDocument();
+  const appBarTitle = getByText(/Dallas Carraher/i);
+  expect(appBarTitle).toBeInTheDocument();
 });

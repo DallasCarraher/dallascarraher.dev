@@ -12,8 +12,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const drawerWidth = 240;
 
@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#6200EE",
+    backgroundColor: "#074DCF",
+    // backgroundColor: "#6200EE",
   },
   drawer: {
     width: drawerWidth,
@@ -39,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  myName: {
+    marginLeft: "1rem",
+  },
 }));
 
 export const Navbar = () => {
@@ -49,7 +53,10 @@ export const Navbar = () => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h3" noWrap>
+            🦦
+          </Typography>
+          <Typography variant="h5" noWrap className={classes.myName}>
             Dallas Carraher
           </Typography>
         </Toolbar>
@@ -64,32 +71,23 @@ export const Navbar = () => {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            {["Home", "Resumé"].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {index % 2 === 0 ? <HomeRoundedIcon /> : <PictureAsPdfIcon />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
           </List>
           <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+          <List></List>
         </div>
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <Typography paragraph>Lorem ipsum</Typography>
-        <Typography paragraph>Consequat mauris</Typography>
+        {/* <Typography paragraph>Lorem ipsum</Typography>
+        <Typography paragraph>Consequat mauris</Typography> */}
       </main>
     </div>
   );
