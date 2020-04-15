@@ -1,12 +1,14 @@
 import React from "react";
-import { Navbar } from "components";
+import { Router } from "@reach/router";
+import { Home, Resume } from "components";
 import "./App.scss";
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-    </div>
+    <Router>
+      <Home path="/" />
+      <Resume path="/resume" />
+    </Router>
   );
 }
 
