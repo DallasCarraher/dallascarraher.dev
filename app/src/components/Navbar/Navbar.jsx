@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Drawer,
@@ -36,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: "auto",
   },
+  links: {
+    textDecoration: "none",
+    color: "gray",
+    "&:hover": { color: "black" },
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -45,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Navbar = () => {
+export const Navbar = ({ children }) => {
   const classes = useStyles();
 
   return (
@@ -71,14 +77,22 @@ export const Navbar = () => {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {["Home", "Resumé"].map((text, index) => (
-              <ListItem button key={text}>
+            <Link to="/" className={classes.links}>
+              <ListItem button key="Home">
                 <ListItemIcon>
-                  {index % 2 === 0 ? <HomeRoundedIcon /> : <PictureAsPdfIcon />}
+                  <HomeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary="Home" />
               </ListItem>
-            ))}
+            </Link>
+            <Link to="/resume" className={classes.links}>
+              <ListItem button key="Resumé">
+                <ListItemIcon>
+                  <PictureAsPdfIcon />
+                </ListItemIcon>
+                <ListItemText primary="Resumé" />
+              </ListItem>
+            </Link>
           </List>
           <Divider />
           <List></List>
@@ -86,8 +100,7 @@ export const Navbar = () => {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        {/* <Typography paragraph>Lorem ipsum</Typography>
-        <Typography paragraph>Consequat mauris</Typography> */}
+        {children}
       </main>
     </div>
   );

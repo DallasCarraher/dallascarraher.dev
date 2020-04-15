@@ -1,0 +1,15 @@
+.resume {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1rem;
+  .resume-right-container {
+    .resume-download-button {
+      height: 2.5rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .resume-img {
+    width: 40rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+}
