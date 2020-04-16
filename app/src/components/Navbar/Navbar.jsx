@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 const drawerWidth = 240;
 
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: "#074DCF",
-    // backgroundColor: "#6200EE",
+    display: "flex",
   },
   drawer: {
     width: drawerWidth,
@@ -37,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: "auto",
   },
+  github: {
+    textDecoration: "none",
+    color: "white",
+    "&:hover": { color: "black" },
+  },
   links: {
     textDecoration: "none",
     color: "gray",
@@ -47,7 +53,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   myName: {
+    fontFamily: "Operator Mono",
     marginLeft: "1rem",
+    flexGrow: 1,
+  },
+  NameLogo: {
+    // flexBasis: 4,
   },
 }));
 
@@ -65,6 +76,14 @@ export const Navbar = ({ children }) => {
           <Typography variant="h5" noWrap className={classes.myName}>
             Dallas Carraher
           </Typography>
+          <a
+            href="https://github.com/dallascarraher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.github}
+          >
+            <GitHubIcon />
+          </a>
         </Toolbar>
       </AppBar>
       <Drawer
