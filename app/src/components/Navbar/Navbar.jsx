@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "@reach/router";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Drawer,
   AppBar,
+  Button,
   CssBaseline,
   Toolbar,
   List,
@@ -16,51 +16,8 @@ import {
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import GitHubIcon from "@material-ui/icons/GitHub";
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#074DCF",
-    display: "flex",
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerContainer: {
-    overflow: "auto",
-  },
-  github: {
-    textDecoration: "none",
-    color: "white",
-    "&:hover": { color: "black" },
-  },
-  links: {
-    textDecoration: "none",
-    color: "gray",
-    "&:hover": { color: "black" },
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  myName: {
-    fontFamily: "Operator Mono",
-    marginLeft: "1rem",
-    flexGrow: 1,
-  },
-  NameLogo: {
-    // flexBasis: 4,
-  },
-}));
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import { useStyles } from "./useStyles";
 
 export const Navbar = ({ children }) => {
   const classes = useStyles();
@@ -70,17 +27,32 @@ export const Navbar = ({ children }) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h3" noWrap>
-            🦦
+          <Link to="/" className={classes.nameLogo}>
+            <Button>
+              <Typography variant="h3" noWrap>
+                🦦
+              </Typography>
+              <Typography variant="h5" noWrap className={classes.myName}>
+                Dallas Carraher
+              </Typography>
+            </Button>
+          </Link>
+          <Typography variant="h6" noWrap className={classes.social}>
+            links
           </Typography>
-          <Typography variant="h5" noWrap className={classes.myName}>
-            Dallas Carraher
-          </Typography>
+          <a
+            href="https://linkedin.com/in/dallascarraher/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.socialLinks}
+          >
+            <LinkedInIcon />
+          </a>
           <a
             href="https://github.com/dallascarraher"
             target="_blank"
             rel="noopener noreferrer"
-            className={classes.github}
+            className={classes.socialLinks}
           >
             <GitHubIcon />
           </a>
