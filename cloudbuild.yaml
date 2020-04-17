@@ -1,12 +1,15 @@
 steps:
   # Install
-  - name: "gcr.io/cloud-builders/npm:node-10.13.0"
+  - name: "node:10.15.1"
+    entrypoint: yarn
     args: ["install"]
 
   # Test
-  - name: "gcr.io/cloud-builders/npm:node-10.13.0"
+  - name: "node:10.15.1"
+    entrypoint: yarn
     args: ["run", "test"]
 
   # Build
-  - name: "gcr.io/cloud-builders/npm:node-10.13.0"
+  - name: "node:10.15.1"
+    entrypoint: yarn
     args: ["run", "build"]
