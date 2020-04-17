@@ -7,7 +7,7 @@ steps:
   # Test
   - name: "node:10.15.1"
     entrypoint: yarn
-    args: ["run", "test"]
+    args: ["run", "test:ci"]
 
   # Build
   - name: "node:10.15.1"
