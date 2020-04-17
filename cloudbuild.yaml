@@ -1,12 +1,12 @@
 steps:
   # Install
-  - name: "gcr.io/cloud-builders/yarn:node-10.10.0"
+  - name: "gcr.io/cloud-builders/yarn:node-12.16.2"
     args: ["install"]
 
   # Test
-  - name: "gcr.io/cloud-builders/yarn:node-10.10.0"
+  - name: "gcr.io/cloud-builders/yarn:node-12.16.2"
     args: ["run", "test"]
 
   # Build
-  - name: "gcr.io/cloud-builders/yarn:node-10.10.0"
+  - name: "gcr.io/cloud-builders/yarn:node-12.16.2"
     args: ["run", "build"]
