@@ -1,0 +1,78 @@
+[debug] [2020-04-19T22:43:43.310Z] ----------------------------------------------------------------------
+[debug] [2020-04-19T22:43:43.311Z] Command:       /Users/dallascarraher/.nvm/versions/node/v12.6.0/bin/node /Users/dallascarraher/.nvm/versions/node/v12.6.0/bin/firebase deploy --debug --token 
+[debug] [2020-04-19T22:43:43.312Z] CLI Version:   8.1.1
+[debug] [2020-04-19T22:43:43.312Z] Platform:      darwin
+[debug] [2020-04-19T22:43:43.312Z] Node Version:  v12.6.0
+[debug] [2020-04-19T22:43:43.314Z] Time:          Sun Apr 19 2020 15:43:43 GMT-0700 (Pacific Daylight Time)
+[debug] [2020-04-19T22:43:43.314Z] ----------------------------------------------------------------------
+[debug] [2020-04-19T22:43:43.314Z] 
+[debug] [2020-04-19T22:43:43.324Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-19T22:43:43.326Z] > authorizing via signed-in user
+[debug] [2020-04-19T22:43:43.326Z] [iam] checking project dcdev-react-components for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-04-19T22:43:43.331Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-19T22:43:43.332Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-19T22:43:43.480Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:43 GMT","server":"scaffolding on HTTPServer2","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-19T22:43:43.495Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/dcdev-react-components:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-04-19T22:43:43.632Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:43 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=46","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-19T22:43:43.633Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/dcdev-react-components  
+ 
+[debug] [2020-04-19T22:43:43.817Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:43 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'dcdev-react-components'...
+[info] 
+[info] i  deploying hosting
+[debug] [2020-04-19T22:43:43.823Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-04-19T22:43:44.593Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:44 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting[dcdev-react-components]: beginning deploy...
+[info] i  hosting[dcdev-react-components]: found 22 files in build
+[debug] [2020-04-19T22:43:44.703Z] [hosting] hash cache [YnVpbGQ] stored for 22 files
+[debug] [2020-04-19T22:43:44.703Z] [hosting][hash queue][FINAL] {"max":81,"min":0,"avg":4.863636363636363,"active":0,"complete":22,"success":22,"errored":0,"retried":0,"total":22,"elapsed":89}
+[debug] [2020-04-19T22:43:44.704Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions/59258ab368800bac:populateFiles  
+ <request body omitted>
+[debug] [2020-04-19T22:43:45.428Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:45 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-19T22:43:45.437Z] [hosting][populate queue][FINAL] {"max":731,"min":731,"avg":731,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":737}
+[debug] [2020-04-19T22:43:45.437Z] [hosting] uploads queued: 5
+[debug] [2020-04-19T22:43:46.603Z] [hosting][upload queue][FINAL] {"max":1174,"min":837,"avg":938.6,"active":0,"complete":5,"success":5,"errored":0,"retried":0,"total":5,"elapsed":1174}
+[info] ✔  hosting[dcdev-react-components]: file upload complete
+[debug] [2020-04-19T22:43:46.605Z] [hosting] deploy completed after 2009ms
+[debug] [2020-04-19T22:43:46.710Z] [
+  {
+    "config": {
+      "public": "build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "dcdev-react-components"
+    },
+    "site": "dcdev-react-components",
+    "version": "sites/dcdev-react-components/versions/59258ab368800bac"
+  }
+]
+[info] i  hosting[dcdev-react-components]: finalizing version...
+[debug] [2020-04-19T22:43:46.711Z] >>> HTTP REQUEST PATCH https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions/59258ab368800bac?updateMask=status  
+ {"status":"FINALIZED"}
+[debug] [2020-04-19T22:43:47.337Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:47 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-19T22:43:47.338Z] [hosting] finalized version for dcdev-react-components: {"name":"sites/dcdev-react-components/versions/59258ab368800bac","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2020-04-19T22:43:44.238751Z","createUser":{"email":"dall133android@gmail.com"},"finalizeTime":"2020-04-19T22:43:47.280116Z","finalizeUser":{"email":"dall133android@gmail.com"}}
+[info] ✔  hosting[dcdev-react-components]: version finalized
+[info] i  hosting[dcdev-react-components]: releasing new version...
+[debug] [2020-04-19T22:43:47.341Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/releases?version_name=sites/dcdev-react-components/versions/59258ab368800bac  
+ {"message":null}
+[debug] [2020-04-19T22:43:47.782Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sun, 19 Apr 2020 22:43:47 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-04-19T22:43:47.782Z] [hosting] release: {"name":"sites/dcdev-react-components/releases/1587336227725475","version":{"name":"sites/dcdev-react-components/versions/59258ab368800bac","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}},"type":"DEPLOY","releaseTime":"2020-04-19T22:43:47Z"}
+[info] ✔  hosting[dcdev-react-components]: release complete
+[info] 
+[info] ✔  Deploy complete!
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/dcdev-react-components/overview
+[info] Hosting URL: https://dcdev-react-components.web.app
