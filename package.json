@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "version": "0.1.0",
+  "name": "dallascarraher.dev",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.10",
@@ -18,13 +18,15 @@
     "start": "react-scripts start --no-cache",
     "build": "react-scripts build",
     "test": "react-scripts test -i",
-    "test:ci": "CI=true react-scripts test",
-    "eject": "react-scripts eject"
+    "test:ci": "CI=true react-scripts test -i",
+    "format": "prettier --write \"src/**/*.js\"",
+    "eject": "react-scripts eject",
+    "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\" "
   },
   "husky": {
     "hooks": {
-      "pre-commit": "CI=true yarn test",
-      "pre-push": "CI=true yarn test"
+      "pre-commit": "yarn run format && CI=true yarn test -i",
+      "pre-push": "CI=true yarn test -i"
     }
   },
   "eslintConfig": {
@@ -43,6 +45,13 @@
     ]
   },
   "devDependencies": {
-    "husky": "^4.2.5"
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "2.5.0",
+    "husky": "^4.2.5",
+    "prettier": "2.0.4"
   }
 }

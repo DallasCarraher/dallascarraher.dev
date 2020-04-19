@@ -1,3 +1,3 @@
 tasks:
   - init: echo "Replace me with a build script for the project."
-    command: cd app && yarn start
+    command: yarn start

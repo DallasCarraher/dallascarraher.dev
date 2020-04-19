@@ -44,11 +44,6 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: "1rem",
     flexGrow: 1,
   },
-  social: {
-    fontFamily: "Operator Mono",
-    marginRight: "1rem",
-    marginBottom: "0.5rem",
-  },
   nameLogo: {
     textDecoration: "none",
     marginLeft: "1rem",
