@@ -1,0 +1,36 @@
+.parent-div {
+  display: flex;
+  flex-direction: row;
+
+  // Profile Section
+  .profile-div {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+
+    .avatar {
+      height: 20rem;
+      width: 16rem;
+    }
+    .sm-icons {
+      vertical-align: text-bottom;
+    }
+    p {
+      margin: 0.25rem;
+    }
+  }
+
+  // Content Section
+  .content-div {
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+
+    .content-div-paper {
+      height: auto;
+      margin-bottom: 1rem;
+      min-width: 20rem;
+      padding: 1.5rem;
+    }
+  }
+}
