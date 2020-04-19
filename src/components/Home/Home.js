@@ -5,7 +5,7 @@ import BusinessIcon from "@material-ui/icons/Business";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 import { Navbar } from "../Navbar/Navbar";
-import AboutMe from "./AboutMe";
+import AboutMe from "./AboutMe/AboutMe";
 import avatar from "img/avatar.png";
 import "./style.scss";
 

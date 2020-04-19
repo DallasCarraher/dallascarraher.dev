@@ -13,3 +13,8 @@ steps:
   - name: "node:10.15.1"
     entrypoint: yarn
     args: ["run", "build"]
+
+  # Deploy
+  - name: "node:10.15.1"
+    entrypoint: yarn
+    args: ["run", "deploy"]

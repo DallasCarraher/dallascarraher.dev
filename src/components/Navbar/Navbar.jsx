@@ -37,16 +37,13 @@ export const Navbar = ({ children }) => {
               </Typography>
             </Button>
           </Link>
-          <Typography variant="h6" noWrap className={classes.social}>
-            links
-          </Typography>
           <a
             href="https://linkedin.com/in/dallascarraher/"
             target="_blank"
             rel="noopener noreferrer"
             className={classes.socialLinks}
           >
-            <LinkedInIcon />
+            <LinkedInIcon fontSize="large" />
           </a>
           <a
             href="https://github.com/dallascarraher"
@@ -54,7 +51,7 @@ export const Navbar = ({ children }) => {
             rel="noopener noreferrer"
             className={classes.socialLinks}
           >
-            <GitHubIcon />
+            <GitHubIcon fontSize="large" />
           </a>
         </Toolbar>
       </AppBar>

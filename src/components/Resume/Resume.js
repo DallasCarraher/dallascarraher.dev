@@ -10,7 +10,9 @@ export default function Resume() {
   return (
     <Navbar>
       <div className="resume">
-        <img src={resume} alt="resume.png" className="resume-img" />
+        <div className="resume-left-container">
+          <img src={resume} alt="resume.png" className="resume-img" />
+        </div>
         <div className="resume-right-container">
           <Button
             startIcon={<CloudDownloadIcon />}
