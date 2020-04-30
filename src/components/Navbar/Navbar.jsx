@@ -1,28 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "@reach/router";
 import {
-  Drawer,
   AppBar,
   Button,
   CssBaseline,
-  Toolbar,
-  List,
-  Typography,
   Divider,
+  Drawer,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Toolbar,
+  Typography,
 } from "@material-ui/core";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import { useStyles } from "./useStyles";
+import { MobileNavbar } from "./MobileNavbar";
 
 export const Navbar = ({ children }) => {
   const classes = useStyles();
+  const getWidth = () => window.innerWidth;
+  const [width, setWidth] = useState(getWidth());
 
-  return (
+  useEffect(() => {
+    const resizeListener = () => {
+      setWidth(getWidth());
+    };
+
+    window.addEventListener("resize", resizeListener);
+
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, []);
+
+  return width < 700 ? (
+    <MobileNavbar children={children} />
+  ) : (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
