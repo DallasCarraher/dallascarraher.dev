@@ -1,11 +1,13 @@
 .parent-div {
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 
   // Profile Section
   .profile-div {
-    display: flex;
-    flex-direction: column;
+    width: 18rem;
     margin: 0.5rem;
 
     .avatar {
@@ -23,8 +25,6 @@
   // Content Section
   .content-div {
     margin: 0.5rem;
-    display: flex;
-    flex-direction: column;
 
     .content-div-paper {
       height: auto;

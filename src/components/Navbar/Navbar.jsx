@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "@reach/router";
 import {
   AppBar,
@@ -17,25 +17,13 @@ import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import { useCheckForMobile } from "utils";
 import { useStyles } from "./useStyles";
 import { MobileNavbar } from "./MobileNavbar";
 
 export const Navbar = ({ children }) => {
   const classes = useStyles();
-  const getWidth = () => window.innerWidth;
-  const [width, setWidth] = useState(getWidth());
-
-  useEffect(() => {
-    const resizeListener = () => {
-      setWidth(getWidth());
-    };
-
-    window.addEventListener("resize", resizeListener);
-
-    return () => {
-      window.removeEventListener("resize", resizeListener);
-    };
-  }, []);
+  const width = useCheckForMobile();
 
   return width < 700 ? (
     <MobileNavbar children={children} />
