@@ -21,6 +21,10 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 import { useMobileStyles } from "./useMobileStyles";
 
 export const MobileNavbar = ({ children }) => {
@@ -65,6 +69,14 @@ export const MobileNavbar = ({ children }) => {
               </Typography>
             </Button>
           </Link>
+          <IconButton
+            aria-label="toggle light/dark mode"
+            component="span"
+            className={classes.modeToggleButton}
+            onClick={() => {}}
+          >
+            <Brightness4Icon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -105,7 +117,34 @@ export const MobileNavbar = ({ children }) => {
           </Link>
         </List>
         <Divider />
-        <List></List>
+        <List>
+          <a
+            href="https://linkedin.com/in/dallascarraher/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.links}
+          >
+            <ListItem button key="linkedIn">
+              <ListItemIcon>
+                <LinkedInIcon />
+              </ListItemIcon>
+              <ListItemText primary="LinkedIn" />
+            </ListItem>
+          </a>
+          <a
+            href="https://github.com/dallascarraher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.links}
+          >
+            <ListItem button key="linkedIn">
+              <ListItemIcon>
+                <GitHubIcon />
+              </ListItemIcon>
+              <ListItemText primary="Github" />
+            </ListItem>
+          </a>
+        </List>
       </Drawer>
       <main
         className={clsx(classes.content, {

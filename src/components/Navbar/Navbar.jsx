@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@reach/router";
+
 import {
   AppBar,
   Button,
@@ -17,6 +18,10 @@ import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import IconButton from "@material-ui/core/IconButton";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+
 import { useCheckForMobile } from "utils";
 import { useStyles } from "./useStyles";
 import { MobileNavbar } from "./MobileNavbar";
@@ -24,6 +29,10 @@ import { MobileNavbar } from "./MobileNavbar";
 export const Navbar = ({ children }) => {
   const classes = useStyles();
   const width = useCheckForMobile();
+
+  const temp = () => {
+    console.log("Hey this worked");
+  };
 
   return width < 700 ? (
     <MobileNavbar children={children} />
@@ -42,22 +51,14 @@ export const Navbar = ({ children }) => {
               </Typography>
             </Button>
           </Link>
-          <a
-            href="https://linkedin.com/in/dallascarraher/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.socialLinks}
+          <IconButton
+            aria-label="toggle light/dark mode"
+            component="span"
+            className={classes.modeToggleButton}
+            onClick={temp}
           >
-            <LinkedInIcon fontSize="large" />
-          </a>
-          <a
-            href="https://github.com/dallascarraher"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.socialLinks}
-          >
-            <GitHubIcon fontSize="large" />
-          </a>
+            <Brightness4Icon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -88,7 +89,34 @@ export const Navbar = ({ children }) => {
             </Link>
           </List>
           <Divider />
-          <List></List>
+          <List>
+            <a
+              href="https://linkedin.com/in/dallascarraher/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.links}
+            >
+              <ListItem button key="linkedIn">
+                <ListItemIcon>
+                  <LinkedInIcon />
+                </ListItemIcon>
+                <ListItemText primary="LinkedIn" />
+              </ListItem>
+            </a>
+            <a
+              href="https://github.com/dallascarraher"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.links}
+            >
+              <ListItem button key="linkedIn">
+                <ListItemIcon>
+                  <GitHubIcon />
+                </ListItemIcon>
+                <ListItemText primary="Github" />
+              </ListItem>
+            </a>
+          </List>
         </div>
       </Drawer>
       <main className={classes.content}>

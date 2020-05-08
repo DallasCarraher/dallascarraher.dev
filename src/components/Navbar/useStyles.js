@@ -21,8 +21,7 @@ export const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: "auto",
   },
-  socialLinks: {
-    marginRight: "1rem",
+  modeToggleButton: {
     textDecoration: "none",
     color: "white",
     "&:hover": { color: "black" },
