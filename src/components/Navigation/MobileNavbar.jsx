@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "@reach/router";
+
 import clsx from "clsx";
-import { useTheme } from "@material-ui/core/styles";
 import {
   AppBar,
   Button,
@@ -25,11 +25,19 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
+
 import { useMobileStyles } from "./useMobileStyles";
+import { useThemeContext, themes } from "utils";
+
+const { LIGHT, DARK } = themes;
 
 export const MobileNavbar = ({ children }) => {
-  const classes = useMobileStyles();
-  const theme = useTheme();
+  const [themeContext, dispatch] = useThemeContext();
+  const { theme } = themeContext;
+
+  const toggleTheme = () =>
+    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT });
+
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -39,6 +47,9 @@ export const MobileNavbar = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const styles = useMobileStyles(theme);
+  const classes = styles();
 
   return (
     <div className={classes.root}>
@@ -73,9 +84,9 @@ export const MobileNavbar = ({ children }) => {
             aria-label="toggle light/dark mode"
             component="span"
             className={classes.modeToggleButton}
-            onClick={() => {}}
+            onClick={toggleTheme}
           >
-            <Brightness4Icon />
+            {theme === LIGHT ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -102,7 +113,7 @@ export const MobileNavbar = ({ children }) => {
           <Link to="/" className={classes.links}>
             <ListItem button key="Home">
               <ListItemIcon>
-                <HomeRoundedIcon />
+                <HomeRoundedIcon className={classes.icons} />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
@@ -110,7 +121,7 @@ export const MobileNavbar = ({ children }) => {
           <Link to="/resume" className={classes.links}>
             <ListItem button key="Resumé">
               <ListItemIcon>
-                <PictureAsPdfIcon />
+                <PictureAsPdfIcon className={classes.icons} />
               </ListItemIcon>
               <ListItemText primary="Resumé" />
             </ListItem>
@@ -126,7 +137,7 @@ export const MobileNavbar = ({ children }) => {
           >
             <ListItem button key="linkedIn">
               <ListItemIcon>
-                <LinkedInIcon />
+                <LinkedInIcon className={classes.icons} />
               </ListItemIcon>
               <ListItemText primary="LinkedIn" />
             </ListItem>
@@ -139,7 +150,7 @@ export const MobileNavbar = ({ children }) => {
           >
             <ListItem button key="linkedIn">
               <ListItemIcon>
-                <GitHubIcon />
+                <GitHubIcon className={classes.icons} />
               </ListItemIcon>
               <ListItemText primary="Github" />
             </ListItem>

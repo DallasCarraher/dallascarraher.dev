@@ -22,20 +22,25 @@ import IconButton from "@material-ui/core/IconButton";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 
-import { useCheckForMobile } from "utils";
+import { useThemeContext, themes, useCheckForMobile } from "utils";
 import { useStyles } from "./useStyles";
 import { MobileNavbar } from "./MobileNavbar";
 
-export const Navbar = ({ children }) => {
-  const classes = useStyles();
-  const width = useCheckForMobile();
+const { LIGHT, DARK } = themes;
 
-  const temp = () => {
-    console.log("Hey this worked");
-  };
+export const Navigation = ({ children }) => {
+  const width = useCheckForMobile();
+  const [themeContext, dispatch] = useThemeContext();
+  const { theme } = themeContext;
+
+  const toggleTheme = () =>
+    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT });
+
+  const styles = useStyles(theme);
+  const classes = styles();
 
   return width < 700 ? (
-    <MobileNavbar children={children} />
+    <MobileNavbar children={children} theme={theme} />
   ) : (
     <div className={classes.root}>
       <CssBaseline />
@@ -55,9 +60,9 @@ export const Navbar = ({ children }) => {
             aria-label="toggle light/dark mode"
             component="span"
             className={classes.modeToggleButton}
-            onClick={temp}
+            onClick={toggleTheme}
           >
-            <Brightness4Icon />
+            {theme === LIGHT ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -74,7 +79,7 @@ export const Navbar = ({ children }) => {
             <Link to="/" className={classes.links}>
               <ListItem button key="Home">
                 <ListItemIcon>
-                  <HomeRoundedIcon />
+                  <HomeRoundedIcon className={classes.icons} />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
               </ListItem>
@@ -82,7 +87,7 @@ export const Navbar = ({ children }) => {
             <Link to="/resume" className={classes.links}>
               <ListItem button key="Resumé">
                 <ListItemIcon>
-                  <PictureAsPdfIcon />
+                  <PictureAsPdfIcon className={classes.icons} />
                 </ListItemIcon>
                 <ListItemText primary="Resumé" />
               </ListItem>
@@ -98,7 +103,7 @@ export const Navbar = ({ children }) => {
             >
               <ListItem button key="linkedIn">
                 <ListItemIcon>
-                  <LinkedInIcon />
+                  <LinkedInIcon className={classes.icons} />
                 </ListItemIcon>
                 <ListItemText primary="LinkedIn" />
               </ListItem>
@@ -111,7 +116,7 @@ export const Navbar = ({ children }) => {
             >
               <ListItem button key="linkedIn">
                 <ListItemIcon>
-                  <GitHubIcon />
+                  <GitHubIcon className={classes.icons} />
                 </ListItemIcon>
                 <ListItemText primary="Github" />
               </ListItem>
@@ -127,4 +132,4 @@ export const Navbar = ({ children }) => {
   );
 };
 
-export default Navbar;
+export default Navigation;
