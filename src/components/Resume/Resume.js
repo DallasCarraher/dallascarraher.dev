@@ -1,14 +1,14 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-import { Navbar } from "../Navbar/Navbar";
+import { Navigation } from "../Navigation/Navigation";
 import resume from "img/resume.png";
 import pdf from "./Resume.pdf";
 import "./style.scss";
 
 export default function Resume() {
   return (
-    <Navbar>
+    <Navigation>
       <div className="resume">
         <div className="resume-left-container">
           <img src={resume} alt="resume.png" className="resume-img" />
@@ -26,6 +26,6 @@ export default function Resume() {
           </Button>
         </div>
       </div>
-    </Navbar>
+    </Navigation>
   );
 }
