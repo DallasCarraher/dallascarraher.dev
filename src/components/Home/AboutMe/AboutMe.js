@@ -6,14 +6,17 @@ export default function AboutMe() {
     <div data-testid="posts" className="about-me">
       <h2>About Me</h2>
       <p>
-        Experienced Software Engineer with a demonstrated history of working in
-        modern full stack environments.
+        Experienced Software Engineer with a demonstrated history of working
+        full stack
       </p>
       <p>Skilled in: </p>
       <ul>
-        <li> JavaScript, React, Redux </li>
-        <li> Spring (Java), C# </li>
-        <li> AWS (DynamoDB, EC2, Lambda, RDS) & GCP equivalents.</li>
+        <li> JavaScript, Typescript, React, React Native, Redux </li>
+        <li> Java (Spring) </li>
+        <li>
+          {" "}
+          AWS (DynamoDB, EC2, Lambda, RDS) & Google Cloud Platform equivalents.
+        </li>
       </ul>
       <p>
         Strong engineering professional with a Bachelor of Science focused in
