@@ -46,7 +46,11 @@ export default function Home() {
                   href="https://vuejs.org/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontWeight: "bold", textDecoration: "none" }}
+                  style={{
+                    fontWeight: "bold",
+                    textDecoration: "none",
+                    color: theme === LIGHT ? "black" : "white",
+                  }}
                 >
                   Vue
                 </a>{" "}
@@ -57,7 +61,11 @@ export default function Home() {
                   href="https://dallascarraher.github.io/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontWeight: "bold", textDecoration: "none" }}
+                  style={{
+                    fontWeight: "bold",
+                    textDecoration: "none",
+                    color: theme === LIGHT ? "black" : "white",
+                  }}
                 >
                   {" "}
                   Take a look.
