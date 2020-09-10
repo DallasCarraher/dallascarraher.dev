@@ -12,15 +12,16 @@ export default function AboutMe() {
       <p>Skilled in: </p>
       <ul>
         <li> JavaScript, Typescript, React, React Native, Redux </li>
-        <li> Java (Spring) </li>
+        <li> Java (Spring), Node (express) </li>
+        <li> AWS (DynamoDB, RDS, EC2) & Google Cloud Platform equivalents.</li>
         <li>
-          {" "}
-          AWS (DynamoDB, EC2, Lambda, RDS) & Google Cloud Platform equivalents.
+          I really enjoy firebase. I use that for most personal projects
+          (including this site).
         </li>
       </ul>
       <p>
-        Strong engineering professional with a Bachelor of Science focused in
-        Business Information Systems from Oregon State University.
+        I'm a Strong engineering professional with a Bachelor of Science focused
+        in Business Information Systems from Oregon State University.
       </p>
     </div>
   );
