@@ -38,8 +38,30 @@ export default function Home() {
               <AboutMe />
             </Paper>
             <Paper className={theme === LIGHT ? "paper-light" : "paper-dark"}>
-              <p style={{ textAlign: "center" }}>
-                I'll probably put something here soon ...
+              <h2>What I'm doing right now</h2>
+              <p style={{ textAlign: "left", fontSize: "16px" }}>
+                Currently outside of work I'm working on a personal project
+                using{" "}
+                <a
+                  href="https://vuejs.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontWeight: "bold", textDecoration: "none" }}
+                >
+                  Vue
+                </a>{" "}
+                for the first time. I'm creating a markdown editor for myself
+                and friends. Feel free to create an account and login to try it
+                yourself.
+                <a
+                  href="https://dallascarraher.github.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontWeight: "bold", textDecoration: "none" }}
+                >
+                  {" "}
+                  Take a look.
+                </a>
               </p>
             </Paper>
           </div>
