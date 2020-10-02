@@ -78,7 +78,7 @@ export default function Home() {
               <p style={{ textAlign: "left", fontSize: "16px" }}>
                 • I also just purchased Kent Dodd's new workshop package{" "}
                 <a
-                  href="https://dallascarraher.github.io/"
+                  href="https://epicreact.dev/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
