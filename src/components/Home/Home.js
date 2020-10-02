@@ -38,10 +38,14 @@ export default function Home() {
               <AboutMe />
             </Paper>
             <Paper className={theme === LIGHT ? "paper-light" : "paper-dark"}>
-              <h2>What I'm doing right now</h2>
+              <h2>
+                What I've been up to...{" "}
+                <span role="img" aria-label="thinking-face">
+                  🤔
+                </span>
+              </h2>
               <p style={{ textAlign: "left", fontSize: "16px" }}>
-                Currently outside of work I'm working on a personal project
-                using{" "}
+                • Outside of work I've been working on a personal project using{" "}
                 <a
                   href="https://vuejs.org/"
                   target="_blank"
@@ -68,7 +72,23 @@ export default function Home() {
                   }}
                 >
                   {" "}
-                  Take a look.
+                  Click here to check it out
+                </a>
+              </p>
+              <p style={{ textAlign: "left", fontSize: "16px" }}>
+                • I also just purchased Kent Dodd's new workshop package{" "}
+                <a
+                  href="https://dallascarraher.github.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontWeight: "bold",
+                    textDecoration: "none",
+                    color: theme === LIGHT ? "black" : "white",
+                  }}
+                >
+                  {" "}
+                  Epic React
                 </a>
               </p>
             </Paper>

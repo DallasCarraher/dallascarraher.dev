@@ -4,25 +4,27 @@ import "./style.scss";
 export default function AboutMe() {
   return (
     <div data-testid="posts" className="about-me">
-      <h2>About Me</h2>
-      <p>
-        Experienced Software Engineer with a demonstrated history of working
-        full stack
-      </p>
+      <h1>About Me</h1>
+      <p>Experienced Front-end Software Engineer</p>
       <p>Skilled in: </p>
       <ul>
-        <li> JavaScript, Typescript, React, React Native, Redux </li>
-        <li> Java (Spring), Node (express) </li>
+        <li> JavaScript, Typescript, React, React Native </li>
+        <li> Node & express, GraphQL </li>
         <li> AWS (DynamoDB, RDS, EC2) & Google Cloud Platform equivalents.</li>
-        <li>
-          I really enjoy firebase. I use that for most personal projects
-          (including this site).
-        </li>
+        <ul>
+          <li>
+            Firebase is also really cool <RocketEmoji />. I use it for most
+            personal projects (including this site).
+          </li>
+        </ul>
       </ul>
-      <p>
-        I'm a Strong engineering professional with a Bachelor of Science focused
-        in Business Information Systems from Oregon State University.
-      </p>
+      <p>I have a BS in Information Systems from Oregon State University.</p>
     </div>
   );
 }
+
+const RocketEmoji = () => (
+  <span role="img" aria-label="rocket">
+    🚀
+  </span>
+);

@@ -178,3 +178,77 @@
 [info] 
 [info] Project Console: https://console.firebase.google.com/project/dcdev-react-components/overview
 [info] Hosting URL: https://dcdev-react-components.web.app
+[debug] [2020-09-10T23:16:29.492Z] ----------------------------------------------------------------------
+[debug] [2020-09-10T23:16:29.493Z] Command:       /usr/local/Cellar/node/14.5.0/bin/node /usr/local/bin/firebase deploy --debug --token 
+[debug] [2020-09-10T23:16:29.493Z] CLI Version:   8.10.0
+[debug] [2020-09-10T23:16:29.493Z] Platform:      darwin
+[debug] [2020-09-10T23:16:29.494Z] Node Version:  v14.5.0
+[debug] [2020-09-10T23:16:29.494Z] Time:          Thu Sep 10 2020 16:16:29 GMT-0700 (Pacific Daylight Time)
+[debug] [2020-09-10T23:16:29.495Z] ----------------------------------------------------------------------
+[debug] [2020-09-10T23:16:29.495Z] 
+[debug] [2020-09-10T23:16:29.499Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-09-10T23:16:29.500Z] > authorizing via signed-in user
+[debug] [2020-09-10T23:16:29.501Z] [iam] checking project dcdev-react-components for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-09-10T23:16:29.503Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/dcdev-react-components:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-09-10T23:16:29.654Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:29 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=59","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-09-10T23:16:29.656Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/dcdev-react-components  
+ 
+[debug] [2020-09-10T23:16:29.814Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:29 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'dcdev-react-components'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2020-09-10T23:16:29.817Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-09-10T23:16:30.456Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:30 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting[dcdev-react-components]: beginning deploy... 
+[info] i  hosting[dcdev-react-components]: found 22 files in build 
+[debug] [2020-09-10T23:16:30.587Z] [hosting] hash cache [YnVpbGQ] stored for 22 files
+[debug] [2020-09-10T23:16:30.587Z] [hosting][hash queue][FINAL] {"max":115,"min":10,"avg":19.136363636363637,"active":0,"complete":22,"success":22,"errored":0,"retried":0,"total":22,"elapsed":121}
+[debug] [2020-09-10T23:16:30.587Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions/53414e238ba10a15:populateFiles  
+ <request body omitted>
+[debug] [2020-09-10T23:16:31.134Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:31 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-09-10T23:16:31.137Z] [hosting][populate queue][FINAL] {"max":549,"min":549,"avg":549,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":551}
+[debug] [2020-09-10T23:16:31.138Z] [hosting] uploads queued: 6
+[debug] [2020-09-10T23:16:32.145Z] [hosting][upload queue][FINAL] {"max":1011,"min":837,"avg":935.3333333333334,"active":0,"complete":6,"success":6,"errored":0,"retried":0,"total":6,"elapsed":1011}
+[info] ✔  hosting[dcdev-react-components]: file upload complete 
+[debug] [2020-09-10T23:16:32.146Z] [hosting] deploy completed after 1689ms
+[debug] [2020-09-10T23:16:32.236Z] [
+  {
+    "config": {
+      "public": "build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "dcdev-react-components"
+    },
+    "site": "dcdev-react-components",
+    "version": "sites/dcdev-react-components/versions/53414e238ba10a15"
+  }
+]
+[info] i  hosting[dcdev-react-components]: finalizing version... 
+[debug] [2020-09-10T23:16:32.237Z] >>> HTTP REQUEST PATCH https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/versions/53414e238ba10a15?updateMask=status  
+ {"status":"FINALIZED"}
+[debug] [2020-09-10T23:16:32.687Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:32 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-09-10T23:16:32.687Z] [hosting] finalized version for dcdev-react-components: {"name":"sites/dcdev-react-components/versions/53414e238ba10a15","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2020-09-10T23:16:30.226823Z","createUser":{"email":"dall133android@gmail.com"},"finalizeTime":"2020-09-10T23:16:32.701527Z","finalizeUser":{"email":"dall133android@gmail.com"}}
+[info] ✔  hosting[dcdev-react-components]: version finalized 
+[info] i  hosting[dcdev-react-components]: releasing new version... 
+[debug] [2020-09-10T23:16:32.688Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/dcdev-react-components/releases?version_name=sites/dcdev-react-components/versions/53414e238ba10a15  
+ {"message":null}
+[debug] [2020-09-10T23:16:33.136Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Sep 2020 23:16:33 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-09-10T23:16:33.136Z] [hosting] release: {"name":"sites/dcdev-react-components/releases/1599779792577258","version":{"name":"sites/dcdev-react-components/versions/53414e238ba10a15","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2020-09-10T23:16:30.226823Z","createUser":{"email":"dall133android@gmail.com"},"finalizeTime":"2020-09-10T23:16:32.701527Z","finalizeUser":{"email":"dall133android@gmail.com"},"preview":{}},"type":"DEPLOY","releaseTime":"2020-09-10T23:16:32.577258794Z","releaseUser":{"email":"dall133android@gmail.com"}}
+[info] ✔  hosting[dcdev-react-components]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/dcdev-react-components/overview
+[info] Hosting URL: https://dcdev-react-components.web.app
