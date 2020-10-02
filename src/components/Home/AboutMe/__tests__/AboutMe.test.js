@@ -6,6 +6,6 @@ test("renders AboutMe Section", () => {
   const { getByTestId } = render(<AboutMe />);
   const { getByText } = within(getByTestId("posts"));
   const aboutMeHeader = getByText(/About Me/i);
-  const aboutMeParagraph = getByText(/Experienced Software/i);
+  const aboutMeParagraph = getByText(/Experienced Front-end/i);
   expect(aboutMeHeader && aboutMeParagraph).toBeInTheDocument();
 });
