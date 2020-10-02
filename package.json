@@ -15,7 +15,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start --no-cache",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test -i",
     "test:ci": "CI=true react-scripts test -i",
