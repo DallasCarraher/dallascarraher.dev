@@ -7,7 +7,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { useThemeState, themes } from "utils";
 import { Navigation } from "../Navigation/Navigation";
 import AboutMe from "./AboutMe/AboutMe";
-import avatar from "img/avatar.png";
+import avatar from "img/avatar.jpg";
 import "./style.scss";
 
 const { LIGHT } = themes;
