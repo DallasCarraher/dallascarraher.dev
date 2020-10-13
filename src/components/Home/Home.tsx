@@ -57,7 +57,7 @@ export default function Home() {
                     color: theme === LIGHT ? "black" : "white",
                   }}
                 >
-                  markdown ✍️
+                  markdown <span role="img" aria-label="hand-writing">✍️</span>
                 </a>
               </p>
               <p style={{ textAlign: "left", fontSize: "16px" }}>
@@ -73,7 +73,7 @@ export default function Home() {
                   }}
                 >
                   {" "}
-                  Epic React ⚛️
+                  Epic React <span role="img" aria-label="atom">⚛️</span>
                 </a>
               </p>
               <p style={{ textAlign: "left", fontSize: "16px" }}>
