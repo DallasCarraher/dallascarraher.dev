@@ -21,6 +21,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import WebIcon from '@material-ui/icons/Web';
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
@@ -72,8 +73,8 @@ export const MobileNavbar = ({ children }) => {
           </IconButton>
           <Link to="/" className={classes.nameLogo}>
             <Button>
-              <Typography variant="h3" noWrap>
-                🦦
+              <Typography variant="h4" noWrap>
+                <span role="img" aria-label="rocket">🚀</span>
               </Typography>
               <Typography variant="h6" noWrap className={classes.myName}>
                 Dallas Carraher
@@ -126,6 +127,14 @@ export const MobileNavbar = ({ children }) => {
               <ListItemText primary="Resumé" />
             </ListItem>
           </Link>
+          <Link to="/blog" className={classes.links}>
+              <ListItem button key="Blog">
+                <ListItemIcon>
+                  <WebIcon className={classes.icons} />
+                </ListItemIcon>
+                <ListItemText primary="Blog" />
+              </ListItem>
+            </Link>
         </List>
         <Divider />
         <List>

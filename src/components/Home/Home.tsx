@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@reach/router";
 import { Card, CardContent, Paper } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
 import BusinessIcon from "@material-ui/icons/Business";
@@ -13,6 +14,7 @@ import "./style.scss";
 const { LIGHT } = themes;
 
 export default function Home() {
+  document.title = "Dallas Carraher";
   const codeIcon = <CodeIcon fontSize="small" className="sm-icons" />;
   const companyIcon = <BusinessIcon fontSize="small" className="sm-icons" />;
   const locationIcon = <LocationOnIcon fontSize="small" className="sm-icons" />;
@@ -20,16 +22,15 @@ export default function Home() {
   const { theme } = useThemeState();
 
   return (
-    <div>
       <Navigation>
         <div className="parent-div">
           <div data-testid="profile" className="profile-div">
             <Card className={theme === LIGHT ? "card-light" : "card-dark"}>
               <CardContent>
                 <img src={avatar} alt="Dallas Carraher" className="avatar" />
-                <p> {codeIcon} Software Engineer</p>
+                <p> {codeIcon} Front-end Engineer</p>
                 <p> {companyIcon} CDK Global</p>
-                <p> {locationIcon} Portland, OR</p>
+                <p> {locationIcon} Hillsboro, OR</p>
               </CardContent>
             </Card>
           </div>
@@ -45,22 +46,7 @@ export default function Home() {
                 </span>
               </h2>
               <p style={{ textAlign: "left", fontSize: "16px" }}>
-                • Outside of work I've been working on a personal project using{" "}
-                <a
-                  href="https://vuejs.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontWeight: "bold",
-                    textDecoration: "none",
-                    color: theme === LIGHT ? "black" : "white",
-                  }}
-                >
-                  Vue
-                </a>{" "}
-                for the first time. I'm creating a markdown editor for myself
-                and friends. Feel free to create an account and login to try it
-                yourself.
+                • {" "}
                 <a
                   href="https://dallascarraher.github.io/"
                   target="_blank"
@@ -71,12 +57,11 @@ export default function Home() {
                     color: theme === LIGHT ? "black" : "white",
                   }}
                 >
-                  {" "}
-                  Click here to check it out
+                  markdown ✍️
                 </a>
               </p>
               <p style={{ textAlign: "left", fontSize: "16px" }}>
-                • I also just purchased Kent Dodd's new workshop package{" "}
+                • Learning a lot from{" "}
                 <a
                   href="https://epicreact.dev/"
                   target="_blank"
@@ -88,13 +73,15 @@ export default function Home() {
                   }}
                 >
                   {" "}
-                  Epic React
+                  Epic React ⚛️
                 </a>
+              </p>
+              <p style={{ textAlign: "left", fontSize: "16px" }}>
+                • Working on my <Link to="blog" style={{textDecoration: 'none', color: 'black', fontWeight: 'bold'}}>Blog</Link>
               </p>
             </Paper>
           </div>
         </div>
       </Navigation>
-    </div>
   );
 }
