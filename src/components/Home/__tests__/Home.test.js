@@ -10,9 +10,9 @@ test("renders Home Tab Profile Card Content", () => {
     </ThemeProvider>
   );
   const { getByText } = within(getByTestId("profile"));
-  const profilePositionElement = getByText(/Software Engineer/i);
+  const profilePositionElement = getByText(/Engineer/i);
   const profileCompanyElement = getByText(/CDK Global/i);
-  const profileLocationElement = getByText(/Portland, OR/i);
+  const profileLocationElement = getByText(/OR/i);
   expect(
     profilePositionElement && profileCompanyElement && profileLocationElement
   ).toBeInTheDocument();
