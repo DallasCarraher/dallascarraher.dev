@@ -11,7 +11,7 @@ export default function Blog() {
   return (
     <Navigation>
       <h2 className={theme === LIGHT ? "light" : "dark"}>
-        Hello, welcome to my blog page. I'm going to do something here soon.
+        {"Hello, welcome to my blog page. I'm going to do something here soon."}
       </h2>
     </Navigation>
   );

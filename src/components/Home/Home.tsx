@@ -7,9 +7,9 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 import { useThemeState, themes } from "utils";
 import { Navigation } from "../common/Navigation/Navigation";
-import AboutMe from "./AboutMe/AboutMe";
+import AboutMe from "./AboutMe";
 import avatar from "img/avatar.jpg";
-import "./style.scss";
+import "./home.scss";
 
 const { LIGHT } = themes;
 
@@ -40,7 +40,7 @@ export default function Home() {
           </Paper>
           <Paper className={theme === LIGHT ? "paper-light" : "paper-dark"}>
             <h2>
-              What I've been up to...{" "}
+              {"What I've been up to... "}
               <span role="img" aria-label="thinking-face">
                 🤔
               </span>

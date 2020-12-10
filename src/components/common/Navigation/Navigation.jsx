@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import WebIcon from '@material-ui/icons/Web';
+import WebIcon from "@material-ui/icons/Web";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import IconButton from "@material-ui/core/IconButton";
@@ -41,7 +41,7 @@ export const Navigation = ({ children }) => {
   const classes = styles();
 
   return width < 700 ? (
-    <MobileNavbar children={children} theme={theme} />
+    <MobileNavbar theme={theme}>{children}</MobileNavbar>
   ) : (
     <div className={classes.root}>
       <CssBaseline />
@@ -50,7 +50,9 @@ export const Navigation = ({ children }) => {
           <Link to="/" className={classes.nameLogo}>
             <Button>
               <Typography variant="h4" noWrap>
-                <span role="img" aria-label="rocket">🚀</span>
+                <span role="img" aria-label="rocket">
+                  🚀
+                </span>
               </Typography>
               <Typography variant="h5" noWrap className={classes.myName}>
                 Dallas Carraher
