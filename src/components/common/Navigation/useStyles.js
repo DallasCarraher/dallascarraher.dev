@@ -1,19 +1,19 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { themes } from "utils";
+import { makeStyles } from '@material-ui/core/styles'
+import { themes } from 'utils'
 
-const { LIGHT } = themes;
-const drawerWidth = 240;
+const { LIGHT } = themes
+const drawerWidth = 240
 
 export const useStyles = (theme) =>
   theme === LIGHT
     ? makeStyles((theme) => ({
         root: {
-          display: "flex",
+          display: 'flex',
         },
         appBar: {
           zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: "#074DCF",
-          display: "flex",
+          backgroundColor: '#074DCF',
+          display: 'flex',
         },
         drawer: {
           width: drawerWidth,
@@ -23,46 +23,46 @@ export const useStyles = (theme) =>
           width: drawerWidth,
         },
         drawerContainer: {
-          overflow: "auto",
+          overflow: 'auto',
         },
         modeToggleButton: {
-          textDecoration: "none",
-          color: "white",
-          "&:hover": { color: "#303030" },
+          textDecoration: 'none',
+          color: 'white',
+          '&:hover': { color: '#303030' },
         },
         links: {
-          textDecoration: "none",
-          color: "gray",
-          "&:hover": { color: "#303030" },
+          textDecoration: 'none',
+          color: 'gray',
+          '&:hover': { color: '#303030' },
         },
         content: {
           flexGrow: 1,
           padding: theme.spacing(3),
         },
         myName: {
-          textTransform: "none",
-          fontFamily: "Operator Mono",
-          color: "white",
-          marginBottom: "0.5rem",
-          marginLeft: "1rem",
+          textTransform: 'none',
+          fontFamily: 'Operator Mono',
+          color: 'white',
+          marginBottom: '0.5rem',
+          marginLeft: '1rem',
           flexGrow: 1,
         },
         nameLogo: {
-          textDecoration: "none",
-          marginLeft: "1rem",
+          textDecoration: 'none',
+          marginLeft: '1rem',
           flexGrow: 1,
         },
       }))
     : // Dark Mode
       makeStyles((theme) => ({
         root: {
-          display: "flex",
-          height: "100vh",
+          display: 'flex',
+          height: '100vh',
         },
         appBar: {
           zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: "#074DCF",
-          display: "flex",
+          backgroundColor: '#074DCF',
+          display: 'flex',
         },
         drawer: {
           width: drawerWidth,
@@ -70,43 +70,43 @@ export const useStyles = (theme) =>
         },
         drawerPaper: {
           width: drawerWidth,
-          backgroundColor: "#424242",
+          backgroundColor: '#424242',
         },
         drawerContainer: {
-          overflow: "auto",
+          overflow: 'auto',
         },
         modeToggleButton: {
-          textDecoration: "none",
-          color: "white",
-          "&:hover": { color: "#4791db" },
+          textDecoration: 'none',
+          color: 'white',
+          '&:hover': { color: '#4791db' },
         },
         links: {
-          textDecoration: "none",
-          color: "gray",
-          "&:hover": { color: "white" },
+          textDecoration: 'none',
+          color: 'gray',
+          '&:hover': { color: 'white' },
         },
         icons: {
-          color: "white",
+          color: 'white',
         },
         content: {
           flexGrow: 1,
           padding: theme.spacing(3),
-          backgroundColor: "#303030",
-          height: "100%",
+          backgroundColor: '#303030',
+          height: '100%',
         },
         myName: {
-          textTransform: "none",
-          fontFamily: "Operator Mono",
-          color: "white",
-          marginBottom: "0.5rem",
-          marginLeft: "1rem",
+          textTransform: 'none',
+          fontFamily: 'Operator Mono',
+          color: 'white',
+          marginBottom: '0.5rem',
+          marginLeft: '1rem',
           flexGrow: 1,
         },
         nameLogo: {
-          textDecoration: "none",
-          marginLeft: "1rem",
+          textDecoration: 'none',
+          marginLeft: '1rem',
           flexGrow: 1,
         },
-      }));
+      }))
 
-export default useStyles;
+export default useStyles

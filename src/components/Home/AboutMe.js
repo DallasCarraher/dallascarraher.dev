@@ -1,5 +1,5 @@
-import React from "react";
-import "./aboutme.scss";
+import React from 'react'
+import './aboutme.scss'
 
 export default function AboutMe() {
   return (
@@ -20,11 +20,11 @@ export default function AboutMe() {
       </ul>
       <p>I have a BS in Information Systems from Oregon State University.</p>
     </div>
-  );
+  )
 }
 
 const RocketEmoji = () => (
   <span role="img" aria-label="rocket">
     🚀
   </span>
-);
+)

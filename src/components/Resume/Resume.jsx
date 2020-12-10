@@ -1,10 +1,10 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-import { Navigation } from "../common/Navigation/Navigation";
-import resume from "img/resume.png";
-import pdf from "./Resume.pdf";
-import "./style.scss";
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
+import { Navigation } from '../common/Navigation/Navigation'
+import resume from 'img/resume.png'
+import pdf from './Resume.pdf'
+import './style.scss'
 
 export default function Resume() {
   return (
@@ -27,5 +27,5 @@ export default function Resume() {
         </div>
       </div>
     </Navigation>
-  );
+  )
 }

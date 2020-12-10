@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "@reach/router";
+import React from 'react'
+import { Link } from '@reach/router'
 
 import {
   AppBar,
@@ -13,32 +13,32 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-} from "@material-ui/core";
-import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import WebIcon from "@material-ui/icons/Web";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import LinkedInIcon from "@material-ui/icons/LinkedIn";
-import IconButton from "@material-ui/core/IconButton";
-import Brightness7Icon from "@material-ui/icons/Brightness7";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
+} from '@material-ui/core'
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded'
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf'
+import WebIcon from '@material-ui/icons/Web'
+import GitHubIcon from '@material-ui/icons/GitHub'
+import LinkedInIcon from '@material-ui/icons/LinkedIn'
+import IconButton from '@material-ui/core/IconButton'
+import Brightness7Icon from '@material-ui/icons/Brightness7'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
 
-import { useThemeContext, themes, useCheckForMobile } from "utils";
-import { useStyles } from "./useStyles";
-import { MobileNavbar } from "./MobileNavbar";
+import { useThemeContext, themes, useCheckForMobile } from 'utils'
+import { useStyles } from './useStyles'
+import { MobileNavbar } from './MobileNavbar'
 
-const { LIGHT, DARK } = themes;
+const { LIGHT, DARK } = themes
 
 export const Navigation = ({ children }) => {
-  const width = useCheckForMobile();
-  const [themeContext, dispatch] = useThemeContext();
-  const { theme } = themeContext;
+  const width = useCheckForMobile()
+  const [themeContext, dispatch] = useThemeContext()
+  const { theme } = themeContext
 
   const toggleTheme = () =>
-    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT });
+    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT })
 
-  const styles = useStyles(theme);
-  const classes = styles();
+  const styles = useStyles(theme)
+  const classes = styles()
 
   return width < 700 ? (
     <MobileNavbar theme={theme}>{children}</MobileNavbar>
@@ -140,7 +140,7 @@ export const Navigation = ({ children }) => {
         {children}
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Navigation;
+export default Navigation
