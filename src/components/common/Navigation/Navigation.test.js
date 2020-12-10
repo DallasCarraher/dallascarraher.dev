@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { ThemeProvider } from "utils";
-import Navigation from "../Navigation";
+import Navigation from "./Navigation";
 
 test("renders navigation", () => {
   const { getByText } = render(
