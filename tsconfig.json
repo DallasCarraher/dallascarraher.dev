@@ -4,10 +4,7 @@
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react-jsx",
@@ -27,9 +24,7 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "build",
@@ -40,7 +35,5 @@
     "jest",
     "src/setupTests.ts"
   ],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }

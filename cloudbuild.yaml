@@ -1,19 +1,19 @@
 steps:
   # Install
-  - name: "node:10.15.1"
+  - name: 'node:10.15.1'
     entrypoint: yarn
-    args: ["install"]
+    args: ['install']
 
   # Test
-  - name: "node:10.15.1"
+  - name: 'node:10.15.1'
     entrypoint: yarn
-    args: ["run", "test:ci"]
+    args: ['run', 'test:ci']
 
   # Build
-  - name: "node:10.15.1"
+  - name: 'node:10.15.1'
     entrypoint: yarn
-    args: ["run", "build"]
+    args: ['run', 'build']
 
   # Deploy
-  - name: "gcr.io/$PROJECT_ID/firebase"
-    args: ["deploy"]
+  - name: 'gcr.io/$PROJECT_ID/firebase'
+    args: ['deploy']

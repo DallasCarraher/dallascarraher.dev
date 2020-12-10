@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "@reach/router";
+import React, { useState } from 'react'
+import { Link } from '@reach/router'
 
-import clsx from "clsx";
+import clsx from 'clsx'
 import {
   AppBar,
   Button,
@@ -14,43 +14,43 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-} from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import WebIcon from '@material-ui/icons/Web';
-import GitHubIcon from "@material-ui/icons/GitHub";
-import LinkedInIcon from "@material-ui/icons/LinkedIn";
-import Brightness7Icon from "@material-ui/icons/Brightness7";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
+} from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded'
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf'
+import WebIcon from '@material-ui/icons/Web'
+import GitHubIcon from '@material-ui/icons/GitHub'
+import LinkedInIcon from '@material-ui/icons/LinkedIn'
+import Brightness7Icon from '@material-ui/icons/Brightness7'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
 
-import { useMobileStyles } from "./useMobileStyles";
-import { useThemeContext, themes } from "utils";
+import { useMobileStyles } from './useMobileStyles'
+import { useThemeContext, themes } from 'utils'
 
-const { LIGHT, DARK } = themes;
+const { LIGHT, DARK } = themes
 
 export const MobileNavbar = ({ children }) => {
-  const [themeContext, dispatch] = useThemeContext();
-  const { theme } = themeContext;
+  const [themeContext, dispatch] = useThemeContext()
+  const { theme } = themeContext
 
   const toggleTheme = () =>
-    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT });
+    theme === LIGHT ? dispatch({ value: DARK }) : dispatch({ value: LIGHT })
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  const styles = useMobileStyles(theme);
-  const classes = styles();
+  const styles = useMobileStyles(theme)
+  const classes = styles()
 
   return (
     <div className={classes.root}>
@@ -74,7 +74,9 @@ export const MobileNavbar = ({ children }) => {
           <Link to="/" className={classes.nameLogo}>
             <Button>
               <Typography variant="h4" noWrap>
-                <span role="img" aria-label="rocket">🚀</span>
+                <span role="img" aria-label="rocket">
+                  🚀
+                </span>
               </Typography>
               <Typography variant="h6" noWrap className={classes.myName}>
                 Dallas Carraher
@@ -102,7 +104,7 @@ export const MobileNavbar = ({ children }) => {
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
+            {theme.direction === 'ltr' ? (
               <ChevronRightIcon />
             ) : (
               <ChevronLeftIcon />
@@ -128,13 +130,13 @@ export const MobileNavbar = ({ children }) => {
             </ListItem>
           </Link>
           <Link to="/blog" className={classes.links}>
-              <ListItem button key="Blog">
-                <ListItemIcon>
-                  <WebIcon className={classes.icons} />
-                </ListItemIcon>
-                <ListItemText primary="Blog" />
-              </ListItem>
-            </Link>
+            <ListItem button key="Blog">
+              <ListItemIcon>
+                <WebIcon className={classes.icons} />
+              </ListItemIcon>
+              <ListItemText primary="Blog" />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
         <List>
@@ -175,5 +177,5 @@ export const MobileNavbar = ({ children }) => {
         {children}
       </main>
     </div>
-  );
-};
+  )
+}
