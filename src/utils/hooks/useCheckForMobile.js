@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 
 export default function useCheckForMobile() {
-  const getWidth = () => window.innerWidth;
-  const [width, setWidth] = useState(getWidth());
+  const [width, setWidth] = useState(() => window.innerWidth);
 
   useEffect(() => {
     const resizeListener = () => {
-      setWidth(getWidth());
+      setWidth(() => window.innerWidth);
     };
 
     window.addEventListener("resize", resizeListener);
