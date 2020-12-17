@@ -20,7 +20,7 @@ function App() {
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <GlobalStyles />
       <Router>
-        <NewHome path="/" toggleTheme={toggleTheme} />
+        <NewHome path="/" toggleTheme={toggleTheme} theme={theme} />
         {/* <Home path="/" /> */}
         {/* <Resume path="/resume" /> */}
         {/* <Blog path="/blog" /> */}
