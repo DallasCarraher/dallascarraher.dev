@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test -i",
+    "test": "react-scripts test",
     "test:ci": "CI=true react-scripts test -i",
     "format": "prettier --write \"src/**/*.js\"",
     "deploy": "firebase deploy --debug --token \"$FIREBASE_TOKEN\" "
