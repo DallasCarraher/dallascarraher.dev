@@ -1,4 +1,4 @@
-export { default as useCheckForMobile } from './hooks/useCheckForMobile'
+export { default as useCheckForMobile } from './useCheckForMobile'
 export {
   themes,
   useThemeContext,

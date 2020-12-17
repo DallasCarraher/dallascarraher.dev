@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
-import { Navigation } from '../common/Navigation/Navigation'
+import { Navigation } from '../../common/Navigation/Navigation'
 import resume from 'img/resume.png'
 import pdf from './Resume.pdf'
 import './style.scss'
