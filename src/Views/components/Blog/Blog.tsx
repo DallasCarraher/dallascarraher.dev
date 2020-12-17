@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigation } from '../common/Navigation/Navigation'
+import { Navigation } from '../../common/Navigation/Navigation'
 import { useThemeState, themes } from 'utils'
 import './style.scss'
 
