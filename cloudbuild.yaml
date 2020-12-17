@@ -1,17 +1,17 @@
 steps:
   # Install
-  - name: 'node:10.15.1'
-    entrypoint: yarn
+  - name: 'node:14.15.1'
+    entrypoint: npm
     args: ['install']
 
   # Test
-  - name: 'node:10.15.1'
-    entrypoint: yarn
+  - name: 'node:14.15.1'
+    entrypoint: npm
     args: ['run', 'test:ci']
 
   # Build
-  - name: 'node:10.15.1'
-    entrypoint: yarn
+  - name: 'node:14.15.1'
+    entrypoint: npm
     args: ['run', 'build']
 
   # Deploy
