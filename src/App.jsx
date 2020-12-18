@@ -1,16 +1,17 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
-import { GlobalStyles, darkTheme, lightTheme } from './theme'
+import { GlobalStyles, darkTheme, lightTheme, useTheme } from './theme'
 import { Router } from '@reach/router'
 import { NewHome } from 'Views/components'
-// import { ThemeProvider } from "utils";
 
 function App() {
   document.title = 'Dallas Carraher'
-  const [theme, setTheme] = React.useState(() => localStorage.getItem('theme'))
+
+  const [state, dispatch] = useTheme()
+  const { theme } = state
 
   const toggleTheme = () =>
-    theme === 'light' ? setTheme('dark') : setTheme('light')
+    theme === 'light' ? dispatch('dark') : dispatch('light')
 
   React.useEffect(() => {
     localStorage.setItem('theme', theme)
@@ -21,9 +22,6 @@ function App() {
       <GlobalStyles />
       <Router>
         <NewHome path="/" toggleTheme={toggleTheme} theme={theme} />
-        {/* <Home path="/" /> */}
-        {/* <Resume path="/resume" /> */}
-        {/* <Blog path="/blog" /> */}
       </Router>
     </ThemeProvider>
   )

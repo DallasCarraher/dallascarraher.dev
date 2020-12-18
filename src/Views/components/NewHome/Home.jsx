@@ -1,12 +1,14 @@
 import React from 'react'
+import styles from './Home.module.css'
 import IconButton from '@material-ui/core/IconButton'
 import { default as DarkThemeIcon } from '@material-ui/icons/Brightness7'
 import { default as LightThemeIcon } from '@material-ui/icons/Brightness4'
-import styles from './Home.module.css'
+import { Header } from '../Header'
 
 export function NewHome({ toggleTheme, theme }) {
   return (
     <>
+      <Header />
       <div className={styles.themeIcon}>
         <IconButton
           aria-label="toggle light/dark mode"
