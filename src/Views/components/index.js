@@ -1,1 +1,1 @@
-export { NewHome } from './NewHome/Home.jsx'
+export { Home } from './Home/Home.jsx'
