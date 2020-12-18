@@ -3,7 +3,7 @@ import { render, within } from '@testing-library/react'
 import { ThemeProvider } from 'utils'
 import Home from '../Home'
 
-test('renders Home Tab Profile Card Content', () => {
+test.skip('renders Home Tab Profile Card Content', () => {
   const { getByTestId } = render(
     <ThemeProvider>
       <Home />
