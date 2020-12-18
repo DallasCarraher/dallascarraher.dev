@@ -19,9 +19,9 @@ export function ThemeIconButton() {
       onClick={toggleTheme}
     >
       {theme === 'light' ? (
-        <DarkThemeIcon style={{ color: 'black' }} />
+        <DarkThemeIcon style={{ color: '#363537' }} />
       ) : (
-        <LightThemeIcon style={{ color: 'white' }} />
+        <LightThemeIcon style={{ color: '#FAFAFA' }} />
       )}
     </IconButton>
   )
