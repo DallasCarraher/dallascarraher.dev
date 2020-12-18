@@ -11,6 +11,9 @@
 # production
 /build
 
+#vscode
+.vscode
+
 # firebase
 .firebase
 firebase-debug.log
