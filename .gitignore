@@ -12,7 +12,7 @@
 /build
 
 # firebase
-.firebase*
+.firebase
 firebase-debug.log
 
 # misc
