@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 import { ThemeProvider } from 'utils'
 import Navigation from './Navigation'
 
-test('renders navigation', () => {
+test.skip('renders navigation', () => {
   const { getByText } = render(
     <ThemeProvider>
       <Navigation />
