@@ -1,14 +1,22 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Header } from './Header'
-import styles from './Home.module.css'
+
+const Announcement = styled.h1`
+  user-select: none;
+  margin-top: 200px;
+  text-align: center;
+`
 
 export function Home() {
   return (
     <>
       <Header />
-      <h1 className={styles.message}>
-        Re-writing my site right now, please bear with 😅
-      </h1>
+      <section>
+        <Announcement>
+          Re-writing my site right now, please bear with 😅
+        </Announcement>
+      </section>
     </>
   )
 }
