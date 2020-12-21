@@ -6,7 +6,7 @@ import BusinessIcon from '@material-ui/icons/Business'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 
 import { useThemeState, themes } from 'utils'
-import { Navigation } from '../../common/Navigation/Navigation'
+import { Navigation } from '../Navigation/Navigation'
 import AboutMe from './AboutMe'
 import avatar from 'img/avatar.jpg'
 import './home.scss'
