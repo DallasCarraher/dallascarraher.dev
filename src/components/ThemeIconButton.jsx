@@ -14,10 +14,9 @@ export function ThemeIconButton() {
 
   return (
     <IconButton
-      style={{ backgroundColor: 'transparent' }}
+      style={{ padding: 30 }}
       aria-label="toggle light/dark mode"
       component="span"
-      disableRipple
       onClick={toggleTheme}
     >
       {theme === 'light' ? (

@@ -2,7 +2,7 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyles, darkTheme, lightTheme, useTheme } from './theme'
 import { Router } from '@reach/router'
-import { Home } from 'Views/components'
+import { Home } from 'components'
 
 function App() {
   document.title = 'Dallas Carraher'
