@@ -47,7 +47,7 @@ const InfoLine = styled.p`
 
 export function Profile() {
   return (
-    <Card margin="30px" width="350px">
+    <Card margin="30px" maxWidth="350px">
       <Avatar src={picture} />
       <MyName>Dallas Carraher</MyName>
       <InfoSection>
