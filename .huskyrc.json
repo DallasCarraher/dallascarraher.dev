@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "pre-commit": "npm run format",
+    "pre-push": "CI=true npm test"
+  }
+}
