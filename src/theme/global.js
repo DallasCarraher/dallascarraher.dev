@@ -14,7 +14,9 @@ export const GlobalStyles = createGlobalStyle`
     ${'' /* display: flex; */}
     ${'' /* flex-direction: column; */}
     ${'' /* justify-content: center; */}
-    height: 100vh;
+    height: 100%;
+    ${'' /* Really not sure why this is necessary... */}
+    width: 99%;
     margin: 0;
     padding: 0;
     font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
