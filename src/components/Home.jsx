@@ -1,43 +1,44 @@
 import React from 'react'
 import styled from 'styled-components'
-// import { Flex } from './Flex'
+import { Flex } from './Flex'
 import { Profile } from './Profile'
 import { Nav } from './Nav'
 import { Card } from './Card'
 
-const Layout = styled.section`
-  display: ${(props) => props.display || 'flex'};
-  flex-direction: ${(props) => props.flexDirection};
-  flex-wrap: nowrap;
-  @media (max-width: 960px) {
-    flex-wrap: wrap;
-  }
-  align-items: ${(props) => props.alignItems || 'left'};
-  text-align: ${(props) => props.textAlign || 'center'};
-  justify-content: ${(props) => props.justifyContent || 'center'};
-  width: ${(props) => props.width || '100%'};
-  padding: ${(props) => props.padding || '10px'};
-`
-
 const Announcement = styled.h1`
   user-select: none;
-  text-align: center;
+`
+
+const Divider = styled.div`
+  border-left: ${(props) => `solid ${props.theme.text} 5px`};
+  border-radius: 20px;
 `
 
 export function Home() {
   return (
-    <Layout flexDirection="column">
-      <Layout flexDirection="column" alignItems="center">
+    <>
+      <Flex alignItems="center">
         <Nav />
-      </Layout>
-      <Layout>
-        <Profile />
-        <Card margin="30px" maxWidth="800px">
-          <Announcement>
-            Re-writing my site right now, please bear with 😅
-          </Announcement>
-        </Card>
-      </Layout>
-    </Layout>
+      </Flex>
+      <Flex>
+        <Flex
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="center"
+          maxWidth="500px"
+        >
+          <Profile />
+        </Flex>
+        <Flex direction="row" justifyContent="flex-start" w="10%">
+          <Divider />
+        </Flex>
+        <Flex direction="column" alignItems="center" m="30px">
+          <Card margin="30px" maxWidth="800px">
+            <Announcement>Still working on my site 👍</Announcement>
+            <Announcement>Thanks for taking a peek though!</Announcement>
+          </Card>
+        </Flex>
+      </Flex>
+    </>
   )
 }

@@ -1,25 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { func, element, string, bool } from 'prop-types'
-
-const FONT_SIZE = {
-  SMALL: '16px',
-  MEDIUM: '24px',
-  LARGE: '36px',
-}
-
-const getFontSize = (size) => {
-  switch (size) {
-    case 'small':
-      return FONT_SIZE.SMALL
-    case 'medium':
-      return FONT_SIZE.MEDIUM
-    case 'large':
-      return FONT_SIZE.LARGE
-    default:
-      return FONT_SIZE.SMALL
-  }
-}
+import { func, string, bool, any } from 'prop-types'
+import getFontSize from 'utils/getFontSize'
 
 const StyledButton = styled.button`
   color: ${(props) => props.theme.text};
@@ -59,13 +41,14 @@ export const Button = ({ children, onClick, size, disabled }) => {
 }
 
 Button.propTypes = {
-  children: element.isRequired,
-  onClick: func.isRequired,
+  children: any.isRequired,
+  onClick: func,
   size: string,
   disabled: bool,
 }
 
 Button.defaultProps = {
+  onClick: () => {},
   size: 'small',
   disabled: false,
 }
