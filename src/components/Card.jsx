@@ -6,6 +6,7 @@ const StyledCard = styled.div`
   display: flex;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
+  text-align: ${(props) => props.textAlign};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   width: ${(props) => props.width};
@@ -23,6 +24,7 @@ export const Card = (props) => {
     <StyledCard
       flexDirection={props.direction}
       alignItems={props.alignItems}
+      textAlign={props.textAlign}
       margin={props.m}
       padding={props.p}
       width={props.width}
@@ -37,6 +39,7 @@ Card.propTypes = {
   children: oneOfType([arrayOf(element), element]),
   direction: string,
   alignItems: string,
+  textAlign: string,
   m: string,
   p: string,
   width: string,
@@ -47,6 +50,7 @@ Card.defaultProps = {
   children: React.createElement('div'),
   direction: 'column',
   alignItems: 'center',
+  textAlign: 'center',
   m: '10px',
   p: '10px',
   width: '100%',

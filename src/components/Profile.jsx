@@ -30,7 +30,7 @@ const InfoSection = styled.div`
 `
 
 const InfoLine = styled.p`
-  font-size: 16px;
+  font-size: 20px;
 `
 
 export const Profile = () => (
