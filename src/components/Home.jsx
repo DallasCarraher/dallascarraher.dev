@@ -4,6 +4,7 @@ import { Flex } from './Flex'
 import { Profile } from './Profile'
 import { Nav } from './Nav'
 import { Card } from './Card'
+import useCheckForMobile from './useCheckForMobile'
 
 const Announcement = styled.h1`
   user-select: none;
@@ -29,9 +30,11 @@ export function Home() {
         >
           <Profile />
         </Flex>
-        <Flex direction="row" justifyContent="flex-start" w="10%">
-          <Divider />
-        </Flex>
+        {useCheckForMobile() > 960 && (
+          <Flex direction="row" justifyContent="flex-start" w="10%">
+            <Divider />
+          </Flex>
+        )}
         <Flex direction="column" alignItems="center" m="30px">
           <Card margin="30px" maxWidth="800px">
             <Announcement>Still working on my site 👍</Announcement>
