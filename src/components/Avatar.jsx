@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { string } from 'prop-types'
 
 const Image = styled.img`
-  /* box-shadow: 5px 2px 2px 3px rgba(0, 0, 0, 0.1); */
   margin: 20px;
   height: ${(props) => props.size};
   width: ${(props) => props.size};
