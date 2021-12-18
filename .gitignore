@@ -10,6 +10,7 @@
 
 # production
 /build
+/public/build
 
 #vscode
 .vscode
@@ -26,6 +27,7 @@ firebase-debug.log
 .env.test.local
 .env.production.local
 .eslintcache
+/.cache
 
 npm-debug.log*
 yarn-debug.log*
