@@ -5,7 +5,7 @@ function getNodeVersion() {
   return new Promise(function (resolve, reject) {
     version.stdout.on('data', function (data) {
       const nodeVersion = data.toString('utf8').replace(/(\r|\n).*/, '')
-      if (nodeVersion.trim() !== 'v14.15.1') {
+      if (nodeVersion.trim() !== 'v16.13.1') {
         reject({ code: 1, version: nodeVersion })
         return
       }
@@ -32,15 +32,15 @@ getNodeVersion()
   .catch(function (err) {
     let message =
       "\n❌ You're using the wrong version of node for this project."
-    message += "\nMake sure you're using v14.15.1 👍"
+    message += "\nMake sure you're using v16.13.1 👍"
 
     if (err.version) {
       message += `\r\n\nYour current node version is ${err.version} 🤭\n\n`
     }
 
     message += 'If you have nvm installed, run:\n'
-    message += 'nvm install 14.15.1\n'
-    message += 'nvm use 14.15.1\n'
+    message += 'nvm install 16.13.1\n'
+    message += 'nvm use 16.13.1\n'
 
     let nvmLink = 'https://github.com/creationix/nvm'
     if (process.platform === 'win32') {

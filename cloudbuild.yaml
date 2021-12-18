@@ -1,16 +1,16 @@
 steps:
   # Install
-  - name: 'node:14.15.1'
+  - name: 'node:16.13.1'
     entrypoint: npm
     args: ['install']
 
   # Test
-  - name: 'node:14.15.1'
+  - name: 'node:16.13.1'
     entrypoint: npm
     args: ['run', 'test:ci']
 
   # Build
-  - name: 'node:14.15.1'
+  - name: 'node:16.13.1'
     entrypoint: npm
     args: ['run', 'build']
 
