@@ -7,26 +7,24 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
-} from "remix";
-import type { LinksFunction } from "remix";
+} from 'remix'
+import type { LinksFunction } from 'remix'
 
-import globalStylesUrl from "~/styles/global.css";
-import darkStylesUrl from "~/styles/dark.css";
+import globalStylesUrl from '~/styles/global.css'
+import darkStylesUrl from '~/styles/dark.css'
 
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: globalStylesUrl },
+    { rel: 'stylesheet', href: globalStylesUrl },
     {
-      rel: "stylesheet",
+      rel: 'stylesheet',
       href: darkStylesUrl,
-      media: "(prefers-color-scheme: dark)",
+      media: '(prefers-color-scheme: dark)',
     },
-  ];
-};
+  ]
+}
 
-// https://remix.run/api/conventions#default-export
-// https://remix.run/api/conventions#route-filenames
 export default function App() {
   return (
     <Document title="Dallas Carraher">
@@ -34,12 +32,12 @@ export default function App() {
         <Outlet />
       </Layout>
     </Document>
-  );
+  )
 }
 
 // https://remix.run/docs/en/v1/api/conventions#errorboundary
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
+  console.error(error)
   return (
     <Document title="Error!">
       <Layout>
@@ -54,14 +52,14 @@ export function ErrorBoundary({ error }: { error: Error }) {
         </div>
       </Layout>
     </Document>
-  );
+  )
 }
 
 // https://remix.run/docs/en/v1/api/conventions#catchboundary
 export function CatchBoundary() {
-  let caught = useCatch();
+  let caught = useCatch()
 
-  let message;
+  let message
   switch (caught.status) {
     case 401:
       message = (
@@ -69,16 +67,16 @@ export function CatchBoundary() {
           Oops! Looks like you tried to visit a page that you do not have access
           to.
         </p>
-      );
-      break;
+      )
+      break
     case 404:
       message = (
         <p>Oops! Looks like you tried to visit a page that does not exist.</p>
-      );
-      break;
+      )
+      break
 
     default:
-      throw new Error(caught.data || caught.statusText);
+      throw new Error(caught.data || caught.statusText)
   }
 
   return (
@@ -90,15 +88,15 @@ export function CatchBoundary() {
         {message}
       </Layout>
     </Document>
-  );
+  )
 }
 
 function Document({
   children,
   title,
 }: {
-  children: React.ReactNode;
-  title?: string;
+  children: React.ReactNode
+  title?: string
 }) {
   return (
     <html lang="en">
@@ -113,10 +111,10 @@ function Document({
         {children}
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        {process.env.NODE_ENV === 'development' && <LiveReload />}
       </body>
     </html>
-  );
+  )
 }
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -124,7 +122,11 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="remix-app">
       <header className="remix-app__header">
         <div className="container remix-app__header-content">
-          <Link to="/" title="Remix" className="remix-app__header-home-link">
+          <Link
+            to="/"
+            title="Dallas Carraher"
+            className="remix-app__header-home-link"
+          >
             <h1>Dallas Carraher</h1>
           </Link>
           <nav aria-label="Main navigation" className="remix-app__header-nav">
@@ -151,5 +153,5 @@ function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </footer>
     </div>
-  );
+  )
 }
