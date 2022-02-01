@@ -119,39 +119,45 @@ function Document({
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="remix-app">
-      <header className="remix-app__header">
-        <div className="container remix-app__header-content">
+    <div className="portfolio-app">
+      <header className="portfolio-app__header">
+        <div className="portfolio-app__header-content">
           <Link
             to="/"
             title="Dallas Carraher"
-            className="remix-app__header-home-link"
+            className="portfolio-app__header-home-link"
           >
             <h1>Dallas Carraher</h1>
           </Link>
-          <nav aria-label="Main navigation" className="remix-app__header-nav">
+          <nav
+            aria-label="Main navigation"
+            className="portfolio-app__header-nav"
+          >
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/playground">Playground</Link>
               </li>
               <li>
-                <a href="https://remix.run/docs">Remix Docs</a>
+                <Link to="/snippets">Snippets</Link>
               </li>
               <li>
-                <a href="https://github.com/remix-run/remix">GitHub</a>
+                <a
+                  href="https://linkedin.com/in/dallascarraher/"
+                  target="_blank"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/dallascarraher" target="_blank">
+                  GitHub
+                </a>
               </li>
             </ul>
           </nav>
         </div>
       </header>
-      <div className="remix-app__main">
-        <div className="container remix-app__main-content">{children}</div>
-      </div>
-      <footer className="remix-app__footer">
-        <div className="container remix-app__footer-content">
-          <p>&copy; You!</p>
-        </div>
-      </footer>
+      <main className="portfolio-app__main">{children}</main>
     </div>
   )
 }

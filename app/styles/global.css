@@ -1,15 +1,58 @@
-/*
- * You can just delete everything here or keep whatever you like, it's just a
- * quick baseline!
- */
 :root {
+  --font-body: 'Wotfard', Futura, -apple-system, sans-serif;
   --color-foreground: hsl(0, 0%, 7%);
   --color-background: hsl(0, 0%, 100%);
   --color-links: hsl(213, 100%, 52%);
   --color-links-hover: hsl(213, 100%, 43%);
   --color-border: hsl(0, 0%, 82%);
-  --font-body: -apple-system, "Segoe UI", Helvetica Neue, Helvetica, Roboto,
-    Arial, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+  --color-text: hsl(222deg, 22%, 5%);
+  --color-background: hsl(0deg, 0%, 100%);
+  --color-blurred-background: hsla(0deg, 0%, 100%, 0.85);
+  --color-primary: hsl(245deg, 100%, 60%);
+  --color-secondary: hsl(333deg, 100%, 45%);
+  --color-tertiary: hsl(255deg, 85%, 30%);
+  --color-decorative: hsl(200deg, 75%, 65%);
+  --color-muted: hsl(210deg, 55%, 92%);
+  --color-muted-background: hsla(210deg, 55%, 92%, 0.85);
+  --color-info: hsl(245deg, 100%, 60%);
+  --color-success: hsl(160deg, 100%, 40%);
+  --color-success-background: hsla(160deg, 100%, 40%, 0.1);
+  --color-error: hsl(340deg, 95%, 50%);
+  --color-error-background: hsla(340deg, 95%, 43%, 0.1);
+  --color-alert: hsl(37deg, 100%, 50%);
+  --color-alert-background: hsla(52deg, 100%, 50%, 0.25);
+  --color-venn-0: hsl(190deg, 100%, 65%);
+  --color-venn-1: hsl(340deg, 100%, 65%);
+  --color-subtle-background: hsl(225deg, 25%, 95%);
+  --color-subtle-floating: hsl(0deg, 0%, 100%);
+  --color-homepage-light: hsl(204deg, 67%, 85%);
+  --color-homepage-dark: hsl(202deg, 71%, 90%);
+  --color-homepage-bg: hsl(204deg, 67%, 85%);
+  --syntax-bg: hsl(225deg, 25%, 97%);
+  --syntax-highlight: hsl(225deg, 25%, 93%);
+  --syntax-txt: #2a2a2a;
+  --syntax-comment: #467790;
+  --syntax-prop: #da0079;
+  --syntax-bool: #bf00b8;
+  --syntax-val: #78909c;
+  --syntax-str: #651fff;
+  --syntax-name: #aa00ff;
+  --syntax-del: rgb(255, 85, 85);
+  --syntax-regex: #3600d6;
+  --syntax-fn: #3d5afe;
+  --prefers-dark: false;
+
+  /* customs */
+  --content-bg: hsla(0, 0%, 23%, 0.2);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background-color: transparent;
+}
+
+::selection {
+  background-color: var(--selection-background, var(--color-primary));
 }
 
 html {
@@ -28,7 +71,8 @@ html {
 
 :focus {
   outline: var(--color-links) solid 2px;
-  outline-offset: 2px;
+  outline-offset: 0.5rem;
+  border-radius: 0.2rem;
 }
 
 html,
@@ -51,7 +95,12 @@ a {
 
 a:hover {
   color: var(--color-links-hover);
-  text-decoration: underline;
+  /* text-decoration: underline; */
+}
+
+a[target='_blank']:after {
+  content: '↗️';
+  margin: 0 3px 0 5px;
 }
 
 hr {
@@ -63,8 +112,8 @@ hr {
   margin-bottom: 2rem;
 }
 
-input:where([type="text"]),
-input:where([type="search"]) {
+input:where([type='text']),
+input:where([type='search']) {
   display: block;
   border: 1px solid var(--color-border);
   width: 100%;
@@ -77,84 +126,90 @@ input:where([type="search"]) {
   color: var(--color-foreground);
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.container {
-  --gutter: 16px;
-  width: 1024px;
-  max-width: calc(100% - var(--gutter) * 2);
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.remix-app {
-  display: flex;
-  flex-direction: column;
+.portfolio-app {
   min-height: 100vh;
   min-height: calc(100vh - env(safe-area-inset-bottom));
 }
 
-.remix-app > * {
-  width: 100%;
+.portfolio-app__header {
+  border-bottom: 3px solid var(--color-foreground);
 }
 
-.remix-app__header {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.remix-app__header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.remix-app__header-home-link {
-  width: 106px;
-  height: 30px;
-  color: var(--color-foreground);
-}
-
-.remix-app__header-nav ul {
-  list-style: none;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 1.5em;
-}
-
-.remix-app__header-nav li {
-  font-weight: bold;
-}
-
-.remix-app__main {
-  flex: 1 1 100%;
-}
-
-.remix-app__footer {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.remix-app__footer-content {
+.portfolio-app__header-content {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
-.remix__page {
+.portfolio-app__header-home-link {
+  color: var(--color-foreground);
+}
+
+.portfolio-app__header-home-link > h1 {
+  margin: 0;
+}
+
+.portfolio-app__header-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+}
+
+.portfolio-app__header-nav li {
+  padding: 1rem;
+  font-weight: bold;
+}
+
+.portfolio-app__main {
+  padding: 5rem;
+}
+
+.portfolio-app__intro {
+  display: flex;
+  justify-content: center;
+}
+
+.portfolio-app__intro > * {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.portfolio-app__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'newest categories' 'newest popular';
+  gap: 64px 96px;
+  padding-top: 64px;
+}
+
+.portfolio-app__posts {
+  grid-area: newest;
+}
+
+.portfolio-app__categories {
+  grid-area: categories;
+}
+
+.portfolio-app__popular {
+  grid-area: popular;
+}
+
+.portfolio-app__footer {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 3px solid var(--color-border);
+}
+
+.portfolio-app__footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.portfolio__page {
   --gap: 1rem;
   --space: 2rem;
   display: grid;
@@ -165,7 +220,7 @@ input:where([type="search"]) {
 }
 
 @media print, screen and (min-width: 640px) {
-  .remix__page {
+  .portfolio__page {
     --gap: 2rem;
     grid-auto-rows: unset;
     grid-template-columns: repeat(2, 1fr);
@@ -173,35 +228,36 @@ input:where([type="search"]) {
 }
 
 @media screen and (min-width: 1024px) {
-  .remix__page {
+  .portfolio__page {
     --gap: 4rem;
   }
 }
 
-.remix__page > main > :first-child {
+.portfolio__page > main > :first-child {
   margin-top: 0;
 }
 
-.remix__page > main > :last-child {
+.portfolio__page > main > :last-child {
   margin-bottom: 0;
 }
 
-.remix__page > aside {
+.portfolio__page > aside {
   margin: 0;
   padding: 1.5ch 2ch;
-  border: solid 1px var(--color-border);
+  /* border: solid 3px var(--color-foreground); */
+  background-color: var(--content-bg);
   border-radius: 0.5rem;
 }
 
-.remix__page > aside > :first-child {
+.portfolio__page > aside > :first-child {
   margin-top: 0;
 }
 
-.remix__page > aside > :last-child {
+.portfolio__page > aside > :last-child {
   margin-bottom: 0;
 }
 
-.remix__form {
+.portfolio__form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -210,7 +266,7 @@ input:where([type="search"]) {
   border-radius: 0.5rem;
 }
 
-.remix__form > * {
+.portfolio__form > * {
   margin-top: 0;
   margin-bottom: 0;
 }
