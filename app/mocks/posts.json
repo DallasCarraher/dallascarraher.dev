@@ -1,0 +1,10 @@
+{
+  "posts": [
+    {
+      "title": "demo-post 1",
+      "categories": ["JavaScript, React"],
+      "body": ""
+    },
+    {}
+  ]
+}
