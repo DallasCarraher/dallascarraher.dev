@@ -15,10 +15,6 @@
 #vscode
 .vscode
 
-# firebase
-.firebase
-firebase-debug.log
-
 # misc
 .DS_Store
 .env
