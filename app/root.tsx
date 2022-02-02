@@ -120,44 +120,32 @@ function Document({
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="portfolio-app">
-      <header className="portfolio-app__header">
-        <div className="portfolio-app__header-content">
-          <Link
-            to="/"
-            title="Dallas Carraher"
-            className="portfolio-app__header-home-link"
-          >
-            <h1>Dallas Carraher</h1>
-          </Link>
-          <nav
-            aria-label="Main navigation"
-            className="portfolio-app__header-nav"
-          >
-            <ul>
-              <li>
-                <Link to="/playground">Playground</Link>
-              </li>
-              <li>
-                <Link to="/snippets">Snippets</Link>
-              </li>
-              <li>
-                <a
-                  href="https://linkedin.com/in/dallascarraher/"
-                  target="_blank"
-                >
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/dallascarraher" target="_blank">
-                  GitHub
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      <header className="max-width-wrapper header">
+        <Link to="/" title="Dallas Carraher" className="header-home-link">
+          <h1>Dallas Carraher</h1>
+        </Link>
+        <nav aria-label="Main navigation" className="header-nav">
+          <ul>
+            <li>
+              <Link to="/playground">Playground</Link>
+            </li>
+            <li>
+              <Link to="/snippets">Snippets</Link>
+            </li>
+            <li>
+              <a href="https://linkedin.com/in/dallascarraher/" target="_blank">
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/dallascarraher" target="_blank">
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </nav>
       </header>
-      <main className="portfolio-app__main">{children}</main>
+      <main className="max-width-wrapper main">{children}</main>
     </div>
   )
 }

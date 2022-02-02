@@ -21,11 +21,11 @@
 
 .greeting {
   animation: incoming-text 1.5s ease forwards;
-  /* animation-delay: 1s; */
   visibility: hidden;
 }
 
-.skills {
+.greeting-2 {
+  max-width: 400px;
   animation: incoming-text 1.5s ease forwards;
   animation-delay: 1s;
   visibility: hidden;
@@ -39,6 +39,53 @@
     visibility: visible;
     transform: scale(1, 1);
   }
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'newest categories' 'newest popular';
+  gap: 64px 96px;
+  padding-top: 64px;
+}
+
+.posts {
+  grid-area: newest;
+  padding-left: 2rem;
+}
+
+.post-link {
+  padding-bottom: 2rem;
+}
+
+.post-link p {
+  font-weight: 200;
+}
+
+.post-link:hover h3 {
+  color: var(--color-secondary);
+}
+
+.post-link:hover p {
+  color: var(--color-primary);
+}
+
+.post-link:hover span {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.3rem;
+}
+
+.categories {
+  grid-area: categories;
+  padding-left: 2rem;
+}
+
+.popular {
+  grid-area: popular;
+  padding-left: 2rem;
 }
 
 .post {

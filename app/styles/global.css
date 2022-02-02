@@ -1,5 +1,88 @@
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-thin-webfont.eot');
+  src: url('/fonts/wotfard-thin-webfont.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/wotfard-thin-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-thin-webfont.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-extralight-webfont.eot');
+  src: url('/fonts/wotfard-extralight-webfont.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/wotfard-extralight-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-extralight-webfont.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-light-webfont.eot');
+  src: url('/fonts/wotfard-light-webfont.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/wotfard-light-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-light-webfont.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-regular-webfont.eot');
+  src: url('/fonts/wotfard-regular-webfont.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/wotfard-regular-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-regular-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-medium-webfont.eot');
+  src: url('/fonts/wotfard-medium-webfont.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/wotfard-medium-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-medium-webfont.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-semibold-webfont.eot');
+  src: url('/fonts/wotfard-semibold-webfont.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts/wotfard-semibold-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-semibold-webfont.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Wotfard';
+  src: url('/fonts/wotfard-bold-webfont.eot');
+  src: url('/fonts/wotfard-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/wotfard-bold-webfont.woff2') format('woff2'),
+    url('/fonts/wotfard-bold-webfont.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 :root {
-  --font-body: 'Wotfard', Futura, -apple-system, sans-serif;
+  /* font */
+  --font-body: -apple-system, 'Segoe UI', Helvetica Neue, Helvetica, Roboto,
+    Arial, sans-serif, system-ui, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-display: 'Wotfard', var(--font-body);
+  --font-weight-bold: 600;
+  --font-weight-medium: 500;
+  --font-weight-light: 300;
+  --font-family-mono: monospace;
+  /* color */
   --color-foreground: hsl(0, 0%, 7%);
   --color-background: hsl(0, 0%, 100%);
   --color-links: hsl(213, 100%, 52%);
@@ -8,9 +91,12 @@
   --color-text: hsl(222deg, 22%, 5%);
   --color-background: hsl(0deg, 0%, 100%);
   --color-blurred-background: hsla(0deg, 0%, 100%, 0.85);
-  --color-primary: hsl(245deg, 100%, 60%);
-  --color-secondary: hsl(333deg, 100%, 45%);
-  --color-tertiary: hsl(255deg, 85%, 30%);
+  --color-primary: hsl(333deg, 100%, 45%);
+  --color-secondary: hsl(245deg, 100%, 60%);
+  --color-tertiary: hsl(150, 100%, 60%);
+  --color-quaternary: hsl(53deg, 100%, 50%);
+  --color-quinary: hsl(280, 100%, 60%);
+  /* quaternary (4th), quinary (5th), senary, septenary, octonary, nonary, denary */
   --color-decorative: hsl(200deg, 75%, 65%);
   --color-muted: hsl(210deg, 55%, 92%);
   --color-muted-background: hsla(210deg, 55%, 92%, 0.85);
@@ -28,6 +114,7 @@
   --color-homepage-light: hsl(204deg, 67%, 85%);
   --color-homepage-dark: hsl(202deg, 71%, 90%);
   --color-homepage-bg: hsl(204deg, 67%, 85%);
+  /* code playgrounds */
   --syntax-bg: hsl(225deg, 25%, 97%);
   --syntax-highlight: hsl(225deg, 25%, 93%);
   --syntax-txt: #2a2a2a;
@@ -40,19 +127,19 @@
   --syntax-del: rgb(255, 85, 85);
   --syntax-regex: #3600d6;
   --syntax-fn: #3d5afe;
-  --prefers-dark: false;
-
-  /* customs */
-  --content-bg: hsla(0, 0%, 23%, 0.2);
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
-  background-color: transparent;
+  width: 6px;
+  background-color: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
 }
 
 ::selection {
-  background-color: var(--selection-background, var(--color-primary));
+  background-color: var(--color-tertiary);
 }
 
 html {
@@ -70,9 +157,9 @@ html {
 }
 
 :focus {
-  outline: var(--color-links) solid 2px;
+  outline: var(--color-tertiary) dotted 3px;
   outline-offset: 0.5rem;
-  border-radius: 0.2rem;
+  border-radius: 1px;
 }
 
 html,
@@ -84,32 +171,36 @@ body {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
+  font-weight: 300;
   line-height: 1.5;
 }
 
-a {
-  color: var(--color-links);
-  text-decoration: none;
+h1 {
+  font-size: 2rem;
+  font-weight: 500;
 }
 
-a:hover {
-  color: var(--color-links-hover);
-  /* text-decoration: underline; */
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+a {
+  font-weight: 300;
+  color: var(--color-text);
+  text-decoration: none;
+  outline: none;
 }
 
 a[target='_blank']:after {
   content: '↗️';
   margin: 0 3px 0 5px;
-}
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  background-color: var(--color-border);
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
 
 input:where([type='text']),
@@ -127,146 +218,74 @@ input:where([type='search']) {
 }
 
 .portfolio-app {
-  min-height: 100vh;
   min-height: calc(100vh - env(safe-area-inset-bottom));
 }
 
-.portfolio-app__header {
-  border-bottom: 3px solid var(--color-foreground);
+.max-width-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
 }
 
-.portfolio-app__header-content {
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  max-width: 1100px;
   align-items: center;
   padding: 1rem;
 }
 
-.portfolio-app__header-home-link {
+.header-home-link h1 {
   color: var(--color-foreground);
-}
-
-.portfolio-app__header-home-link > h1 {
   margin: 0;
 }
 
-.portfolio-app__header-nav ul {
+.header-home-link h1:hover {
+  color: var(--color-primary);
+}
+
+.header-nav ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
 }
 
-.portfolio-app__header-nav li {
+.header-nav li {
   padding: 1rem;
   font-weight: bold;
 }
 
-.portfolio-app__main {
-  padding: 5rem;
+.header-nav a:hover {
+  color: var(--color-primary);
 }
 
-.portfolio-app__intro {
+.section-header {
+  color: var(--color-primary);
+  text-transform: uppercase;
+  font-size: calc(1.2rem);
+  letter-spacing: 2px;
+}
+
+.main {
+  padding: 1rem;
+}
+
+.intro {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.portfolio-app__intro > * {
+.intro > * {
   margin-left: 3rem;
-  margin-right: 3rem;
-}
-
-.portfolio-app__grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas: 'newest categories' 'newest popular';
-  gap: 64px 96px;
-  padding-top: 64px;
-}
-
-.portfolio-app__posts {
-  grid-area: newest;
-}
-
-.portfolio-app__categories {
-  grid-area: categories;
-}
-
-.portfolio-app__popular {
-  grid-area: popular;
-}
-
-.portfolio-app__footer {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top: 3px solid var(--color-border);
-}
-
-.portfolio-app__footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.portfolio__page {
-  --gap: 1rem;
-  --space: 2rem;
-  display: grid;
-  grid-auto-rows: min-content;
-  gap: var(--gap);
-  padding-top: var(--space);
-  padding-bottom: var(--space);
 }
 
 @media print, screen and (min-width: 640px) {
-  .portfolio__page {
-    --gap: 2rem;
-    grid-auto-rows: unset;
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media screen and (min-width: 1024px) {
-  .portfolio__page {
-    --gap: 4rem;
-  }
-}
-
-.portfolio__page > main > :first-child {
-  margin-top: 0;
-}
-
-.portfolio__page > main > :last-child {
-  margin-bottom: 0;
-}
-
-.portfolio__page > aside {
-  margin: 0;
-  padding: 1.5ch 2ch;
-  /* border: solid 3px var(--color-foreground); */
-  background-color: var(--content-bg);
-  border-radius: 0.5rem;
-}
-
-.portfolio__page > aside > :first-child {
-  margin-top: 0;
-}
-
-.portfolio__page > aside > :last-child {
-  margin-bottom: 0;
-}
-
-.portfolio__form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-}
-
-.portfolio__form > * {
-  margin-top: 0;
-  margin-bottom: 0;
 }

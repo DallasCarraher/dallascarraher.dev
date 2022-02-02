@@ -9,6 +9,7 @@
   --color-primary: hsl(230deg, 100%, 67%);
   --color-secondary: hsl(333deg, 100%, 52%);
   --color-tertiary: hsl(53deg, 100%, 50%);
+  --color-quaternary: hsl(280, 100%, 60%);
   --color-decorative: hsl(200deg, 50%, 60%);
   --color-muted: hsl(210deg, 38%, 15%);
   --color-muted-background: hsla(210deg, 38%, 15%, 0.85);
@@ -38,4 +39,8 @@
   --syntax-del: hsl(0, 100%, 67%);
   --syntax-regex: hsl(51, 100%, 50%);
   --syntax-fn: hsl(195, 100%, 50%);
+}
+
+::selection {
+  background-color: var(--color-secondary);
 }
