@@ -55,20 +55,28 @@
   padding-left: 2rem;
 }
 
+.posts h2 {
+  padding-bottom: 2rem;
+}
+
 .post-link {
   padding-bottom: 2rem;
+}
+
+.post-link h3 {
+  color: var(--color-secondary);
 }
 
 .post-link p {
   font-weight: 200;
 }
 
-.post-link:hover h3 {
+/* .post-link:hover h3 {
   color: var(--color-secondary);
-}
+} */
 
 .post-link:hover p {
-  color: var(--color-primary);
+  /* color: var(--color-primary); */
 }
 
 .post-link:hover span {

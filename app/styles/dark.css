@@ -44,3 +44,14 @@
 ::selection {
   background-color: var(--color-secondary);
 }
+
+a[href^="https://"]:after
+{
+  display: inline-block;
+  background: transparent url(/img/external-link.svg) 0 0 no-repeat;
+  filter: invert(1);
+  content: '';
+  margin-left: 0.5rem;
+  height: 16px;
+  width: 16px;
+}
