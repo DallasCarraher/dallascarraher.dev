@@ -157,7 +157,8 @@ html {
 }
 
 :focus {
-  outline: var(--color-tertiary) dotted 3px;
+  outline: auto;
+  outline: var(--color-secondary) dotted 2px;
   outline-offset: 0.5rem;
   border-radius: 1px;
 }
@@ -198,9 +199,15 @@ a {
   outline: none;
 }
 
-a[target='_blank']:after {
-  content: '↗️';
-  margin: 0 3px 0 5px;
+a[href^="https://"]:after
+{
+  display: inline-block;
+  background: transparent url(/img/external-link.svg) 0 0 no-repeat;
+  filter: invert(0);
+  content: '';
+  margin-left: 0.5rem;
+  height: 16px;
+  width: 16px;
 }
 
 input:where([type='text']),
