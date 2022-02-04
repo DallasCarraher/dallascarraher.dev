@@ -68,7 +68,12 @@
 }
 
 .post-link p {
-  font-weight: 200;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.post-link span {
+  font-size: 48px;
 }
 
 /* .post-link:hover h3 {

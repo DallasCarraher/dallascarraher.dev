@@ -47,7 +47,20 @@ export default function Index() {
       <main className="home-grid">
         <div className="posts">
           <h2 className="section-header">Recent</h2>
-          {posts.map((post) => (
+          <div className="post-link">
+            <Link to="#">
+              <h3>Blog Posts incoming!</h3>
+              <p>
+                I'll have some blog posts here soon that I'm really excited to
+                start working on{' '}
+                <span role="img" aria-label="dancing">
+                  🕺
+                </span>
+              </p>
+              {/* <span>Continue Reading</span> */}
+            </Link>
+          </div>
+          {/* {posts.map((post) => (
             <div className="post-link">
               <Link to={`/posts/${post.id}`}>
                 <h3>{post.title}</h3>
@@ -61,23 +74,24 @@ export default function Index() {
                 <span>Continue Reading</span>
               </Link>
             </div>
-          ))}
+          ))} */}
         </div>
         <div className="categories">
           <h2 className="section-header">Categories</h2>
           {/* categories of posts will be here */}
-          <ul className="">
+          {/* <ul className="">
             {filters.map((filter) => (
               <li>
                 <CategoryPill filter={filter} />
               </li>
             ))}
-          </ul>
+          </ul> */}
+          N/A
         </div>
         <div className="popular">
           <h2 className="section-header">Popular</h2>
           {/* popular posts will be listed here */}
-          <p>working on it</p>
+          <p>N/A</p>
         </div>
       </main>
     </>
