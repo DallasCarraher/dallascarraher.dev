@@ -169,6 +169,8 @@ body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-foreground);
+  scrollbar-width: 6px;
+  scrollbar-color: var(--color-primary);
 }
 
 body {
