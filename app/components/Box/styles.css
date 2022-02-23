@@ -1,0 +1,35 @@
+:root {
+  --dark: black;
+  --light: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .Box {
+    border: solid 3px var(--light);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .Box {
+    border: solid 3px var(--dark);
+  }
+}
+
+.Box {
+  border-radius: 10px;
+  max-width: 80%;
+  overflow-wrap: break-word;
+  padding: 1px;
+}
+
+.Box img {
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.unavailable {
+  cursor: not-allowed;
+  border: 3px hsl(0, 100%, 40%);
+  border-style: dashed;
+}
