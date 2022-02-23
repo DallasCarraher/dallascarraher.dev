@@ -71,7 +71,10 @@ export function CatchBoundary() {
       break
     case 404:
       message = (
-        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+        <p>
+          Oops! Looks like you tried to visit a page that does not exist or
+          doesn't exist yet!
+        </p>
       )
       break
 
