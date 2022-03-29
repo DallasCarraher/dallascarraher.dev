@@ -19,13 +19,12 @@
   border-radius: 10px;
   max-width: 80%;
   overflow-wrap: break-word;
-  padding: 1px;
 }
 
 .Box img {
   max-height: 100%;
   max-width: 100%;
-  border-radius: 6px;
+  border-radius: 6px 6px 0px 0px;
 }
 
 .unavailable {

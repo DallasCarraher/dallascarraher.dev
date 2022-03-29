@@ -10,31 +10,18 @@ export function links() {
   return [...codeSnippetLinks(), { rel: 'stylesheet', href: snippetStyles }]
 }
 
-var text = `function sanitize(text: string) {
-  const patterns = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '\`': '&grave;',
-  }
-  // regex -> & < > " '
-  const reg = /[&<>"']/gi
-  return text.replace(reg, (match) => patterns[match as keyof typeof patterns])
-}`
-
 export default function convertLinks() {
   const { width } = useWindowSize()
   return (
     <main className="wrapper">
       <h1 className="center">Converting Links in Plain Text</h1>
       <p className="center subtitle">
-        a clean snippet for converting links in strings dynamically
+        a short post on how to convert links in strings to anchor tags safely
       </p>
       <img
+        alt="by Lucas Sankey"
+        title="Photo by Lucas Sankey"
         className="header-img full-bleed"
-        alt="frog on chain link fence"
         src="https://unsplash.com/photos/1i7RLrsEcZo/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjQ4NTIxMTM4&force=true"
       />
       <p>

@@ -171,6 +171,11 @@ html {
   border-radius: 1px;
 }
 
+a:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
 html,
 body {
   padding: 0;
@@ -275,10 +280,6 @@ input:where([type='search']) {
 .header-nav li {
   padding: 1rem;
   font-weight: bold;
-}
-
-.header-nav a:hover {
-  color: var(--color-primary);
 }
 
 .section-header {
