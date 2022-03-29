@@ -148,7 +148,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           </ul>
         </nav>
       </header>
-      <main className="max-width-wrapper main">{children}</main>
+      <main>{children}</main>
     </div>
   )
 }

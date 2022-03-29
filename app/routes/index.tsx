@@ -31,7 +31,7 @@ export default function Index() {
   const filters = ['React', 'TypeScript', 'Vue', 'Webpack']
 
   return (
-    <>
+    <main className="max-width-wrapper main">
       <section className="intro">
         <img src={picture} className="avatar" />
         <div>
@@ -44,20 +44,16 @@ export default function Index() {
           </h3>
         </div>
       </section>
-      <main className="home-grid">
+      <section className="home-grid">
         <div className="posts">
           <h2 className="section-header">Recent</h2>
           <div className="post-link">
-            <Link to="#">
-              <h3>Blog Posts incoming!</h3>
+            <Link to="/snippets">
+              <h3>Snippets!</h3>
               <p>
-                I'll have some blog posts here soon that I'm really excited to
-                start working on{' '}
-                <span role="img" aria-label="dancing">
-                  🕺
-                </span>
+                I've gone ahead and added my first snippet! Check it out by
+                clicking here.
               </p>
-              {/* <span>Continue Reading</span> */}
             </Link>
           </div>
           {/* {posts.map((post) => (
@@ -93,7 +89,7 @@ export default function Index() {
           {/* popular posts will be listed here */}
           <p>N/A</p>
         </div>
-      </main>
-    </>
+      </section>
+    </main>
   )
 }
