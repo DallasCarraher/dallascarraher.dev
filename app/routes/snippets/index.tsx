@@ -11,8 +11,8 @@ export default function Snippets() {
       <div className="snippets-grid">
         <Box
           link="/snippets/convertLinks"
-          title="convertLinks"
-          text="convert links in strings to anchor tags"
+          title="Converting Links in Plain Text"
+          text="a short post on how to convert links in strings to anchor tags safely"
           img="https://unsplash.com/photos/1i7RLrsEcZo/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjQ4NTIxMTM4&force=true"
         />
       </div>

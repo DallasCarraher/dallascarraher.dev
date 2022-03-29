@@ -156,9 +156,17 @@ html {
   outline: auto;
 }
 
+/* debugging */
+/* :hover {
+  outline: auto;
+  outline: var(--color-primary) dotted 2px;
+  outline-offset: 0.5rem;
+  border-radius: 1px;
+} */
+
 :focus {
   outline: auto;
-  outline: var(--color-secondary) dotted 2px;
+  outline: var(--color-primary) dotted 2px;
   outline-offset: 0.5rem;
   border-radius: 1px;
 }

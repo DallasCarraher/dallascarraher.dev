@@ -63,6 +63,13 @@
   padding-bottom: 2rem;
 }
 
+.post-link:hover {
+  outline: auto;
+  outline: var(--color-secondary) dotted 2px;
+  outline-offset: 0.5rem;
+  border-radius: 1px;
+}
+
 .post-link h3 {
   color: var(--color-secondary);
 }
@@ -74,14 +81,6 @@
 
 .post-link span {
   font-size: 48px;
-}
-
-/* .post-link:hover h3 {
-  color: var(--color-secondary);
-} */
-
-.post-link:hover p {
-  /* color: var(--color-primary); */
 }
 
 .post-link:hover span {
