@@ -131,7 +131,7 @@
 }
 
 /* Dark Theme */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-foreground: hsl(0, 0%, 100%);
   --color-background: hsl(210deg, 30%, 8%);
   --color-links: hsl(213, 100%, 73%);
