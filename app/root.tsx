@@ -134,9 +134,9 @@ function Layout({ children }: { children: React.ReactNode }) {
         </Link>
         <nav aria-label="Main navigation" className="header-nav">
           <ul>
-            <li>
+            {/* <li>
               <Link to="/playground">Playground</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/snippets">Snippets</Link>
             </li>
