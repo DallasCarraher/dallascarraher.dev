@@ -4,6 +4,7 @@ import CodeSnippet, {
 } from '~/components/CodeSnippet/CodeSnippet'
 import Codesandbox from '~/components/Codesandbox/Codesandbox'
 import useWindowSize from '~/hooks/useWindowSize'
+// import useSilenceiFrames from '~/hooks/useSilenceiFrames'
 import snippetStyles from '~/styles/snippets.css'
 
 export function links() {
@@ -11,6 +12,7 @@ export function links() {
 }
 
 export default function convertLinks() {
+  // useSilenceiFrames()
   const { width } = useWindowSize()
   return (
     <main className="wrapper">
