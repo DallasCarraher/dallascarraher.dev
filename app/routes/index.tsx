@@ -1,7 +1,7 @@
 import type { MetaFunction, LoaderFunction } from 'remix'
 import { useLoaderData, json, Link } from 'remix'
 import picture from '~/assets/avatar.jpg'
-import { CategoryPill } from '~/components/CategoryPill/CategoryPill'
+// import { CategoryPill } from '~/components/CategoryPill/CategoryPill'
 import styles from '~/styles/index.css'
 import { getPosts, Post } from './posts/post'
 
@@ -27,7 +27,7 @@ export let meta: MetaFunction = () => {
 
 // https://remix.run/guides/routing#index-routes
 export default function Index() {
-  let posts = useLoaderData<Post[]>()
+  // let posts = useLoaderData<Post[]>()
   const filters = ['React', 'TypeScript', 'Vue', 'Webpack']
 
   return (
