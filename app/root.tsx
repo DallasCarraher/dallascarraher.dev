@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
   Link,
   Links,
@@ -9,6 +10,8 @@ import {
   useCatch,
 } from 'remix'
 import type { LinksFunction } from 'remix'
+import useDarkMode from '~/hooks/useDarkMode'
+import Switch, { links as switchLinks } from '~/components/Switch/Switch'
 
 import globalStylesUrl from '~/styles/global.css'
 import darkStylesUrl from '~/styles/dark.css'
@@ -16,6 +19,7 @@ import darkStylesUrl from '~/styles/dark.css'
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
   return [
+    ...switchLinks(),
     { rel: 'stylesheet', href: globalStylesUrl },
     {
       rel: 'stylesheet',
@@ -121,6 +125,7 @@ function Document({
 }
 
 function Layout({ children }: { children: React.ReactNode }) {
+  const { dark, setDark } = useDarkMode()
   return (
     <div className="portfolio-app">
       <header className="max-width-wrapper header">
@@ -144,6 +149,9 @@ function Layout({ children }: { children: React.ReactNode }) {
               <a href="https://github.com/dallascarraher" target="_blank">
                 GitHub
               </a>
+            </li>
+            <li>
+              <Switch value={dark} toggleValue={setDark} />
             </li>
           </ul>
         </nav>
