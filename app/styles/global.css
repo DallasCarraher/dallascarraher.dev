@@ -92,8 +92,8 @@
   --color-background: hsl(0deg, 0%, 100%);
   --color-blurred-background: hsla(0deg, 0%, 100%, 0.85);
   --color-primary: hsl(333deg, 100%, 45%);
-  --color-secondary: hsl(245deg, 100%, 60%);
-  --color-tertiary: hsl(150, 100%, 60%);
+  --color-secondary: hsl(150, 100%, 40%);
+  --color-tertiary: hsl(245deg, 100%, 60%);
   --color-quaternary: hsl(53deg, 100%, 50%);
   --color-quinary: hsl(280, 100%, 60%);
   /* quaternary (4th), quinary (5th), senary, septenary, octonary, nonary, denary */
@@ -140,8 +140,8 @@
   --color-text: hsl(0deg, 0%, 100%);
   --color-blurred-background: hsla(210deg, 30%, 8%, 0.85);
   --color-primary: hsl(230deg, 100%, 67%);
-  --color-secondary: hsl(333deg, 100%, 52%);
-  --color-tertiary: hsl(53deg, 100%, 50%);
+  --color-secondary: hsl(150, 100%, 40%);
+  --color-tertiary: hsl(333deg, 100%, 52%);
   --color-quaternary: hsl(280, 100%, 60%);
   --color-decorative: hsl(200deg, 50%, 60%);
   --color-muted: hsl(210deg, 38%, 15%);
@@ -185,7 +185,7 @@
 }
 
 ::selection {
-  background-color: var(--color-tertiary);
+  background-color: var(--color-primary);
 }
 
 html {
