@@ -10,11 +10,12 @@ import {
   useCatch,
 } from 'remix'
 import type { LinksFunction } from 'remix'
+import setTheme from './utils/setTheme'
 import useDarkMode from '~/hooks/useDarkMode'
 import Switch, { links as switchLinks } from '~/components/Switch/Switch'
 
 import globalStylesUrl from '~/styles/global.css'
-import darkStylesUrl from '~/styles/dark.css'
+// import darkStylesUrl from '~/styles/dark.css'
 
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
@@ -115,6 +116,7 @@ function Document({
         <Links />
       </head>
       <body>
+        <div title="setTheme script" dangerouslySetInnerHTML={setTheme()} />
         {children}
         <ScrollRestoration />
         <Scripts />
