@@ -1,10 +1,8 @@
-// import * as React from 'react'
 import CodeSnippet, {
   links as codeSnippetLinks,
 } from '~/components/CodeSnippet/CodeSnippet'
 import Codesandbox from '~/components/Codesandbox/Codesandbox'
 import useWindowSize from '~/hooks/useWindowSize'
-// import useSilenceiFrames from '~/hooks/useSilenceiFrames'
 import snippetStyles from '~/styles/snippets.css'
 
 export function links() {
@@ -12,7 +10,6 @@ export function links() {
 }
 
 export default function convertLinks() {
-  // useSilenceiFrames()
   const { width } = useWindowSize()
   return (
     <main className="wrapper">
@@ -42,7 +39,7 @@ export default function convertLinks() {
         {'(i.e.'}
         <code>{' <h1>hello</h1>)'}</code>.
       </p>
-      {width < 960 ? (
+      {width < 1024 ? (
         <div className="paragraphs center margin-it">
           <a
             className="link"
@@ -106,7 +103,7 @@ export default function convertLinks() {
         You can see it in action below. Now try doing the same as you did
         before, but now you should see a different result.
       </p>
-      {width < 960 ? (
+      {width < 1024 ? (
         <div className="paragraphs center margin-it">
           <a
             className="link"

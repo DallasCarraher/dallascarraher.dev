@@ -4,8 +4,8 @@ h2 {
 
 .snippets-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem 0rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4rem 3rem;
   justify-items: center;
   padding: 3rem;
 }
@@ -128,4 +128,12 @@ footer {
 }
 main li {
   font-size: 20px;
+}
+
+@media (max-width: 760px) {
+  .snippets-grid {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+  }
 }

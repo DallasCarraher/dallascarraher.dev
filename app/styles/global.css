@@ -326,7 +326,6 @@ input:where([type='search']) {
 
 .header-nav li {
   padding: 1rem;
-  font-weight: bold;
 }
 
 .section-header {
@@ -340,17 +339,19 @@ input:where([type='search']) {
   padding: 1rem;
 }
 
-.intro {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.intro > * {
-  margin-left: 3rem;
-}
-
-@media print, screen and (min-width: 640px) {
-}
-
-@media screen and (min-width: 1024px) {
+@media (max-width: 760px) {
+  .header {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+  .header-nav ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 1rem;
+    padding-left: 0px;
+  }
 }
