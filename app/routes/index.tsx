@@ -46,20 +46,20 @@ export default function Index() {
           </h3>
         </div>
       </section>
-      {width >= 1024 && (
-        <section className="home-grid">
-          <div className="posts">
-            <h2 className="section-header">Recent</h2>
-            <div className="post-link">
-              <Link to="/snippets">
-                <h3>Snippets!</h3>
-                <p>
-                  I've gone ahead and added my first snippet! Check it out by
-                  clicking here.
-                </p>
-              </Link>
-            </div>
+      <section className="home-grid">
+        <div className="posts">
+          <h2 className="section-header">Recent</h2>
+          <div className="post-link">
+            <Link to="/snippets">
+              <h3>Snippets!</h3>
+              <p>
+                I've gone ahead and added my first snippet! Check it out by
+                clicking here.
+              </p>
+            </Link>
           </div>
+        </div>
+        {width > 1024 && (
           <div className="categories">
             <h2 className="section-header">Categories</h2>
             {/* <ul className="">
@@ -71,8 +71,8 @@ export default function Index() {
           </ul> */}
             N/A
           </div>
-        </section>
-      )}
+        )}
+      </section>
     </main>
   )
 }
