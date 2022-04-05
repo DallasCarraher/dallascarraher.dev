@@ -13,21 +13,20 @@ import type { LinksFunction } from 'remix'
 import setTheme from './utils/setTheme'
 import useDarkMode from '~/hooks/useDarkMode'
 import Switch, { links as switchLinks } from '~/components/Switch/Switch'
+import HamburgerMenu, {
+  links as hamburgerLinks,
+} from './components/HamburgerMenu/HamburgerMenu'
 
 import globalStylesUrl from '~/styles/global.css'
 import useWindowSize from './hooks/useWindowSize'
-// import darkStylesUrl from '~/styles/dark.css'
+import Portal from './components/Portal/Portal'
 
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
   return [
     ...switchLinks(),
+    ...hamburgerLinks(),
     { rel: 'stylesheet', href: globalStylesUrl },
-    // {
-    //   rel: 'stylesheet',
-    //   href: darkStylesUrl,
-    //   media: '(prefers-color-scheme: dark)',
-    // },
   ]
 }
 
@@ -130,37 +129,87 @@ function Document({
 function Layout({ children }: { children: React.ReactNode }) {
   const { dark, setDark } = useDarkMode()
   const { width } = useWindowSize()
+  const [hamMenu, setHamMenu] = React.useState(false)
   return (
     <div className="portfolio-app">
       <header className="max-width-wrapper header">
         <Link to="/" title="Dallas Carraher" className="header-home-link">
           <h1>Dallas Carraher</h1>
         </Link>
-        {/* {width > 1024 && ( */}
-        <nav aria-label="Main navigation" className="header-nav">
-          <ul>
-            <li>
-              <Link to="/snippets">Snippets</Link>
-            </li>
-            <li>
-              <a href="https://linkedin.com/in/dallascarraher/" target="_blank">
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/dallascarraher" target="_blank">
-                GitHub
-              </a>
-            </li>
-            <li>
-              <Switch value={dark} toggleValue={setDark} />
-            </li>
-          </ul>
-        </nav>
-        {/* )} */}
-        {/* {width <= 760 && <div>hamburger</div>} */}
+        {width > 760 && (
+          <nav aria-label="Main navigation" className="header-nav">
+            <ul>
+              <li>
+                <Link to="/snippets">Snippets</Link>
+              </li>
+              <li>
+                <a
+                  href="https://linkedin.com/in/dallascarraher/"
+                  target="_blank"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/dallascarraher" target="_blank">
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <Switch value={dark} toggleValue={setDark} />
+              </li>
+            </ul>
+          </nav>
+        )}
+        {width <= 760 && (
+          <HamburgerMenu active={hamMenu} setActive={setHamMenu} />
+        )}
       </header>
       <main>{children}</main>
+      {hamMenu && (
+        <Portal el="mobile-nav">
+          <div className="ham-menu-nav">
+            <ul>
+              <li
+                onClick={() =>
+                  setTimeout(() => {
+                    setHamMenu(!hamMenu)
+                  }, 0)
+                }
+              >
+                <Link to="/">Home</Link>
+              </li>
+              <li
+                onClick={() =>
+                  setTimeout(() => {
+                    setHamMenu(!hamMenu)
+                  }, 0)
+                }
+              >
+                <Link to="/snippets">Snippets</Link>
+              </li>
+              <li>
+                <a
+                  href="https://linkedin.com/in/dallascarraher/"
+                  target="_blank"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/dallascarraher" target="_blank">
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <button onClick={() => setDark(!dark)}>
+                  {dark ? 'switch to light mode' : 'switch to dark mode'}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </Portal>
+      )}
     </div>
   )
 }
