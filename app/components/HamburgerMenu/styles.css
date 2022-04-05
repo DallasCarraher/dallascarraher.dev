@@ -1,0 +1,62 @@
+.hamburger {
+  height: 3rem;
+  width: 3rem;
+  border: 3px solid var(--color-foreground);
+  border-radius: 50%;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hamburger .line {
+  width: 120%;
+  height: 1rem;
+  background-color: var(--color-foreground);
+  display: block;
+  margin-bottom: 3px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+}
+
+.ripple {
+  background-position: center;
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: var(--color-background + 1)
+    radial-gradient(circle, transparent 1%, var(--color-background) 1%)
+    center/15000%;
+}
+.ripple:active {
+  background-color: var(--color-primary);
+  background-size: 100%;
+  transition: background 0s;
+}
+
+/* ONE */
+
+#hamburger-1.is-active .line:nth-child(2) {
+  opacity: 0;
+}
+
+#hamburger-1.is-active .line:nth-child(1) {
+  -webkit-transform: translateY(10px) rotate(45deg);
+  -ms-transform: translateY(10px) rotate(45deg);
+  -o-transform: translateY(10px) rotate(45deg);
+  transform: translateX(0px) translateY(6px) rotate(45deg);
+  margin: 0;
+}
+
+#hamburger-1.is-active .line:nth-child(3) {
+  -webkit-transform: translateY(-10px) rotate(-45deg);
+  -ms-transform: translateY(-10px) rotate(-45deg);
+  -o-transform: translateY(-10px) rotate(-45deg);
+  transform: translateX(0px) translateY(-7px) rotate(-45deg);
+  margin: 0;
+}
