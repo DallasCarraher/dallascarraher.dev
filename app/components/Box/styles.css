@@ -1,7 +1,6 @@
 .Box {
   border: solid 3px var(--color-foreground);
   border-radius: 10px;
-  max-width: 80%;
   overflow-wrap: break-word;
   padding: 8px;
 }

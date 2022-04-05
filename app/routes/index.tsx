@@ -1,6 +1,7 @@
 import type { MetaFunction, LoaderFunction } from 'remix'
 import { useLoaderData, json, Link } from 'remix'
 import picture from '~/assets/avatar.jpg'
+import useWindowSize from '~/hooks/useWindowSize'
 // import { CategoryPill } from '~/components/CategoryPill/CategoryPill'
 import styles from '~/styles/index.css'
 import { getPosts, Post } from './posts/post'
@@ -28,7 +29,8 @@ export let meta: MetaFunction = () => {
 // https://remix.run/guides/routing#index-routes
 export default function Index() {
   // let posts = useLoaderData<Post[]>()
-  const filters = ['React', 'TypeScript', 'Vue', 'Webpack']
+  // const filters = ['React', 'TypeScript', 'Vue', 'Webpack']
+  const { width } = useWindowSize()
 
   return (
     <main className="max-width-wrapper main">
@@ -44,52 +46,33 @@ export default function Index() {
           </h3>
         </div>
       </section>
-      <section className="home-grid">
-        <div className="posts">
-          <h2 className="section-header">Recent</h2>
-          <div className="post-link">
-            <Link to="/snippets">
-              <h3>Snippets!</h3>
-              <p>
-                I've gone ahead and added my first snippet! Check it out by
-                clicking here.
-              </p>
-            </Link>
-          </div>
-          {/* {posts.map((post) => (
+      {width >= 1024 && (
+        <section className="home-grid">
+          <div className="posts">
+            <h2 className="section-header">Recent</h2>
             <div className="post-link">
-              <Link to={`/posts/${post.id}`}>
-                <h3>{post.title}</h3>
+              <Link to="/snippets">
+                <h3>Snippets!</h3>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi
-                  modi magni pariatur repellat nemo, animi molestiae at iure.
-                  Pariatur suscipit, vel laudantium animi tempora ullam
-                  exercitationem nemo aliquid, quidem, ratione temporibus
-                  perferendis reprehenderit magnam!
+                  I've gone ahead and added my first snippet! Check it out by
+                  clicking here.
                 </p>
-                <span>Continue Reading</span>
               </Link>
             </div>
-          ))} */}
-        </div>
-        <div className="categories">
-          <h2 className="section-header">Categories</h2>
-          {/* categories of posts will be here */}
-          {/* <ul className="">
+          </div>
+          <div className="categories">
+            <h2 className="section-header">Categories</h2>
+            {/* <ul className="">
             {filters.map((filter) => (
               <li>
                 <CategoryPill filter={filter} />
               </li>
             ))}
           </ul> */}
-          N/A
-        </div>
-        <div className="popular">
-          <h2 className="section-header">Popular</h2>
-          {/* popular posts will be listed here */}
-          <p>N/A</p>
-        </div>
-      </section>
+            N/A
+          </div>
+        </section>
+      )}
     </main>
   )
 }
