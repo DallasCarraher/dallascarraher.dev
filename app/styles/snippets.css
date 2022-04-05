@@ -1,6 +1,4 @@
-h2 {
-  text-align: center;
-}
+/* Snippets Page CSS */
 
 .snippets-grid {
   display: grid;
@@ -67,6 +65,10 @@ h2 {
   }
 }
 
+/* ---------------- */
+/* Snippet Post CSS */
+/* ---------------- */
+
 .wrapper {
   display: grid;
   grid-template-columns:
@@ -127,13 +129,22 @@ footer {
   height: 40vh;
 }
 main li {
-  font-size: 20px;
+  font-size: 22px;
 }
 
+/* Mobile Layouts (Keep in mind: "Mobile First!") */
 @media (max-width: 760px) {
   .snippets-grid {
     display: flex;
     flex-direction: column;
     padding: 2rem;
+  }
+  p {
+    padding: 1rem 1rem 0rem 1rem;
+    font-size: 18px;
+    font-weight: 200;
+  }
+  ul li {
+    max-width: 300px;
   }
 }
