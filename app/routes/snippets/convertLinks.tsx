@@ -127,7 +127,7 @@ export default function convertLinks() {
       <p>
         This was a fun little exercise to demonstrate the fundamentals, but I
         don't recommend using this function in production code. As mentioned in
-        the stack overlow post I linked above, instead of attempting to
+        the stack overflow post I linked above, instead of attempting to
         hand-roll your own sanitization you really ought to use something
         maintained. Here are some useful links for learning more:
       </p>
