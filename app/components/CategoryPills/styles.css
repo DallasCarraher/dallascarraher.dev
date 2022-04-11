@@ -35,7 +35,6 @@
   border: 2px solid var(--color-primary);
   color: var(--color-primary);
   font-weight: 500;
-  content: '  ';
 }
 
 .selected:after {
@@ -62,4 +61,18 @@
 .control:hover {
   border: 2px solid var(--color-primary);
   color: var(--color-primary);
+}
+
+@media (max-width: 760px) {
+  .filters-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    padding: 1rem;
+  }
+  .filter {
+    width: 170px;
+    margin: 10px 0px 10px 0px;
+    text-align: center;
+  }
 }
