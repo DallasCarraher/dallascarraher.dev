@@ -170,22 +170,10 @@ function Layout({ children }: { children: React.ReactNode }) {
         <Portal el="mobile-nav">
           <div className="ham-menu-nav">
             <ul>
-              <li
-                onClick={() =>
-                  setTimeout(() => {
-                    setHamMenu(!hamMenu)
-                  }, 0)
-                }
-              >
+              <li onClick={() => setHamMenu(!hamMenu)}>
                 <Link to="/">Home</Link>
               </li>
-              <li
-                onClick={() =>
-                  setTimeout(() => {
-                    setHamMenu(!hamMenu)
-                  }, 0)
-                }
-              >
+              <li onClick={() => setHamMenu(!hamMenu)}>
                 <Link to="/snippets">Snippets</Link>
               </li>
               <li>
