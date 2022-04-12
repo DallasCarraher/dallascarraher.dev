@@ -6,6 +6,10 @@
 }
 
 .Box img {
+  /* layout-shift optimization */
+  min-height: 20vh;
+  min-height: 20vh;
+  /* ------------------------- */
   max-height: 100%;
   max-width: 100%;
   border-radius: 10px;
