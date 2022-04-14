@@ -161,7 +161,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             </ul>
           </nav>
         )}
-        {width <= 760 && (
+        {width > -1 && width <= 760 && (
           <HamburgerMenu active={hamMenu} setActive={setHamMenu} />
         )}
       </header>
