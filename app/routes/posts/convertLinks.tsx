@@ -3,10 +3,10 @@ import CodeSnippet, {
 } from '~/components/CodeSnippet/CodeSnippet'
 import Codesandbox from '~/components/Codesandbox/Codesandbox'
 import useWindowSize from '~/hooks/useWindowSize'
-import snippetStyles from '~/styles/snippets.css'
+import postStyles from '~/styles/posts.css'
 
 export function links() {
-  return [...codeSnippetLinks(), { rel: 'stylesheet', href: snippetStyles }]
+  return [...codeSnippetLinks(), { rel: 'stylesheet', href: postStyles }]
 }
 
 export default function convertLinks() {

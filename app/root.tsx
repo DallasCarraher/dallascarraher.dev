@@ -140,7 +140,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           <nav aria-label="Main navigation" className="header-nav">
             <ul>
               <li>
-                <Link to="/snippets">Snippets</Link>
+                <Link to="/posts">Posts</Link>
               </li>
               <li>
                 <a
@@ -174,7 +174,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <Link to="/">Home</Link>
               </li>
               <li onClick={() => setHamMenu(!hamMenu)}>
-                <Link to="/snippets">Snippets</Link>
+                <Link to="/posts">Posts</Link>
               </li>
               <li>
                 <a

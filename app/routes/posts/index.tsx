@@ -1,43 +1,51 @@
-import { Link, useLoaderData } from 'remix'
-import { getPosts } from './post'
-import type { Post } from './post'
-import styles from '~/styles/global.css'
+import * as React from 'react'
+import CategoryPills, {
+  links as categoryPillLinks,
+} from '~/components/CategoryPills/CategoryPills'
+import Box, { links as boxLinks } from '~/components/Box/Box'
 
-export const links = () => [{ rel: 'stylesheet', href: styles }]
+import styles from '~/styles/posts.css'
 
-export const loader = () => {
-  return getPosts()
+export function links() {
+  return [
+    ...categoryPillLinks(),
+    ...boxLinks(),
+    { rel: 'stylesheet', href: styles },
+  ]
 }
 
 export default function Posts() {
-  const posts = useLoaderData<Post[]>()
+  const [filters, setFilters] = React.useState(['JavaScript', 'React', 'Hooks'])
+  const showJavaScript = filters.includes('JavaScript')
+  const showReact = filters.includes('React')
+  const showHooks = filters.includes('Hooks')
+
   return (
-    <>
-      <section className="main">
-        <h1>Posts</h1>
-        <Link to="/posts/new" className="button">
-          New Post
-        </Link>
-      </section>
-      <main className="blog-app__main">
-        <ul className="posts-list">
-          {posts.map((post) => (
-            <article key={post.id} className="post">
-              <a href={`/posts/${post.id}`}>
-                <h3>{post.title}</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi
-                  modi magni pariatur repellat nemo, animi molestiae at iure.
-                  Pariatur suscipit, vel laudantium animi tempora ullam
-                  exercitationem nemo aliquid, quidem, ratione temporibus
-                  perferendis reprehenderit magnam!
-                </p>
-              </a>
-              <Link to="/posts">see more</Link>
-            </article>
-          ))}
-        </ul>
-      </main>
-    </>
+    <section title="posts">
+      <CategoryPills
+        filterNames={['JavaScript', 'React', 'Hooks']}
+        active={filters}
+        setChoices={setFilters}
+      />
+      <div className="posts-grid">
+        {/* JavaScript Posts */}
+        {showJavaScript && (
+          <>
+            <Box
+              alt="by Lucas Sankey"
+              link="/posts/convertLinks"
+              title="Converting Links in Plain Text"
+              text="a short post on how to convert links in strings to anchor tags safely"
+              img="https://images.unsplash.com/photo-1555101835-7271e43705ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+              categories={['JavaScript']}
+            />
+          </>
+        )}
+        {/* Hooks Posts */}
+        {showHooks && null}
+        {/* React-specific Posts */}
+        {showReact && null}
+      </div>
+    </section>
   )
 }

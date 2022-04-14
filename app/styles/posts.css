@@ -1,6 +1,6 @@
-/* Snippets Page CSS */
+/* Posts Page CSS */
 
-.snippets-grid {
+.posts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4rem 3rem;
@@ -8,17 +8,17 @@
   padding: 3rem;
 }
 
-.snippets-grid h3 {
+.posts-grid h3 {
   padding-left: 1rem;
   margin: 0.5rem 0 0.5rem 0;
 }
 
-.snippets-grid p {
+.posts-grid p {
   margin-top: 0;
   padding-left: 1rem;
 }
 
-.snippets-grid a {
+.posts-grid a {
   transform: scale(1);
   transition: transform 0.5s ease-in-out;
   -webkit-transition: transform 0.5s ease-in-out;
@@ -27,7 +27,7 @@
   opacity: 60%;
 }
 
-.snippets-grid a:hover {
+.posts-grid a:hover {
   transform: scale(1.02);
   transition: transform 0.5s ease-in-out;
   -webkit-transition: transform 0.5s ease-in-out;
@@ -37,7 +37,7 @@
   animation: hovering 1.5s ease;
 }
 
-.snippets-grid div {
+.posts-grid div {
   transform: scale(1);
   transition: transform 0.5s ease-in-out;
   -webkit-transition: transform 0.5s ease-in-out;
@@ -46,7 +46,7 @@
   opacity: 60%;
 }
 
-.snippets-grid div:hover {
+.posts-grid div:hover {
   transform: scale(1.02);
   transition: transform 0.5s ease-in-out;
   -webkit-transition: transform 0.5s ease-in-out;
@@ -66,7 +66,7 @@
 }
 
 /* ---------------- */
-/* Snippet Post CSS */
+/* Post CSS */
 /* ---------------- */
 
 .wrapper {
@@ -137,7 +137,7 @@ main li {
 
 /* Mobile Layouts (Keep in mind: "Mobile First!") */
 @media (max-width: 760px) {
-  .snippets-grid {
+  .posts-grid {
     display: flex;
     flex-direction: column;
     padding: 2rem;

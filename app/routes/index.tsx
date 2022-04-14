@@ -4,7 +4,7 @@ import picture from '~/assets/avatar.jpg'
 import useWindowSize from '~/hooks/useWindowSize'
 // import { CategoryPill } from '~/components/CategoryPill/CategoryPill'
 import styles from '~/styles/index.css'
-import { getPosts, Post } from './posts/post'
+import { getPosts, Post } from './blog/post'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
@@ -50,10 +50,10 @@ export default function Index() {
         <div className="posts">
           <h2 className="section-header">Recent</h2>
           <div className="post-link">
-            <Link to="/snippets">
-              <h3>Snippets!</h3>
+            <Link to="/posts">
+              <h3>Content!</h3>
               <p>
-                I've gone ahead and added my first snippet! Check it out by
+                I've gone ahead and added my first post! Check it out by
                 clicking here.
               </p>
             </Link>
