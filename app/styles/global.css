@@ -85,6 +85,7 @@
   /* color */
   --color-foreground: hsl(0, 0%, 7%);
   --color-background: hsl(0, 0%, 100%);
+  --color-background-glass: hsla(0, 0%, 100%, 90%);
   --color-links: hsl(213, 100%, 52%);
   --color-links-hover: hsl(213, 100%, 43%);
   --color-border: hsl(0, 0%, 82%);
@@ -135,6 +136,7 @@
 [data-reactroot='dark'] {
   --color-foreground: hsl(0, 0%, 100%);
   --color-background: hsl(210deg, 30%, 8%);
+  --color-background-glass: hsla(210deg, 30%, 8%, 90%);
   --color-links: hsl(213, 100%, 73%);
   --color-links-hover: hsl(213, 100%, 80%);
   --color-border: hsl(0, 0%, 55%);
@@ -301,11 +303,16 @@ input:where([type='search']) {
 }
 
 .header {
+  position: sticky;
+  z-index: 3;
+  top: -1px;
+  background: var(--color-background-glass);
   display: flex;
   justify-content: space-between;
-  max-width: 1100px;
   align-items: center;
-  padding: 1rem;
+  min-width: 100%;
+  padding: 0.5rem 2rem 0.5rem 2rem;
+  margin: 0;
 }
 
 .header-home-link h1 {
