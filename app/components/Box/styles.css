@@ -1,4 +1,6 @@
 .Box {
+  max-width: 400px;
+  min-width: 350px;
   border: solid 3px var(--color-foreground);
   border-radius: 10px;
   overflow-wrap: break-word;
@@ -7,11 +9,9 @@
 
 .Box img {
   /* layout-shift optimization */
-  min-height: 20vh;
-  min-height: 20vh;
   /* ------------------------- */
-  max-height: 100%;
-  max-width: 100%;
+  height: 25vh;
+  width: 100%;
   border-radius: 10px;
 }
 
@@ -23,11 +23,13 @@
 
 .category-tags-container {
   display: flex;
-  flex-direction: flex-start;
 }
 
 .category-tag {
-  width: fit-content;
+  max-width: 10ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border: 2px solid var(--color-foreground);
   color: var(--color-foreground);
   border-radius: 10px;

@@ -1,0 +1,47 @@
+.skeleton {
+  background: var(--color-background);
+  background: linear-gradient(
+    110deg,
+    var(--color-background) 8%,
+    var(--color-primary) 18%,
+    var(--color-background) 33%
+  );
+  border-radius: 10px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.h1 {
+  height: 2rem;
+  width: 8rem;
+}
+
+.h2 {
+  height: 1rem;
+  width: 6rem;
+}
+
+.h3 {
+  height: 1rem;
+  width: 4rem;
+}
+
+.p {
+  display: block;
+  height: 1rem;
+  width: 100%;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}

@@ -1,7 +1,11 @@
 import styles from './styles.css'
+import Skeleton, {
+  links as skeletonLinks,
+} from '~/components/Skeleton/Skeleton'
+import * as React from 'react'
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }]
+  return [...skeletonLinks(), { rel: 'stylesheet', href: styles }]
 }
 
 type content = {
@@ -21,9 +25,13 @@ export default function Box({
   text,
   categories,
 }: content) {
+  const imgRef = React.useRef<HTMLImageElement>(null)
+
   return link ? (
     <a href={link} className="Box">
-      <img src={img} alt={alt} />
+      <Skeleton imgRef={imgRef}>
+        <img src={img} alt={alt} ref={imgRef} />
+      </Skeleton>
       <h3>{title}</h3>
       <p>{text}</p>
       <div className="category-tags-container">
