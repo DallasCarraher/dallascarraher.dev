@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom'
 import * as React from 'react'
 
 type Props = {
@@ -15,12 +15,7 @@ export default function Portal({
   className = 'root-portal',
   el,
 }: Props) {
-  // until the client loads, don't run.
-  if (!document) return null
-
-  const [container] = React.useState(() => {
-    return document.createElement(el)
-  })
+  const [container] = React.useState(document.createElement(el))
 
   React.useEffect(() => {
     container.classList.add(className)
@@ -28,7 +23,7 @@ export default function Portal({
     return () => {
       document.body.removeChild(container)
     }
-  }, [])
+  }, [className, container])
 
   return ReactDOM.createPortal(children, container)
 }

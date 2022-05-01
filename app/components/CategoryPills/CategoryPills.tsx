@@ -18,7 +18,7 @@ export default function CategoryPills({
 }: Props) {
   const { width } = useWindowSize()
 
-  const updateChoices = (newChoice: string, all?: boolean) => {
+  const updateChoices = (newChoice: string) => {
     // create a localized copy of active to mutate freely before updating the reactive parent
     let updated = new Array(...active)
 

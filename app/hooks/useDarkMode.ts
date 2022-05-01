@@ -34,7 +34,7 @@ export default function useDarkMode() {
     localStorage.setItem('useDarkMode', `${dark}`)
     const dataTheme = dark ? 'dark' : 'light'
     document.documentElement.setAttribute('data-reactroot', dataTheme)
-  }, [dark])
+  }, [dark, initialized])
 
   return { dark, setDark }
 }

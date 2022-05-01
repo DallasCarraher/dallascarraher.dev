@@ -25,11 +25,11 @@ export default function Skeleton({ children, imgRef }: Props) {
 
   useSSRLayoutEffect(() => {
     setTimeout(() => {
-      if (imgRef && imgRef.current!.complete) setLoading(false)
+      if (imgRef && imgRef.current?.complete) setLoading(false)
     }, 300)
   }, [])
 
-  let rootChild = {
+  const rootChild = {
     className: '',
     type: '',
   }

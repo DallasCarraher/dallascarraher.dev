@@ -22,7 +22,7 @@ import useWindowSize from './hooks/useWindowSize'
 import Portal from './components/Portal/Portal'
 
 // https://remix.run/api/app#links
-export let links: LinksFunction = () => {
+export const links: LinksFunction = () => {
   return [
     ...switchLinks(),
     ...hamburgerLinks(),
@@ -62,7 +62,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 // https://remix.run/docs/en/v1/api/conventions#catchboundary
 export function CatchBoundary() {
-  let caught = useCatch()
+  const caught = useCatch()
 
   let message
   switch (caught.status) {
@@ -146,12 +146,17 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <a
                   href="https://linkedin.com/in/dallascarraher/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   LinkedIn
                 </a>
               </li>
               <li>
-                <a href="https://github.com/dallascarraher" target="_blank">
+                <a
+                  href="https://github.com/dallascarraher"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   GitHub
                 </a>
               </li>
@@ -180,12 +185,17 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <a
                   href="https://linkedin.com/in/dallascarraher/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   LinkedIn
                 </a>
               </li>
               <li>
-                <a href="https://github.com/dallascarraher" target="_blank">
+                <a
+                  href="https://github.com/dallascarraher"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   GitHub
                 </a>
               </li>

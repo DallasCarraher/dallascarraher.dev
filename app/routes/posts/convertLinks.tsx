@@ -9,7 +9,7 @@ export function links() {
   return [...codeSnippetLinks(), { rel: 'stylesheet', href: postStyles }]
 }
 
-export default function convertLinks() {
+export default function ConvertLinks() {
   const { width } = useWindowSize()
   return (
     <main className="wrapper">
@@ -45,6 +45,7 @@ export default function convertLinks() {
             className="link"
             href="https://codesandbox.io/s/convert-links-in-plain-text-to-anchors-no-xss-protection-t3toco?file=/src/index.ts"
             target="_blank"
+            rel="noreferrer"
           >
             CodeSandbox Link
           </a>
@@ -64,7 +65,11 @@ export default function convertLinks() {
         developers are aware of and know to be wary of. It's called Cross-Site
         Scripting (or XSS). If you've never heard of it, you'll definitely want
         to check out this link:{' '}
-        <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">
+        <a
+          href="https://owasp.org/www-community/attacks/xss/"
+          target="_blank"
+          rel="noreferrer"
+        >
           owasp.org/www-community/attacks/xss/
         </a>
       </p>
@@ -80,6 +85,7 @@ export default function convertLinks() {
         <a
           href="https://stackoverflow.com/questions/59495766/convert-text-link-to-multiple-html-format-in-javascript-with-xss-filter"
           target="_blank"
+          rel="noreferrer"
         >
           Stack Overflow
         </a>
@@ -109,6 +115,7 @@ export default function convertLinks() {
             className="link"
             href="https://codesandbox.io/s/convert-links-in-plain-text-to-anchor-tags-f6025p"
             target="_blank"
+            rel="noreferrer"
           >
             CodeSandbox Link
           </a>
@@ -136,12 +143,17 @@ export default function convertLinks() {
           <a
             href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md"
             target="_blank"
+            rel="noreferrer"
           >
             Cross Site Scripting Prevention Cheat Sheet
           </a>
         </li>
         <li>
-          <a href="https://github.com/cure53/DOMPurify" target="_blank">
+          <a
+            href="https://github.com/cure53/DOMPurify"
+            target="_blank"
+            rel="noreferrer"
+          >
             DOM Purify
           </a>
         </li>

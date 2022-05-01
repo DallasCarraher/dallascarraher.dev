@@ -1,25 +1,25 @@
 import type { MetaFunction, LoaderFunction } from 'remix'
-import { useLoaderData, json, Link } from 'remix'
+import { json, Link } from 'remix'
 import picture from '~/assets/avatar.jpg'
 import useWindowSize from '~/hooks/useWindowSize'
 // import { CategoryPill } from '~/components/CategoryPill/CategoryPill'
 import styles from '~/styles/index.css'
-import { getPosts, Post } from './blog/post'
+import { getPosts } from './blog/post'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
 // https://remix.run/api/conventions#loader
-export let loader: LoaderFunction = () => {
-  let data = getPosts()
+export const loader: LoaderFunction = () => {
+  const data = getPosts()
 
   // https://remix.run/api/remix#json
   return json(data)
 }
 
 // https://remix.run/api/conventions#meta
-export let meta: MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return {
     title: 'DallasCarraher.dev',
     description: 'Welcome to my site!',
