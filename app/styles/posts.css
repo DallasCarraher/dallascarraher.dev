@@ -136,7 +136,22 @@ main li {
 }
 
 /* Mobile Layouts (Keep in mind: "Mobile First!") */
-@media (max-width: 760px) {
+@media (max-width: 1024px) {
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem 3rem;
+    justify-items: center;
+    padding: 3rem;
+  }
+  p {
+    padding: 1rem 1rem 0rem 1rem;
+    font-size: 18px;
+    font-weight: 200;
+  }
+}
+
+@media (max-width: 560px) {
   .posts-grid {
     display: flex;
     flex-direction: column;
