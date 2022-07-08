@@ -1,5 +1,6 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["remix.env.d.ts"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "isolatedModules": true,
