@@ -1,6 +1,7 @@
-import { Button } from 'ariakit/button'
 import github from '../assets/icons/github.svg'
 import linkedIn from '../assets/icons/linkedin.svg'
+import { SocialButton } from '../components/SocialButton'
+import { Tooltip } from '../components/Tooltip'
 
 /**
  * This serves as my landing page for my website
@@ -17,32 +18,22 @@ export function Index() {
               className="h-56 select-none rounded-full"
             />
           </div>
-          <h1 className="text-3xl text-white p-3">Dallas Carraher</h1>
+          <h1 className="text-3xl p-3">Dallas Carraher</h1>
           <div className="flex space-x-2">
-            <Button
-              as="a"
-              href="https://github.com/DallasCarraher"
-              rel="no-referrer"
-              target="_blank"
-            >
-              <img
+            <Tooltip content="GitHub" placement="bottom">
+              <SocialButton
                 src={github}
                 alt="github logo"
-                className="h-10 bg-slate-400 rounded-full p-1"
+                link="https://github.com/DallasCarraher"
               />
-            </Button>
-            <Button
-              as="a"
-              href="https://linkedin.com/in/dallascarraher"
-              rel="no-referrer"
-              target="_blank"
-            >
-              <img
+            </Tooltip>
+            <Tooltip content="LinkedIn" placement="bottom">
+              <SocialButton
                 src={linkedIn}
                 alt="linkedIn logo"
-                className="h-10 bg-slate-400 rounded-full p-1"
+                link="https://linkedin.com/in/dallascarraher"
               />
-            </Button>
+            </Tooltip>
           </div>
         </div>
       </header>
