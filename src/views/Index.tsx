@@ -1,3 +1,7 @@
+import { Button } from 'ariakit/button'
+import github from '../assets/icons/github.svg'
+import linkedIn from '../assets/icons/linkedin.svg'
+
 /**
  * This serves as my landing page for my website
  */
@@ -13,7 +17,33 @@ export function Index() {
               className="h-56 select-none rounded-full"
             />
           </div>
-          <h1 className="text-3xl text-white p-5">Dallas Carraher</h1>
+          <h1 className="text-3xl text-white p-3">Dallas Carraher</h1>
+          <div className="flex space-x-2">
+            <Button
+              as="a"
+              href="https://github.com/DallasCarraher"
+              rel="no-referrer"
+              target="_blank"
+            >
+              <img
+                src={github}
+                alt="github logo"
+                className="h-10 bg-slate-400 rounded-full p-1"
+              />
+            </Button>
+            <Button
+              as="a"
+              href="https://linkedin.com/in/dallascarraher"
+              rel="no-referrer"
+              target="_blank"
+            >
+              <img
+                src={linkedIn}
+                alt="linkedIn logo"
+                className="h-10 bg-slate-400 rounded-full p-1"
+              />
+            </Button>
+          </div>
         </div>
       </header>
       <main className="max-w-screen-sm px-6 mx-auto"></main>
