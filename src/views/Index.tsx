@@ -2,11 +2,14 @@ import github from '../assets/icons/github.svg'
 import linkedIn from '../assets/icons/linkedin.svg'
 import { SocialButton } from '../components/SocialButton'
 import { Tooltip } from '../components/Tooltip'
+import { usePrisma } from '../PrismaClientProvider'
 
 /**
  * This serves as my landing page for my website
  */
 export function Index() {
+  const prisma = usePrisma()
+  console.log(prisma)
   return (
     <>
       <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
