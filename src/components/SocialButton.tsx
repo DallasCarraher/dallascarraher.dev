@@ -1,9 +1,9 @@
-import { Button } from 'ariakit/button'
+import { Button } from "ariakit/button";
 
 interface ISocialButton {
-  src: string
-  alt: string
-  link: string
+  src: string;
+  alt: string;
+  link: string;
 }
 
 export function SocialButton({ src, alt, link }: ISocialButton) {
@@ -17,5 +17,5 @@ export function SocialButton({ src, alt, link }: ISocialButton) {
         />
       </Button>
     </>
-  )
+  );
 }

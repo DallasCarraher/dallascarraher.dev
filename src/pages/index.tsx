@@ -1,15 +1,16 @@
-import github from '../assets/icons/github.svg'
-import linkedIn from '../assets/icons/linkedin.svg'
-import { SocialButton } from '../components/SocialButton'
-import { Tooltip } from '../components/Tooltip'
-import { usePrisma } from '../PrismaClientProvider'
+import type { NextPage } from "next";
+import Head from "next/head";
+import { trpc } from "../utils/trpc";
 
-/**
- * This serves as my landing page for my website
- */
-export function Index() {
-  const prisma = usePrisma()
-  console.log(prisma)
+import github from "../../public/icons/github.svg";
+import linkedIn from "../../public/icons/linkedin.svg";
+import { SocialButton } from "../components/SocialButton";
+import { Tooltip } from "../components/Tooltip";
+// import { usePrisma } from '../PrismaClientProvider'
+
+const Home: NextPage = () => {
+  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+
   return (
     <>
       <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
@@ -25,14 +26,14 @@ export function Index() {
           <div className="flex space-x-2">
             <Tooltip content="GitHub" placement="bottom">
               <SocialButton
-                src={github}
+                src={github.src}
                 alt="github logo"
                 link="https://github.com/DallasCarraher"
               />
             </Tooltip>
             <Tooltip content="LinkedIn" placement="bottom">
               <SocialButton
-                src={linkedIn}
+                src={linkedIn.src}
                 alt="linkedIn logo"
                 link="https://linkedin.com/in/dallascarraher"
               />
@@ -47,5 +48,7 @@ export function Index() {
         </p>
       </footer>
     </>
-  )
-}
+  );
+};
+
+export default Home;
