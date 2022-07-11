@@ -1,16 +1,13 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../utils/trpc";
+import type { NextPage } from 'next'
+import { trpc } from '../utils/trpc'
 
-import github from "../../public/icons/github.svg";
-import linkedIn from "../../public/icons/linkedin.svg";
-import { SocialButton } from "../components/SocialButton";
-import { Tooltip } from "../components/Tooltip";
-// import { usePrisma } from '../PrismaClientProvider'
+import github from '../../public/icons/github.svg'
+import linkedIn from '../../public/icons/linkedin.svg'
+import { SocialButton } from '../components/SocialButton'
+import { Tooltip } from '../components/Tooltip'
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-
+  const hello = trpc.useQuery(['posts.getAll'])
   return (
     <>
       <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
@@ -48,7 +45,7 @@ const Home: NextPage = () => {
         </p>
       </footer>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
