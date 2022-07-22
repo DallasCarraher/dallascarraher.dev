@@ -41,10 +41,7 @@ const Index: NextPage = () => {
         </div>
       </header>
       <main className="max-w-screen-sm px-6 mx-auto">
-        <div
-          title="posts-container"
-          className="pt-16 lt-sm:pt-12 border-t-black"
-        >
+        <div className="pt-16 lt-sm:pt-12 border-t-black">
           {posts.error && (
             <div className="text-red-500 text-md text-center">
               There was an error loading posts
