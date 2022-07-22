@@ -3,11 +3,13 @@ import { trpc } from '../utils/trpc'
 
 import github from '../../public/icons/github.svg'
 import linkedIn from '../../public/icons/linkedin.svg'
+
 import { SocialButton } from '../components/SocialButton'
 import { Tooltip } from '../components/Tooltip'
+import { LoadingSpinner } from '../components/LoadingSpinner/LoadingSpinner'
 
-const Home: NextPage = () => {
-  const hello = trpc.useQuery(['posts.getAll'])
+const Index: NextPage = () => {
+  const posts = trpc.useQuery(['posts.getAll'])
   return (
     <>
       <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
@@ -38,9 +40,36 @@ const Home: NextPage = () => {
           </div>
         </div>
       </header>
-      <main className="max-w-screen-sm px-6 mx-auto"></main>
+      <main className="max-w-screen-sm px-6 mx-auto">
+        <div
+          title="posts-container"
+          className="pt-16 lt-sm:pt-12 border-t-black"
+        >
+          {posts.error && (
+            <div className="text-red-500 text-md text-center">
+              There was an error loading posts
+            </div>
+          )}
+          {posts.isLoading ? (
+            <div className="text-center">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            posts.data?.map((post) => (
+              <div key={post.id} className="pt-12 first:pt-0">
+                <h3 className="text-2xl font-bold">{post.title}</h3>
+                <p className="text-gray-500/80">
+                  {post.createdAt.toLocaleDateString()}
+                </p>
+                <p className="mt-3 text-gray-600">{post.content}</p>
+                <p className="mt-3">Read More</p>
+              </div>
+            ))
+          )}
+        </div>
+      </main>
       <footer className="max-w-screen-sm px-6 mx-auto mt-20 pb-16 lt-sm:pb-8 lt-sm:mt-16">
-        <p className="flex items-center gap-2.5 text-gray-400 text-sm">
+        <p className="text-gray-400 text-sm">
           <span>© 2022 Dallas Carraher, Powered by MyStack</span>
         </p>
       </footer>
@@ -48,4 +77,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Index
