@@ -16,6 +16,6 @@ export const postsRouter = createRouter()
   })
   .query('getAll', {
     async resolve({ ctx }) {
-      return await ctx.prisma.post.findMany()
+      return await ctx.client.db('blog').collection('posts').find().toArray()
     },
   })

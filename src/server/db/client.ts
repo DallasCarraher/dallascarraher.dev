@@ -1,16 +1,9 @@
-// src/server/db/client.ts
-import { PrismaClient } from "@prisma/client";
+import { MongoClient, ServerApiVersion } from 'mongodb'
 
-declare global {
-  var prisma: PrismaClient | undefined;
-}
+const connectionString = process.env.DATABASE_URL!
 
-export const prisma =
-  global.prisma ||
-  new PrismaClient({
-    log: ["query"],
-  });
+export const client = new MongoClient(connectionString, {
+  serverApi: ServerApiVersion.v1,
+})
 
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = prisma;
-}
+client.connect()

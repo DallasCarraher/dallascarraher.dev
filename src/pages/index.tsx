@@ -53,13 +53,20 @@ const Index: NextPage = () => {
             </div>
           ) : (
             posts.data?.map((post) => (
-              <div key={post.id} className="pt-12 first:pt-0">
+              <div
+                key={`post-${post._id || Math.floor(Math.random() * 100)}`}
+                className="pt-12 first:pt-0"
+              >
                 <h3 className="text-2xl font-bold">{post.title}</h3>
                 <p className="text-gray-500/80">
-                  {post.createdAt.toLocaleDateString()}
+                  {/* {post.createdAt.toLocaleDateString()} */}
                 </p>
-                <p className="mt-3 text-gray-600">{post.content}</p>
-                <p className="mt-3">Read More</p>
+                <p className="mt-3 text-gray-600">{post.body}</p>
+                <p className="mt-3">
+                  <a href="#" className="underline underline-offset-2">
+                    Read More
+                  </a>
+                </p>
               </div>
             ))
           )}
