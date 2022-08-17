@@ -1,0 +1,103 @@
+.underline:hover {
+  text-decoration: underline;
+}
+
+.button {
+  display: flex;
+  height: 2.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  border-style: none;
+  background-color: hsl(204, 100%, 40%);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: hsl(0, 0%, 100%);
+}
+
+.button:hover {
+  background-color: hsl(204, 100%, 32%);
+}
+
+.button[aria-disabled='true'] {
+  opacity: 0.5;
+}
+
+.dark .button {
+  background-color: hsl(204, 100%, 40%);
+  color: hsl(0, 0%, 100%);
+}
+
+.dark .button:hover {
+  background-color: hsl(204, 100%, 32%);
+}
+
+.secondary {
+  background-color: transparent;
+  color: currentColor;
+}
+
+.secondary:hover {
+  background-color: hsl(204 10% 10% / 0.05);
+}
+
+.dark .secondary {
+  background-color: transparent;
+}
+
+.dark .secondary:hover {
+  background-color: hsl(0 0% 100% / 0.05);
+}
+
+.popover {
+  max-width: min(calc(100vw - 16px), 320px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: hsl(204, 20%, 88%);
+  background-color: hsl(204, 20%, 100%);
+  padding: 1rem;
+  color: hsl(204, 10%, 10%);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 15%));
+}
+
+.button:focus-visible,
+.button[data-focus-visible],
+.popover:focus-visible,
+.popover[data-focus-visible] {
+  outline: 2px solid hsl(204, 100%, 40%);
+  outline-offset: 2px;
+}
+
+.dark .popover {
+  border-color: hsl(204, 3%, 32%);
+  background-color: hsl(204, 3%, 20%);
+  color: hsl(0, 0%, 100%);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 40%));
+}
+
+.arrow svg {
+  fill: hsl(204, 20%, 100%);
+  stroke: hsl(204, 20%, 88%);
+}
+
+.dark .arrow svg {
+  fill: hsl(204, 3%, 20%);
+  stroke: hsl(204, 3%, 32%);
+}
+
+.heading {
+  margin: 0px;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+}
