@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import { Button } from 'ariakit/button'
 import {
   Tooltip as AriaTooltip,
   TooltipAnchor,
@@ -22,9 +21,7 @@ export function Tooltip({ children, content, placement }: ITooltip) {
   const tooltip = useTooltipState({ placement })
   return (
     <>
-      <TooltipAnchor state={tooltip} as={Button}>
-        {children}
-      </TooltipAnchor>
+      <TooltipAnchor state={tooltip}>{children}</TooltipAnchor>
       <AriaTooltip state={tooltip} className="rounded-sm bg-hsl(204, 20%, 94%)">
         {content}
       </AriaTooltip>
