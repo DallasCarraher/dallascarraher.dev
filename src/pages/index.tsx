@@ -47,7 +47,11 @@ const Index: NextPage = () => {
       </header>
       <main className="max-w-screen-sm px-6 mx-auto">
         <div className="pt-16 lt-sm:pt-12 border-t-black">
-          {posts.error && (
+          <h1 className="text-2xl text-center">
+            {' '}
+            Working on getting my posts going
+          </h1>
+          {/* {posts.error && (
             <div className="text-red-500 text-md text-center">
               There was an error loading posts
             </div>
@@ -76,7 +80,7 @@ const Index: NextPage = () => {
                 </p>
               </div>
             ))
-          )}
+          )} */}
         </div>
       </main>
       <footer className="flex justify-between max-w-screen-sm px-6 mx-auto mt-20 pb-16 lt-sm:pb-8 lt-sm:mt-16">
