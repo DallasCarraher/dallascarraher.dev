@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Head from 'next/head'
 import { useUser } from '@auth0/nextjs-auth0'
 import { trpc } from '../utils/trpc'
 import { Button } from 'ariakit/button'
@@ -16,6 +17,10 @@ const Index: NextPage = () => {
   const { user, isLoading: loadingUser } = useUser()
   return (
     <>
+      <Head>
+        <title>DallasCarraher.dev</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
         <div className="max-w-screen-sm h-full mx-auto flex flex-col items-center justify-center">
           <div className="h-56">
