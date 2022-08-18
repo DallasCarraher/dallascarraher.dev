@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useUser } from '@auth0/nextjs-auth0'
 import { trpc } from '../utils/trpc'
 import { Button } from 'ariakit/button'
+import { useAtom } from 'jotai'
 
 import github from '../../public/icons/github.svg'
 import linkedIn from '../../public/icons/linkedin.svg'
@@ -11,17 +12,27 @@ import { SocialButton } from '../components/SocialButton'
 import { LoadingSpinner } from '../components/LoadingSpinner/LoadingSpinner'
 import { Expand } from '../components/Expand/Expand'
 import { AnchorTag } from '../components/AnchorTag'
+import { SpotifyToken } from './_app'
 
 const Index: NextPage = () => {
+  const [spotifyToken] = useAtom(SpotifyToken)
   const posts = trpc.useQuery(['posts.getAll'])
+  const currentlyPlaying = trpc.useQuery(
+    ['spotify.currentlyPlaying', spotifyToken],
+    {
+      refetchInterval: 30000,
+    }
+  )
   const { user, isLoading: loadingUser } = useUser()
+  const artists = currentlyPlaying.data?.item?.artists
+  const trackName = currentlyPlaying.data?.item?.name
   return (
     <>
       <Head>
         <title>DallasCarraher.dev</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <header className="w-full h-96 lt-sm:h-80 bg-cover bg-center bg-no-repeat">
+      <header className="w-full lt-sm:h-80 bg-cover bg-center bg-no-repeat pt-6">
         <div className="max-w-screen-sm h-full mx-auto flex flex-col items-center justify-center">
           <div className="h-56">
             <img
@@ -43,15 +54,23 @@ const Index: NextPage = () => {
               link="https://linkedin.com/in/dallascarraher"
             />
           </div>
+          {currentlyPlaying.data?.is_playing && (
+            <div className="m-5 text-center absolute top-2 right-3 border-dotted border-2  border-green-500 rounded p-5">
+              Currently listening to <br /> &quot;{trackName}&quot; by{' '}
+              {artists?.map((artist, idx) => {
+                return artists.length > 1
+                  ? idx === artists.length - 1
+                    ? artist.name
+                    : artist.name + ', '
+                  : artist.name
+              })}
+            </div>
+          )}
         </div>
       </header>
       <main className="max-w-screen-sm px-6 mx-auto">
         <div className="pt-16 lt-sm:pt-12 border-t-black">
-          <h1 className="text-2xl text-center">
-            {' '}
-            Working on getting my posts going
-          </h1>
-          {/* {posts.error && (
+          {posts.error && (
             <div className="text-red-500 text-md text-center">
               There was an error loading posts
             </div>
@@ -80,7 +99,7 @@ const Index: NextPage = () => {
                 </p>
               </div>
             ))
-          )} */}
+          )}
         </div>
       </main>
       <footer className="flex justify-between max-w-screen-sm px-6 mx-auto mt-20 pb-16 lt-sm:pb-8 lt-sm:mt-16">

@@ -1,11 +1,33 @@
+import { useEffect } from 'react'
 import { UserProvider } from '@auth0/nextjs-auth0'
 import { withTRPC } from '@trpc/next'
-import type { AppRouter } from '../server/router'
-import type { AppType } from 'next/dist/shared/lib/utils'
 import superjson from 'superjson'
+import { atom, useAtom } from 'jotai'
+
 import '../styles/globals.css'
 
+import type { AppRouter } from '../server/router'
+import type { AppType } from 'next/dist/shared/lib/utils'
+import { trpc } from '../utils/trpc'
+import { IAccessCode } from '../server/router/spotify'
+
+// const twentyFourHours = 24 * 60 * 60 * 1000
+
+export const SpotifyToken = atom('')
+
 const MyApp: AppType = ({ Component, pageProps }) => {
+  const [, setToken] = useAtom(SpotifyToken)
+  const spotifyTokens = trpc.useQuery(['spotify.getNewToken'], {
+    staleTime: Infinity,
+  })
+
+  // once the token is fetched, set it in the atom
+  useEffect(() => {
+    if (spotifyTokens.data) {
+      setToken(spotifyTokens.data.access_token)
+    }
+  }, [setToken, spotifyTokens.data])
+
   return (
     <UserProvider>
       <Component {...pageProps} />
