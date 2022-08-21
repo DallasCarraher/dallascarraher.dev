@@ -11,7 +11,8 @@ const SPOTIFY_API = {
 
 const client_id = process.env.SPOTIFY_CLIENT_ID!
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET!
-const redirect_uri = process.env.SPOTIFY_REDIRECT_URI!
+const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN!
+// const redirect_uri = process.env.SPOTIFY_REDIRECT_URI!
 // const authCode = process.env.SPOTIFY_AUTHCODE!
 
 export interface IAccessCode {
@@ -51,11 +52,6 @@ export const spotifyRouter = createRouter()
   // })
   .query('getNewToken', {
     async resolve() {
-      const refresh_token =
-        process.env.SPOTIFY_REFRESH_TOKEN! ||
-        localStorage.getItem('refresh_token') ||
-        ''
-
       if (!refresh_token) {
         console.error('No refresh token found')
         return null
@@ -95,10 +91,7 @@ export const spotifyRouter = createRouter()
       })
 
       return (await fetch(nowPlayingRequest)
-        .then((res) => {
-          // console.log(res)
-          return res.json()
-        })
+        .then((res) => res.json())
         .catch((err) => err)) as ICurrentlyPlaying
     },
   })
