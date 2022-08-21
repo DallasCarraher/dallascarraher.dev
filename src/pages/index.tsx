@@ -91,18 +91,20 @@ const Index: NextPage = () => {
                 )}
                 <Equalizer />
               </div>
-              <div className="pt-2 pb-1">
+              <div className="pt-2 pb-1 flex flex-col items-center">
                 {mediaType === 'episode' && <div>Listening to a Podcast</div>}
                 {mediaType === 'track' && (
                   <>
-                    &quot;{trackName}&quot; -{' '}
-                    {artists?.map((artist, idx) => {
-                      return artists.length > 1
-                        ? idx === artists.length - 1
-                          ? artist.name
-                          : artist.name + ', '
-                        : artist.name
-                    })}
+                    <div>
+                      &quot;{trackName}&quot; -{' '}
+                      {artists?.map((artist, idx) => {
+                        return artists.length > 1
+                          ? idx === artists.length - 1
+                            ? artist.name
+                            : artist.name + ', '
+                          : artist.name
+                      })}
+                    </div>
                     <ProgressBar
                       bg="#1DB954"
                       percent={songProgress?.toString()}
