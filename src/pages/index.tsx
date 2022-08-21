@@ -7,25 +7,42 @@ import { useAtom } from 'jotai'
 
 import github from '../../public/icons/github.svg'
 import linkedIn from '../../public/icons/linkedin.svg'
+import spotify from '../../public/icons/spotify.png'
 
+import { Equalizer } from '../components/Equalizer/Equalizer'
 import { SocialButton } from '../components/SocialButton'
 import { LoadingSpinner } from '../components/LoadingSpinner/LoadingSpinner'
 import { Expand } from '../components/Expand/Expand'
 import { AnchorTag } from '../components/AnchorTag'
 import { SpotifyToken } from './_app'
+import ProgressBar from '../components/ProgressBar'
+import { msToMinsAndSecs } from '../utils/helpers'
 
 const Index: NextPage = () => {
   const [spotifyToken] = useAtom(SpotifyToken)
-  const posts = trpc.useQuery(['posts.getAll'])
+  const { user, isLoading: loadingUser } = useUser()
+
+  // const posts = trpc.useQuery(['posts.getAll'])
   const currentlyPlaying = trpc.useQuery(
     ['spotify.currentlyPlaying', spotifyToken],
     {
-      refetchInterval: 30000,
+      refetchInterval: 5000,
     }
   )
-  const { user, isLoading: loadingUser } = useUser()
+
+  // spotify
   const artists = currentlyPlaying.data?.item?.artists
   const trackName = currentlyPlaying.data?.item?.name
+  const albumImg = currentlyPlaying.data?.item?.album?.images[0]?.url
+  const trackLink = currentlyPlaying.data?.item?.external_urls?.spotify
+  const mediaType = currentlyPlaying.data?.currently_playing_type
+  const progress = currentlyPlaying.data?.progress_ms
+  const duration = currentlyPlaying.data?.item?.duration_ms
+
+  const songProgress = progress && duration && (progress / duration) * 100
+  const tsCurrent = progress && msToMinsAndSecs(progress)
+  const tsTotal = duration && msToMinsAndSecs(duration)
+
   return (
     <>
       <Head>
@@ -54,23 +71,53 @@ const Index: NextPage = () => {
               link="https://linkedin.com/in/dallascarraher"
             />
           </div>
-          {currentlyPlaying.data?.is_playing && (
-            <div className="m-5 text-center absolute top-2 right-3 border-dotted border-2  border-green-500 rounded p-5">
-              Currently listening to <br /> &quot;{trackName}&quot; by{' '}
-              {artists?.map((artist, idx) => {
-                return artists.length > 1
-                  ? idx === artists.length - 1
-                    ? artist.name
-                    : artist.name + ', '
-                  : artist.name
-              })}
+          {currentlyPlaying.data && (
+            <div className="flex flex-col mt-8 text-center items-center">
+              <div className="flex justify-center">
+                {albumImg ? (
+                  <a href={trackLink} target="_blank" rel="noreferrer">
+                    <img
+                      src={albumImg}
+                      alt="album art"
+                      className="h-10 m-0 rounded border-green-500 border-2"
+                    />
+                  </a>
+                ) : (
+                  <img
+                    src={spotify.src}
+                    alt="spotify"
+                    className="h-7 m-0 pr-3"
+                  />
+                )}
+                <Equalizer />
+              </div>
+              <div className="pt-2 pb-1">
+                {mediaType === 'episode' && <div>Listening to a Podcast</div>}
+                {mediaType === 'track' && (
+                  <>
+                    &quot;{trackName}&quot; -{' '}
+                    {artists?.map((artist, idx) => {
+                      return artists.length > 1
+                        ? idx === artists.length - 1
+                          ? artist.name
+                          : artist.name + ', '
+                        : artist.name
+                    })}
+                    <ProgressBar
+                      bg="#1DB954"
+                      percent={songProgress?.toString()}
+                    />
+                    <span className="pl-2">{`${tsCurrent} / ${tsTotal}`}</span>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>
       </header>
       <main className="max-w-screen-sm px-6 mx-auto">
-        <div className="pt-16 lt-sm:pt-12 border-t-black">
-          {posts.error && (
+        <div className="pt-8 lt-sm:pt-12">
+          {/* {posts.error && (
             <div className="text-red-500 text-md text-center">
               There was an error loading posts
             </div>
@@ -99,7 +146,7 @@ const Index: NextPage = () => {
                 </p>
               </div>
             ))
-          )}
+          )} */}
         </div>
       </main>
       <footer className="flex justify-between max-w-screen-sm px-6 mx-auto mt-20 pb-16 lt-sm:pb-8 lt-sm:mt-16">
