@@ -6,12 +6,10 @@ import {
   msToMinsAndSecs,
 } from "@dallascarraher/ui";
 import { useSpotify } from "../hooks/useSpotify";
-import { Github, Linkedin } from "lucide-react";
+import { siGithub, siSpotify } from "simple-icons";
+import { Linkedin } from "lucide-react";
 
-// Assets (Vite imports)
-import spotifyIcon from "/icons/spotify.png?url";
-
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     { title: "Dallas Carraher" },
     { name: "description", content: "Personal website of Dallas Carraher" },
@@ -51,7 +49,7 @@ export default function Home() {
           </h1>
 
           {/* Spotify Section */}
-          <div className="flex flex-col mt-6 md:mt-8 text-center items-center min-h-[100px] w-full px-4">
+          <div className="flex flex-col mt-6 md:mt-8 text-center items-center min-h-25 w-full px-4">
             {isLoading ? (
               <LoadingSpinner />
             ) : currentlyPlaying ? (
@@ -66,23 +64,29 @@ export default function Home() {
                       />
                     </a>
                   ) : (
-                    <img
-                      src={spotifyIcon}
-                      alt="spotify"
-                      className="h-7 m-0 pr-3"
-                    />
+                    <svg
+                      role="img"
+                      viewBox="0 0 24 24"
+                      className="h-7 pr-3"
+                      fill={`#${siSpotify.hex}`}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>{siSpotify.title}</title>
+                      <path d={siSpotify.path} />
+                    </svg>
                   )}
                   <Equalizer />
                 </div>
                 <div className="pt-2 pb-1 flex flex-col items-center text-gray-700 dark:text-gray-300 max-w-full">
-                  {mediaType === 'episode' && <div>Listening to a Podcast</div>}
-                  {mediaType === 'track' && (
+                  {mediaType === "episode" && <div>Listening to a Podcast</div>}
+                  {mediaType === "track" && (
                     <>
                       <div className="font-medium text-sm md:text-base px-2 wrap-break-word text-center">
-                        "{trackName}" -{' '}
+                        "{trackName}" -{" "}
                         {artists?.map((artist: any, idx: number) => (
                           <span key={idx}>
-                            {artist.name}{idx < artists.length - 1 ? ', ' : ''}
+                            {artist.name}
+                            {idx < artists.length - 1 ? ", " : ""}
                           </span>
                         ))}
                       </div>
@@ -99,7 +103,16 @@ export default function Home() {
               </>
             ) : (
               <div className="text-gray-500 flex items-center gap-2 text-sm md:text-base">
-                <img src={spotifyIcon} alt="Spotify" className="h-6 opacity-50" />
+                <svg
+                  role="img"
+                  viewBox="0 0 24 24"
+                  className="h-6 opacity-50"
+                  fill={`#${siSpotify.hex}`}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>{siSpotify.title}</title>
+                  <path d={siSpotify.path} />
+                </svg>
                 <span>Not playing anything</span>
               </div>
             )}
@@ -108,7 +121,7 @@ export default function Home() {
       </header>
 
       {/* Main Content - grows to push footer down */}
-      <main className="flex-grow max-w-screen-sm px-6 mx-auto w-full">
+      <main className="grow max-w-screen-sm px-6 mx-auto w-full">
         <div className="py-8 md:py-12">
           <p className="text-center text-gray-500 text-sm md:text-base">
             (Blog posts will go here)
@@ -120,9 +133,7 @@ export default function Home() {
       <footer className="w-full mt-auto border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-screen-sm px-6 mx-auto py-6 md:py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-gray-400 text-xs md:text-sm">
-            <span>
-              © {new Date().getFullYear()} Dallas Carraher
-            </span>
+            <span>© {new Date().getFullYear()} Dallas Carraher</span>
           </div>
           <div className="flex gap-3">
             <a
@@ -132,7 +143,15 @@ export default function Home() {
               aria-label="GitHub"
               className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
             >
-              <Github className="h-4 w-4 text-slate-700 dark:text-slate-200" />
+              <svg
+                role="img"
+                viewBox="0 0 24 24"
+                className="h-4 w-4 fill-slate-700 dark:fill-slate-200"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>{siGithub.title}</title>
+                <path d={siGithub.path} />
+              </svg>
             </a>
             <a
               href="https://linkedin.com/in/dallascarraher"
