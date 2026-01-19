@@ -1,21 +1,20 @@
-import type { FC, ReactNode, CSSProperties } from 'react';
+import type { FC, ReactNode } from 'react';
 
 export interface AnchorTagProps {
   href?: string;
   children: ReactNode;
-  styleOverride?: CSSProperties;
+  className?: string;
 }
 
 export const AnchorTag: FC<AnchorTagProps> = ({
   children,
   href = '#',
-  styleOverride = {},
+  className = '',
 }) => {
   return (
     <a
       href={href}
-      className="hover:underline text-blue-500 transition-colors"
-      style={styleOverride}
+      className={`hover:underline text-blue-500 transition-colors ${className}`}
       rel="noopener noreferrer"
       target="_blank"
     >

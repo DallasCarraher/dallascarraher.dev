@@ -9,7 +9,7 @@ export const ProgressBar = ({ bg, percent }: ProgressBarProps) => (
   <div
     style={{
       height: 8,
-      width: '30vh',
+      width: '100%',
       backgroundColor: '#e0e0de',
       borderRadius: 50,
     }}

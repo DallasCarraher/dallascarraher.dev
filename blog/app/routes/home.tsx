@@ -1,19 +1,14 @@
 import type { Route } from "./+types/home";
 import {
-  AnchorTag,
-  Button,
   Equalizer,
-  Expand,
   LoadingSpinner,
   ProgressBar,
-  SocialButton,
   msToMinsAndSecs,
 } from "@dallascarraher/ui";
 import { useSpotify } from "../hooks/useSpotify";
+import { Github, Linkedin } from "lucide-react";
 
 // Assets (Vite imports)
-import githubIcon from "/icons/github.svg?url";
-import linkedInIcon from "/icons/linkedin.svg?url";
 import spotifyIcon from "/icons/spotify.png?url";
 
 export function meta({ }: Route.MetaArgs) {
@@ -54,18 +49,6 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl p-3 font-bold text-gray-900 dark:text-white">
             Dallas Carraher
           </h1>
-          <div className="flex gap-2">
-            <SocialButton
-              src={githubIcon}
-              alt="github logo"
-              link="https://github.com/DallasCarraher"
-            />
-            <SocialButton
-              src={linkedInIcon}
-              alt="linkedIn logo"
-              link="https://linkedin.com/in/dallascarraher"
-            />
-          </div>
 
           {/* Spotify Section */}
           <div className="flex flex-col mt-6 md:mt-8 text-center items-center min-h-[100px] w-full px-4">
@@ -73,7 +56,7 @@ export default function Home() {
               <LoadingSpinner />
             ) : currentlyPlaying ? (
               <>
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex gap-2">
                   {albumImg ? (
                     <a href={trackLink} target="_blank" rel="noreferrer">
                       <img
@@ -95,7 +78,7 @@ export default function Home() {
                   {mediaType === 'episode' && <div>Listening to a Podcast</div>}
                   {mediaType === 'track' && (
                     <>
-                      <div className="font-medium text-sm md:text-base px-2 break-words text-center">
+                      <div className="font-medium text-sm md:text-base px-2 wrap-break-word text-center">
                         "{trackName}" -{' '}
                         {artists?.map((artist: any, idx: number) => (
                           <span key={idx}>
@@ -141,8 +124,25 @@ export default function Home() {
               © {new Date().getFullYear()} Dallas Carraher
             </span>
           </div>
-          <div>
-            {/* Login placeholder */}
+          <div className="flex gap-3">
+            <a
+              href="https://github.com/DallasCarraher"
+              rel="noreferrer"
+              target="_blank"
+              aria-label="GitHub"
+              className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+            >
+              <Github className="h-4 w-4 text-slate-700 dark:text-slate-200" />
+            </a>
+            <a
+              href="https://linkedin.com/in/dallascarraher"
+              rel="noreferrer"
+              target="_blank"
+              aria-label="LinkedIn"
+              className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+            >
+              <Linkedin className="h-4 w-4 text-slate-700 dark:text-slate-200" />
+            </a>
           </div>
         </div>
       </footer>
