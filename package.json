@@ -1,0 +1,13 @@
+{
+  "name": "dallascarraher.dev-monorepo",
+  "private": true,
+  "packageManager": "pnpm@9.15.3",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
