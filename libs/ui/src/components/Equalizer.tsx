@@ -1,5 +1,4 @@
 
-
 export const Equalizer = () => {
   return (
     <div className="equalizer-container">
