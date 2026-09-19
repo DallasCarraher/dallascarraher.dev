@@ -1,4 +1,4 @@
-import { Button } from './Button';
+import { Button } from "./Button";
 import {
   Popover,
   PopoverArrow,
@@ -6,7 +6,7 @@ import {
   PopoverDisclosure,
   PopoverHeading,
   usePopoverState,
-} from 'ariakit';
+} from "ariakit";
 
 export interface ExpandProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export const Expand = ({
   heading,
   description,
   body,
-  action = () => { },
+  action = () => {},
   actionText,
 }: ExpandProps) => {
   const popover = usePopoverState();
@@ -46,7 +46,7 @@ export const Expand = ({
         <PopoverDescription>{description}</PopoverDescription>
         {body}
         <Button className="mt-4 w-full" onClick={handleAction}>
-          {actionText || 'Close'}
+          {actionText || "Close"}
         </Button>
       </Popover>
     </>

@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from "react";
 
 export interface AnchorTagProps {
   href?: string;
@@ -6,11 +6,7 @@ export interface AnchorTagProps {
   className?: string;
 }
 
-export const AnchorTag: FC<AnchorTagProps> = ({
-  children,
-  href = '#',
-  className = '',
-}) => {
+export const AnchorTag: FC<AnchorTagProps> = ({ children, href = "#", className = "" }) => {
   return (
     <a
       href={href}
