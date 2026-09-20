@@ -9,9 +9,27 @@ const RESOLVED_STYLEX_CSS_VIRTUAL_MODULE = "\0" + STYLEX_CSS_VIRTUAL_MODULE;
 
 const FILE_PATTERN = /\.[jt]sx?$/;
 
+// Placeholder emitted during the build's transform phase, when not every file's
+// StyleX rules have necessarily been collected yet. generateBundle() runs after
+// all modules are transformed, so it swaps this for the final, complete CSS.
+// This must be a real (harmless) rule, not a CSS comment: Vite's CSS minifier
+// strips comments before generateBundle ever sees the asset source, so a
+// comment-based placeholder silently disappears instead of getting replaced.
+const PLACEHOLDER_SELECTOR = ".stylex-build-placeholder-8f2a71";
+const BUILD_PLACEHOLDER = `${PLACEHOLDER_SELECTOR}{--x:1}`;
+const BUILD_PLACEHOLDER_RE = new RegExp(
+  `${PLACEHOLDER_SELECTOR.replace(".", "\\.")}\\{[^}]*\\}`,
+  "g",
+);
+
 export default function stylexPlugin(): Plugin {
   const rulesByFile = new Map<string, Rule[]>();
   let isDev = true;
+
+  const buildCss = () => {
+    const rules = Array.from(rulesByFile.values()).flat();
+    return stylexBabelPlugin.processStylexRules(rules, false);
+  };
 
   return {
     name: "vite-plugin-stylex",
@@ -29,9 +47,7 @@ export default function stylexPlugin(): Plugin {
 
     load(id) {
       if (id === RESOLVED_STYLEX_CSS_VIRTUAL_MODULE) {
-        const rules = Array.from(rulesByFile.values()).flat();
-        const css = stylexBabelPlugin.processStylexRules(rules, false);
-        return css;
+        return isDev ? buildCss() : BUILD_PLACEHOLDER;
       }
     },
 
@@ -75,6 +91,25 @@ export default function stylexPlugin(): Plugin {
       }
 
       return { code: result.code ?? code, map: null };
+    },
+
+    // Production build only: runs once every module has been transformed, so
+    // rulesByFile is finally complete. Patch the placeholder into every emitted
+    // CSS asset that contains it (Vite bundles same-chunk CSS imports together,
+    // so the virtual module's content may be merged into e.g. root-*.css).
+    generateBundle(_options, bundle) {
+      if (isDev) return;
+      const finalCss = buildCss();
+      for (const file of Object.values(bundle)) {
+        if (
+          file.type === "asset" &&
+          typeof file.source === "string" &&
+          BUILD_PLACEHOLDER_RE.test(file.source)
+        ) {
+          BUILD_PLACEHOLDER_RE.lastIndex = 0;
+          file.source = file.source.replace(BUILD_PLACEHOLDER_RE, finalCss);
+        }
+      }
     },
 
     handleHotUpdate({ file, server }) {
