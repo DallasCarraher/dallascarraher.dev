@@ -1,4 +1,4 @@
-import { colors } from "@dallascarraher/ui/styles/tokens.stylex";
+import { colors, fonts } from "@dallascarraher/ui/styles/tokens.stylex";
 import * as stylex from "@stylexjs/stylex";
 
 export const styles = stylex.create({
@@ -7,8 +7,10 @@ export const styles = stylex.create({
   },
   body: {
     height: "100%",
+    margin: 0,
     backgroundColor: colors.bg,
     color: colors.text,
+    fontFamily: fonts.sans,
   },
   errorMain: {
     paddingTop: "4rem",

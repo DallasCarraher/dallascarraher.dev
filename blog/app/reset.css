@@ -1,0 +1,19 @@
+/* Minimal reset covering what Tailwind's preflight used to give for free:
+   border-box sizing (StyleX styles below assume it — e.g. width: 100% plus
+   padding would otherwise overflow its container) and zeroed default margins
+   on block elements that would otherwise add unaccounted-for spacing. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
