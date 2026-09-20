@@ -11,7 +11,8 @@
     "test": "bun run --filter '*' test",
     "lint": "oxlint .",
     "format": "oxfmt .",
-    "format:check": "oxfmt --check ."
+    "format:check": "oxfmt --check .",
+    "spotify:auth": "bun run scripts/spotify-refresh-token.ts"
   },
   "devDependencies": {
     "oxfmt": "^0.68.0",
