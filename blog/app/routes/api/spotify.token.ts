@@ -27,12 +27,13 @@ export async function loader(_args: Route.LoaderArgs) {
   });
 
   try {
-    const response = await fetch(`${SPOTIFY_TOKEN_API}?${params.toString()}`, {
+    const response = await fetch(SPOTIFY_TOKEN_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
+      body: params.toString(),
     });
 
     if (!response.ok) {
