@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface AccessToken {
   access_token: string;
@@ -34,7 +34,7 @@ interface SpotifyTrack {
 
 interface CurrentlyPlaying {
   item?: SpotifyTrack;
-  currently_playing_type?: 'track' | 'episode';
+  currently_playing_type?: "track" | "episode";
   progress_ms?: number;
   is_playing: boolean;
 }
@@ -49,15 +49,15 @@ export function useSpotify() {
   useEffect(() => {
     async function fetchToken() {
       try {
-        const response = await fetch('/api/spotify/token');
+        const response = await fetch("/api/spotify/token");
         if (!response.ok) {
-          throw new Error('Failed to fetch token');
+          throw new Error("Failed to fetch token");
         }
         const tokenData: AccessToken = await response.json();
         setToken(tokenData.access_token);
       } catch (err) {
-        console.error('Error fetching token:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
+        console.error("Error fetching token:", err);
+        setError(err instanceof Error ? err : new Error("Unknown error"));
         setIsLoading(false);
       }
     }
@@ -72,14 +72,14 @@ export function useSpotify() {
     try {
       const response = await fetch(`/api/spotify/currently-playing?token=${token}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch currently playing');
+        throw new Error("Failed to fetch currently playing");
       }
       const playingData = await response.json();
       setData(playingData);
       setIsLoading(false);
     } catch (err) {
-      console.error('Error fetching currently playing:', err);
-      setError(err instanceof Error ? err : new Error('Unknown error'));
+      console.error("Error fetching currently playing:", err);
+      setError(err instanceof Error ? err : new Error("Unknown error"));
       setIsLoading(false);
     }
   }, [token]);
