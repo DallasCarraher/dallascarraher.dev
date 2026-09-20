@@ -2,6 +2,7 @@ import type { Route } from "./+types/home";
 import { Equalizer, LoadingSpinner, ProgressBar, msToMinsAndSecs } from "@dallascarraher/ui";
 import { useSpotify } from "../hooks/useSpotify";
 import { siGithub, siSpotify } from "simple-icons";
+import { linkedIn } from "../icons/linkedin";
 
 export function meta(_args: Route.MetaArgs) {
   return [
@@ -151,9 +152,15 @@ export default function Home() {
               aria-label="LinkedIn"
               className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
             >
-              {/* TODO: simple-icons and lucide-react both dropped the LinkedIn
-                  glyph (trademark takedown). Swap in a real icon of your choosing. */}
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">in</span>
+              <svg
+                role="img"
+                viewBox={linkedIn.viewBox}
+                className="h-4 w-4 fill-slate-700 dark:fill-slate-200"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>{linkedIn.title}</title>
+                <path d={linkedIn.path} />
+              </svg>
             </a>
           </div>
         </div>
