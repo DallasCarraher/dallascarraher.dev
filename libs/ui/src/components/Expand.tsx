@@ -1,4 +1,6 @@
+import * as stylex from "@stylexjs/stylex";
 import { Button } from "./Button";
+import { styles } from "./Expand.stylex";
 import {
   Popover,
   PopoverArrow,
@@ -34,18 +36,18 @@ export const Expand = ({
 
   return (
     <>
-      <PopoverDisclosure state={popover} className="hover:underline cursor-pointer">
+      <PopoverDisclosure state={popover} {...stylex.props(styles.disclosure)}>
         {children}
       </PopoverDisclosure>
-      <Popover
-        state={popover}
-        className="max-w-[min(calc(100vw-16px),320px)] z-50 flex flex-col gap-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 text-gray-900 dark:text-white shadow-lg dark:shadow-2xl"
-      >
-        <PopoverArrow className="[&_svg]:fill-white [&_svg]:stroke-gray-200 dark:[&_svg]:fill-gray-800 dark:[&_svg]:stroke-gray-700" />
-        <PopoverHeading className="font-medium text-xl mb-2">{heading}</PopoverHeading>
+      <Popover state={popover} {...stylex.props(styles.popover)}>
+        {/* PopoverArrow reads the popover's computed background-color/border-color
+            to color itself, so it automatically tracks colors.popoverBg/popoverBorder
+            above without any additional styling. */}
+        <PopoverArrow />
+        <PopoverHeading {...stylex.props(styles.heading)}>{heading}</PopoverHeading>
         <PopoverDescription>{description}</PopoverDescription>
         {body}
-        <Button className="mt-4 w-full" onClick={handleAction}>
+        <Button style={styles.actionButton} onClick={handleAction}>
           {actionText || "Close"}
         </Button>
       </Popover>

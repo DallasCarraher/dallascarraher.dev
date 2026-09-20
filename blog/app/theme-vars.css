@@ -1,0 +1,30 @@
+/* CSS custom properties that flip on the existing `.dark` class (set by next-themes).
+   StyleX style values reference these directly via var(--name) instead of using
+   selector-based dark-mode variants, which StyleX does not support. */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-heading: #111827;
+  --color-text-secondary: #374151;
+  --color-border: #e5e7eb;
+  --color-popover-bg: #ffffff;
+  --color-popover-border: #e5e7eb;
+  --color-icon-bg: #e2e8f0;
+  --color-icon-bg-hover: #cbd5e1;
+  --color-icon-fill: #334155;
+}
+
+.dark {
+  --color-bg: #030712;
+  --color-text: #f3f4f6;
+  --color-heading: #ffffff;
+  --color-text-secondary: #d1d5db;
+  --color-border: #1f2937;
+  --color-popover-bg: #1f2937;
+  --color-popover-border: #374151;
+  --color-icon-bg: #334155;
+  --color-icon-bg-hover: #475569;
+  --color-icon-fill: #e2e8f0;
+
+  color-scheme: dark;
+}

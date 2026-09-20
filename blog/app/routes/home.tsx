@@ -1,8 +1,10 @@
 import type { Route } from "./+types/home";
+import * as stylex from "@stylexjs/stylex";
 import { Equalizer, LoadingSpinner, ProgressBar, msToMinsAndSecs } from "@dallascarraher/ui";
 import { useSpotify } from "../hooks/useSpotify";
 import { siGithub, siSpotify } from "simple-icons";
 import { linkedIn } from "../icons/linkedin";
+import { styles } from "./home.stylex";
 
 export function meta(_args: Route.MetaArgs) {
   return [
@@ -28,41 +30,35 @@ export default function Home() {
   const tsTotal = duration && msToMinsAndSecs(duration);
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div {...stylex.props(styles.page)}>
       {/* Header Section */}
-      <header className="w-full bg-cover bg-center bg-no-repeat pt-8 pb-6 px-4">
-        <div className="max-w-screen-sm mx-auto flex flex-col items-center">
-          <div className="w-40 h-40 md:w-56 md:h-56">
+      <header {...stylex.props(styles.header)}>
+        <div {...stylex.props(styles.headerInner)}>
+          <div {...stylex.props(styles.avatarWrap)}>
             <img
               src="https://github.com/DallasCarraher.png"
               alt="A picture of me"
-              className="w-full h-full select-none rounded-full"
+              {...stylex.props(styles.avatarImg)}
             />
           </div>
-          <h1 className="text-2xl md:text-3xl p-3 font-bold text-gray-900 dark:text-white">
-            Dallas Carraher
-          </h1>
+          <h1 {...stylex.props(styles.heading)}>Dallas Carraher</h1>
 
           {/* Spotify Section */}
-          <div className="flex flex-col mt-6 md:mt-8 text-center items-center min-h-25 w-full px-4">
+          <div {...stylex.props(styles.spotifySection)}>
             {isLoading ? (
               <LoadingSpinner />
             ) : currentlyPlaying ? (
               <>
-                <div className="flex gap-2">
+                <div {...stylex.props(styles.trackRow)}>
                   {albumImg ? (
                     <a href={trackLink} target="_blank" rel="noreferrer">
-                      <img
-                        src={albumImg}
-                        alt="album art"
-                        className="h-10 m-0 rounded border-green-500 border-2"
-                      />
+                      <img src={albumImg} alt="album art" {...stylex.props(styles.albumArt)} />
                     </a>
                   ) : (
                     <svg
                       role="img"
                       viewBox="0 0 24 24"
-                      className="h-7 pr-3"
+                      {...stylex.props(styles.spotifyIcon)}
                       fill={`#${siSpotify.hex}`}
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -72,11 +68,11 @@ export default function Home() {
                   )}
                   <Equalizer />
                 </div>
-                <div className="pt-2 pb-1 flex flex-col items-center text-gray-700 dark:text-gray-300 max-w-full">
+                <div {...stylex.props(styles.trackInfo)}>
                   {mediaType === "episode" && <div>Listening to a Podcast</div>}
                   {mediaType === "track" && (
                     <>
-                      <div className="font-medium text-sm md:text-base px-2 wrap-break-word text-center">
+                      <div {...stylex.props(styles.trackName)}>
                         "{trackName}" -{" "}
                         {artists?.map((artist: any, idx: number) => (
                           <span key={idx}>
@@ -85,20 +81,20 @@ export default function Home() {
                           </span>
                         ))}
                       </div>
-                      <div className="mt-1 w-full max-w-xs">
+                      <div {...stylex.props(styles.progressBarWrap)}>
                         <ProgressBar bg="#1DB954" percent={songProgress?.toString()} />
                       </div>
-                      <span className="text-xs mt-1">{`${tsCurrent} / ${tsTotal}`}</span>
+                      <span {...stylex.props(styles.timestamp)}>{`${tsCurrent} / ${tsTotal}`}</span>
                     </>
                   )}
                 </div>
               </>
             ) : (
-              <div className="text-gray-500 flex items-center gap-2 text-sm md:text-base">
+              <div {...stylex.props(styles.notPlaying)}>
                 <svg
                   role="img"
                   viewBox="0 0 24 24"
-                  className="h-6 opacity-50"
+                  {...stylex.props(styles.notPlayingIcon)}
                   fill={`#${siSpotify.hex}`}
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -113,32 +109,30 @@ export default function Home() {
       </header>
 
       {/* Main Content - grows to push footer down */}
-      <main className="grow max-w-screen-sm px-6 mx-auto w-full">
-        <div className="py-8 md:py-12">
-          <p className="text-center text-gray-500 text-sm md:text-base">
-            (Blog posts will go here)
-          </p>
+      <main {...stylex.props(styles.main)}>
+        <div {...stylex.props(styles.mainInner)}>
+          <p {...stylex.props(styles.mainPlaceholder)}>(Blog posts will go here)</p>
         </div>
       </main>
 
       {/* Footer - stays at bottom */}
-      <footer className="w-full mt-auto border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-screen-sm px-6 mx-auto py-6 md:py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-gray-400 text-xs md:text-sm">
+      <footer {...stylex.props(styles.footer)}>
+        <div {...stylex.props(styles.footerInner)}>
+          <div {...stylex.props(styles.copyright)}>
             <span>© {new Date().getFullYear()} Dallas Carraher</span>
           </div>
-          <div className="flex gap-3">
+          <div {...stylex.props(styles.socialRow)}>
             <a
               href="https://github.com/DallasCarraher"
               rel="noreferrer"
               target="_blank"
               aria-label="GitHub"
-              className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+              {...stylex.props(styles.socialLink)}
             >
               <svg
                 role="img"
                 viewBox="0 0 24 24"
-                className="h-4 w-4 fill-slate-700 dark:fill-slate-200"
+                {...stylex.props(styles.socialIcon)}
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <title>{siGithub.title}</title>
@@ -150,12 +144,12 @@ export default function Home() {
               rel="noreferrer"
               target="_blank"
               aria-label="LinkedIn"
-              className="flex items-center justify-center h-9 w-9 bg-slate-200 dark:bg-slate-700 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+              {...stylex.props(styles.socialLink)}
             >
               <svg
                 role="img"
                 viewBox={linkedIn.viewBox}
-                className="h-4 w-4 fill-slate-700 dark:fill-slate-200"
+                {...stylex.props(styles.socialIcon)}
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <title>{linkedIn.title}</title>
