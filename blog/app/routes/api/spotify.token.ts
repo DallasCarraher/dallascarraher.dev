@@ -37,17 +37,13 @@ export async function loader(_args: Route.LoaderArgs) {
     });
 
     if (!response.ok) {
-      const body = await response.text();
-      throw new Error(`Spotify API error: ${response.statusText} - ${body}`);
+      throw new Error(`Spotify API error: ${response.statusText}`);
     }
 
     const data = (await response.json()) as AccessToken;
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching Spotify token:", error);
-    return Response.json(
-      { error: "Failed to fetch token", detail: error instanceof Error ? error.message : String(error) },
-      { status: 500 },
-    );
+    return Response.json({ error: "Failed to fetch token" }, { status: 500 });
   }
 }
