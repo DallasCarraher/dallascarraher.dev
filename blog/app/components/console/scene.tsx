@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-/** Decorative projected geometry; the document remains usable without canvas. */
+/** The BIOS menu’s eight softly glowing, rotating particles. */
 export function Scene() {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -20,67 +20,33 @@ export function Scene() {
       if (last) time += Math.min(now - last, 40) / 1000;
       last = now;
       ctx.clearRect(0, 0, width, height);
-      const scale = Math.min(width, height) * 0.33;
-      const cx = width * 0.5;
-      const cy = height * 0.5;
-      const angle = motion.matches ? 0.5 : time * 0.09;
-      const project = (x: number, y: number, z: number): [number, number] => {
-        const rx = x * Math.cos(angle) - z * Math.sin(angle);
-        const rz = x * Math.sin(angle) + z * Math.cos(angle);
-        const depth = 3.8 / (3.8 + rz);
-        return [cx + rx * scale * depth, cy + (y * 0.84 + rz * 0.32) * scale * depth];
-      };
-      // Architectural echoes of the console's startup towers.
-      for (let i = 0; i < 12; i++) {
-        const a = (i / 12) * Math.PI * 2;
-        const x = Math.cos(a) * 1.15;
-        const z = Math.sin(a) * 1.15;
-        const h = 0.25 + ((i * 7) % 9) * 0.09;
-        const w = 0.085;
-        const vertices = [
-          [x - w, 0.28, z - w],
-          [x + w, 0.28, z - w],
-          [x + w, 0.28, z + w],
-          [x - w, 0.28, z + w],
-          [x - w, 0.28 - h, z - w],
-          [x + w, 0.28 - h, z - w],
-          [x + w, 0.28 - h, z + w],
-          [x - w, 0.28 - h, z + w],
-        ].map(([px, py, pz]) => project(px, py, pz));
-        ctx.strokeStyle = "rgba(99, 134, 191, 0.16)";
-        ctx.fillStyle = "rgba(36, 57, 87, 0.06)";
-        for (const face of [
-          [0, 1, 5, 4],
-          [1, 2, 6, 5],
-          [4, 5, 6, 7],
-        ]) {
-          ctx.beginPath();
-          face.forEach((v, j) => (j ? ctx.lineTo(...vertices[v]) : ctx.moveTo(...vertices[v])));
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        }
-      }
+      const size = Math.min(width, height);
+      const radius = size * 0.32;
+      const phase = motion.matches ? 0.35 : time * 0.3 + 0.35;
+      const tilt = motion.matches ? 0.5 : Math.sin(time * 0.12 + 0.5);
       const orbs = Array.from({ length: 8 }, (_, i) => {
-        const a = (i * Math.PI) / 4 + (motion.matches ? 0 : time * 0.38);
+        const angle = (i * Math.PI) / 4 + phase;
+        const x = Math.cos(angle);
+        const z = Math.sin(angle);
         return {
-          x: Math.cos(a) * 0.65,
-          y: Math.sin(a * 2 + time * 0.07) * 0.19 - 0.08,
-          z: Math.sin(a) * 0.65,
+          x: width * 0.5 + x * radius,
+          y: height * 0.57 + z * radius * (0.45 + tilt * 0.45),
+          depth: z * (1 - Math.abs(tilt)),
         };
-      }).sort((a, b) => b.z - a.z);
+      }).sort((a, b) => a.depth - b.depth);
       for (const orb of orbs) {
-        const [x, y] = project(orb.x, orb.y, orb.z);
-        const radius = scale * (0.14 - orb.z * 0.025);
-        const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        glow.addColorStop(0, "rgba(239, 253, 255, 1)");
-        glow.addColorStop(0.07, "rgba(190, 235, 255, .95)");
-        glow.addColorStop(0.2, "rgba(89, 171, 255, .55)");
-        glow.addColorStop(0.5, "rgba(39, 104, 226, .15)");
-        glow.addColorStop(1, "rgba(24, 65, 170, 0)");
+        const glowRadius = size * (0.18 + orb.depth * 0.025);
+        const glow = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowRadius);
+        glow.addColorStop(0, "rgba(255, 255, 238, 1)");
+        glow.addColorStop(0.045, "rgba(238, 255, 251, 1)");
+        glow.addColorStop(0.09, "rgba(164, 236, 255, .95)");
+        glow.addColorStop(0.19, "rgba(67, 197, 255, .65)");
+        glow.addColorStop(0.36, "rgba(0, 132, 232, .35)");
+        glow.addColorStop(0.65, "rgba(0, 59, 166, .12)");
+        glow.addColorStop(1, "rgba(0, 30, 100, 0)");
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.arc(orb.x, orb.y, glowRadius, 0, Math.PI * 2);
         ctx.fill();
       }
       if (!motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
@@ -114,11 +80,7 @@ export function Scene() {
   }, []);
   return (
     <div className="scene" aria-hidden="true">
-      <div className="scene-halo" />
       <canvas ref={ref} />
-      <div className="scene-caption">
-        PERSONAL SYSTEM <span>•</span> DC / 01
-      </div>
     </div>
   );
 }

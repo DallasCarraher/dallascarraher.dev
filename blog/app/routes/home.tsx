@@ -16,7 +16,7 @@ export default function Home() {
   const { selected, select, confirm } = useConsole();
   return (
     <div className="home-menu">
-      <h1 className="eyebrow">SELECT A DESTINATION</h1>
+      <h1 className="sr-only">Dallas Carraher</h1>
       <nav aria-label="Main navigation">
         <ul>
           {menuItems.map((item, index) => (
@@ -26,27 +26,18 @@ export default function Home() {
                 className="menu-link"
                 aria-current={selected === index ? "true" : undefined}
                 onFocus={() => select(index)}
-                onMouseEnter={(event) => event.currentTarget.focus({ preventScroll: true })}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === "mouse" && matchMedia("(hover: hover)").matches)
+                    event.currentTarget.focus({ preventScroll: true });
+                }}
                 onClick={confirm}
               >
-                <span className="selection-arrow" aria-hidden="true">
-                  ▸
-                </span>
                 <span>{item.label}</span>
-                <span className="menu-number" aria-hidden="true">
-                  {item.number}
-                </span>
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <div className="menu-description">
-        <span className="tiny-cross" aria-hidden="true">
-          +
-        </span>
-        {menuItems[selected].description}
-      </div>
     </div>
   );
 }

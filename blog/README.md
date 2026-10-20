@@ -1,6 +1,6 @@
 # Personal System
 
-A PS2-inspired personal website. The app uses React Router SSR and a decorative Canvas 2D scene; links and content work without JavaScript.
+A PS2-inspired personal website. The app uses React Router SSR and a decorative Canvas 2D particle scene; links and content work without JavaScript.
 
 ## Develop
 
@@ -22,7 +22,7 @@ For the first browser test run, install Chromium with `bun x playwright install 
 - `app/content/site.ts`: menu labels, social links, and typed project/post collections. Empty collections show deliberate empty states.
 - `app/components/console/screens.tsx`: profile copy and screen presentation.
 - `app/app.css`: palette, type, glow, timing, and responsive layout.
-- `app/components/console/scene.tsx`: orbit and tower geometry.
+- `app/components/console/scene.tsx`: particle orbit and bloom.
 - `app/components/console/audio.ts`: original synthesized sounds, off by default.
 
 The two-second intro appears once per browser tab session on home entry, can be skipped, and respects reduced motion. Direct links bypass it. Sound preferences persist locally, but audio only starts after a user gesture.

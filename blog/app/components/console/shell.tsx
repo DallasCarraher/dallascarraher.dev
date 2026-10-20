@@ -114,19 +114,6 @@ export default function ConsoleShell() {
   return (
     <div className={`console-shell ${home ? "is-home" : "is-content"}`}>
       <div className="console-chrome" inert={booting}>
-        <header className="system-header">
-          <Link to="/" className="identity" aria-label="Dallas Carraher home">
-            <span className="identity-mark">
-              dc<span>✳</span>
-            </span>
-            <span>
-              DALLAS CARRAHER<span className="identity-sub">PERSONAL SYSTEM</span>
-            </span>
-          </Link>
-          <span className="system-status">
-            <i /> SYSTEM ONLINE
-          </span>
-        </header>
         <div className="console-stage">
           <Scene />
           <main
@@ -160,7 +147,6 @@ export default function ConsoleShell() {
                 <kbd>↑ ↓</kbd> Navigate
               </span>
             )}
-            <span className="touch-hint">{home ? "Tap to select" : "Scroll to explore"}</span>
           </div>
           <button
             className="sound-control"
@@ -169,26 +155,17 @@ export default function ConsoleShell() {
             aria-pressed={enabled}
             aria-label={enabled ? "Turn sound off" : "Turn sound on"}
           >
-            <span className={`sound-bars ${enabled ? "is-on" : ""}`} aria-hidden="true">
-              <i />
-              <i />
-              <i />
-              <i />
-            </span>
-            SOUND {enabled ? "ON" : "OFF"}
+            <svg className="controller-triangle" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4 22 21H2Z" />
+            </svg>
+            Sound {enabled ? "on" : "off"}
           </button>
-          <span className="system-version">
-            DC—01 <span> / </span> {active ? active.number : "HOME"}
-          </span>
         </footer>
       </div>
       {booting && (
         <div className="boot-screen" role="dialog" aria-modal="true" aria-label="System startup">
-          <div className="boot-emblem">
-            dc<span>✳</span>
-          </div>
-          <p>DALLAS CARRAHER</p>
-          <span className="boot-label">INITIALIZING PERSONAL SYSTEM</span>
+          <p className="boot-name">Dallas Carraher</p>
+          <span className="boot-label">Personal system</span>
           <div className="boot-line" />
           <button autoFocus onClick={endBoot}>
             Skip intro <span>↵</span>
