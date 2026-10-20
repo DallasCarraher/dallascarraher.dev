@@ -21,19 +21,48 @@ export function Scene() {
       ctx.clearRect(0, 0, width, height);
       const size = Math.min(width, height);
       const radius = size * 0.32;
-      const orbs = getClockOrbs(motion.matches ? frozenTime : new Date())
-        .map((orb) => {
-          // Same 800px perspective camera as the reference, scaled to our layout.
-          const worldZ = orb.z * radius;
-          const perspective = 800 / (800 - worldZ);
+      const date = motion.matches ? frozenTime : new Date();
+      const project = (at: Date) =>
+        getClockOrbs(at).map((orb) => {
+          const perspective = 800 / (800 - orb.z * radius);
           return {
             x: width * 0.5 + orb.x * radius * perspective,
             y: height * 0.57 + orb.y * radius * perspective,
             depth: orb.z,
             perspective,
           };
-        })
-        .sort((a, b) => a.depth - b.depth);
+        });
+      if (!motion.matches) {
+        // Short, fading exposure trails, sampled by time rather than frame count.
+        let previous = project(new Date(date.getTime() - 360));
+        for (let sample = 1; sample <= 18; sample++) {
+          const age = 360 - sample * 20;
+          const at = new Date(date.getTime() - age);
+          const points = project(at);
+          if (at.getMinutes() === date.getMinutes()) {
+            const intensity = (1 - age / 360) ** 2;
+            ctx.strokeStyle = `rgba(35, 127, 230, ${intensity * 0.36})`;
+            ctx.lineWidth = Math.max(0.6, size * 0.008 * intensity);
+            ctx.shadowColor = "#168cde";
+            ctx.shadowBlur = size * 0.018;
+            points.forEach((point, index) => {
+              // Do not streak across a clock rollover.
+              if (
+                Math.hypot(point.x - previous[index].x, point.y - previous[index].y) >
+                radius * 0.5
+              )
+                return;
+              ctx.beginPath();
+              ctx.moveTo(previous[index].x, previous[index].y);
+              ctx.lineTo(point.x, point.y);
+              ctx.stroke();
+            });
+          }
+          previous = points;
+        }
+        ctx.shadowBlur = 0;
+      }
+      const orbs = project(date).sort((a, b) => a.depth - b.depth);
       for (const orb of orbs) {
         const glowRadius = size * 0.18 * orb.perspective;
         const glow = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowRadius);

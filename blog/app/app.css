@@ -518,48 +518,84 @@ progress::-moz-progress-bar {
   z-index: 30;
   background: #000;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: screen-in 400ms ease both;
+  animation: startup-exit 6800ms linear both;
+}
+.startup-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 .boot-name {
-  color: #d0d9e3;
-  font-size: clamp(25px, 5vw, 48px);
-  text-shadow: 0 0 15px #70adff80;
-  margin: 0 0 15px;
+  position: relative;
+  color: #d9dfe6;
+  font-size: clamp(17px, 2vw, 25px);
   font-weight: 400;
-}
-.boot-label {
-  font-size: 16px;
-  color: #777;
-}
-.boot-line {
-  width: 180px;
-  height: 1px;
-  margin-top: 30px;
-  background: #162a41;
-  overflow: hidden;
-}
-.boot-line:after {
-  content: "";
-  display: block;
-  height: 1px;
-  background: #75c9ff;
-  transform-origin: left;
-  animation: boot-progress 2s linear both;
+  text-shadow: 0 1px 4px #000;
+  animation: startup-name 6800ms linear both;
 }
 .boot-screen button {
   position: absolute;
-  bottom: 8%;
+  bottom: max(5%, env(safe-area-inset-bottom));
   background: none;
   border: 0;
   color: #999;
   padding: 15px;
-  font-size: 16px;
+  font-size: 15px;
+  z-index: 1;
+}
+.boot-screen > button:last-child {
+  right: 6%;
+}
+.boot-screen .boot-sound {
+  left: 6%;
 }
 .boot-screen button span {
   margin-left: 10px;
+}
+.controller-cross,
+.controller-circle {
+  width: 19px;
+  height: 19px;
+  background: #19191d;
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 0 0 4px #ffffff18;
+}
+.controller-cross path {
+  stroke: #7d83be;
+  fill: none;
+  stroke-width: 2.5;
+}
+.controller-circle circle {
+  stroke: #c17980;
+  fill: none;
+  stroke-width: 2;
+}
+@keyframes startup-name {
+  0%,
+  5% {
+    opacity: 0;
+  }
+  12%,
+  31% {
+    opacity: 1;
+  }
+  43%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes startup-exit {
+  0%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 @keyframes screen-in {
   from {

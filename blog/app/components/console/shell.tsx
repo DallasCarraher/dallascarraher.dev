@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate, useOutletContext } from "react-router";
 import { menuItems } from "../../content/site";
 import { Scene } from "./scene";
+import { StartupScene, STARTUP_DURATION } from "./startup";
 import { useConsoleAudio } from "./audio";
 
 type ConsoleContext = { selected: number; select: (index: number) => void; confirm: () => void };
@@ -19,11 +20,13 @@ export default function ConsoleShell() {
   );
   const [booting, setBooting] = useState(false);
   const visited = useRef(false);
+  const bootStartedAt = useRef(0);
   const content = useRef<HTMLElement>(null);
-  const { enabled, ready, toggle, play } = useConsoleAudio();
+  const { enabled, ready, unlocked, toggle, play, stopCues } = useConsoleAudio();
   const active = menuItems.find((item) => item.href === location.pathname);
 
   const endBoot = useCallback(() => {
+    stopCues();
     setBooting(false);
     try {
       sessionStorage.setItem("dc-booted", "1");
@@ -33,7 +36,7 @@ export default function ConsoleShell() {
     requestAnimationFrame(() =>
       content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
     );
-  }, []);
+  }, [stopCues]);
 
   useEffect(() => {
     if (visited.current) return;
@@ -45,13 +48,16 @@ export default function ConsoleShell() {
       /* Use this mount only. */
     }
     // Hydrate the intro from browser-only session and media preferences.
-    // oxlint-disable-next-line react/set-state-in-effect
-    if (home && !seen && !matchMedia("(prefers-reduced-motion: reduce)").matches) setBooting(true);
+    if (home && !seen && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      bootStartedAt.current = performance.now();
+      // oxlint-disable-next-line react/set-state-in-effect
+      setBooting(true);
+    }
   }, [home]);
 
   useEffect(() => {
     if (!booting) return;
-    const timer = window.setTimeout(endBoot, 2000);
+    const timer = window.setTimeout(endBoot, STARTUP_DURATION);
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const onMotion = () => {
       if (motion.matches) endBoot();
@@ -62,6 +68,14 @@ export default function ConsoleShell() {
       motion.removeEventListener("change", onMotion);
     };
   }, [booting, endBoot]);
+
+  useEffect(() => {
+    if (booting && enabled && unlocked)
+      play("startup", (performance.now() - bootStartedAt.current) / 1000);
+    return () => {
+      if (booting) stopCues();
+    };
+  }, [booting, enabled, unlocked, play, stopCues]);
 
   useEffect(() => {
     if (booting) return;
@@ -83,7 +97,17 @@ export default function ConsoleShell() {
       )
         return;
       if (booting) {
-        if (["Escape", "Enter", " "].includes(event.key)) {
+        if (event.key === "Tab") {
+          const buttons = [
+            ...document.querySelectorAll<HTMLButtonElement>(".boot-screen button:not([disabled])"),
+          ];
+          const index = buttons.indexOf(target as HTMLButtonElement);
+          event.preventDefault();
+          buttons[(index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length]?.focus();
+        } else if (
+          event.key === "Escape" ||
+          (["Enter", " "].includes(event.key) && target.tagName !== "BUTTON")
+        ) {
           event.preventDefault();
           endBoot();
         }
@@ -135,17 +159,18 @@ export default function ConsoleShell() {
           <div className="control-hints">
             {home ? (
               <span className="keyboard-hint">
-                <kbd>↵</kbd> Select
+                <svg className="controller-cross" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m6 6 12 12M18 6 6 18" />
+                </svg>{" "}
+                Enter
               </span>
             ) : (
               <Link to="/" className="back-control" onClick={() => play("back")}>
-                <kbd>ESC</kbd> Back
+                <svg className="controller-circle" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="7" />
+                </svg>{" "}
+                Back
               </Link>
-            )}
-            {home && (
-              <span className="keyboard-hint">
-                <kbd>↑ ↓</kbd> Navigate
-              </span>
             )}
           </div>
           <button
@@ -164,9 +189,17 @@ export default function ConsoleShell() {
       </div>
       {booting && (
         <div className="boot-screen" role="dialog" aria-modal="true" aria-label="System startup">
+          <StartupScene />
           <p className="boot-name">Dallas Carraher</p>
-          <span className="boot-label">Personal system</span>
-          <div className="boot-line" />
+          <button
+            className="boot-sound"
+            disabled={!ready}
+            onClick={toggle}
+            aria-pressed={enabled}
+            aria-label={enabled ? "Turn sound off" : "Turn sound on"}
+          >
+            Sound {enabled ? "on" : "off"}
+          </button>
           <button autoFocus onClick={endBoot}>
             Skip intro <span>↵</span>
           </button>
