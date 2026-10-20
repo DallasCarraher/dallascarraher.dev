@@ -22,7 +22,7 @@ For the first browser test run, install Chromium with `bun x playwright install 
 - `app/content/site.ts`: menu labels, social links, and typed project/post collections. Empty collections show deliberate empty states.
 - `app/components/console/screens.tsx`: profile copy and screen presentation.
 - `app/app.css`: palette, type, glow, timing, and responsive layout.
-- `app/components/console/scene.tsx`: particle orbit and bloom.
+- `app/components/console/scene.tsx`: particle bloom and perspective. `app/components/console/clock.ts` contains the clock-driven motion model.
 - `app/components/console/audio.ts`: original synthesized sounds, off by default.
 
 The two-second intro appears once per browser tab session on home entry, can be skipped, and respects reduced motion. Direct links bypass it. Sound preferences persist locally, but audio only starts after a user gesture.
@@ -34,3 +34,9 @@ Spotify uses the existing `/api/spotify/token` and `/api/spotify/currently-playi
 Vercel is already connected to the GitHub repository, with successful production and preview deployments. Push a feature branch and open a pull request to use the existing preview integration; a local Vercel login is not required. The hosting configuration is unchanged by this redesign.
 
 Validate the generated preview before merging, including direct page loads and the Spotify endpoints. Production Spotify credentials are managed in the deployment environment independently of local `.env` files.
+
+## Clock animation
+
+The seven particles follow the clock-driven motion of [imsaud.me](https://www.imsaud.me/), rather than an elapsed-time animation loop. Each particle’s angle is its index × fractional seconds × 6°. The positions pass through hour rotation, a minute-dependent tilt, and second-dependent rotations. Consequently the dots bunch together, fan out, and form rings at the same clock times as the reference. They stay synchronized across refreshes and frame rates when device clocks and timezones agree.
+
+The model is implemented independently as scalar rotations in `clock.ts`; fixed coordinate fixtures use an independent matrix calculation of the reference’s transform chain (observed in its public `assets/index-CVD5AJ_P.js` bundle). Tests cover seven-dot geometry, subsecond motion, minute/hour boundaries, twelve-hour periodicity, refresh synchronization, and reduced motion. This matches the reference site's motion model; it is not a claim of binary-equivalent PS2 BIOS emulation. Background tabs pause drawing, then render the current clock time when visible again. Reduced motion freezes a single pattern.

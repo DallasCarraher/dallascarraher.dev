@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
+import { getClockOrbs } from "./clock";
 
-/** The BIOS menu’s eight softly glowing, rotating particles. */
+/** Seven clock-driven particles, with the reference’s motion and perspective. */
 export function Scene() {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -10,32 +11,31 @@ export function Scene() {
     if (!ctx) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    let time = 0;
-    let last = 0;
+    // Reduced motion freezes the current clock pattern until motion is re-enabled.
+    let frozenTime = new Date();
     let width = 0;
     let height = 0;
 
-    function draw(now: number) {
+    function draw() {
       if (!ctx || !canvas) return;
-      if (last) time += Math.min(now - last, 40) / 1000;
-      last = now;
       ctx.clearRect(0, 0, width, height);
       const size = Math.min(width, height);
       const radius = size * 0.32;
-      const phase = motion.matches ? 0.35 : time * 0.3 + 0.35;
-      const tilt = motion.matches ? 0.5 : Math.sin(time * 0.12 + 0.5);
-      const orbs = Array.from({ length: 8 }, (_, i) => {
-        const angle = (i * Math.PI) / 4 + phase;
-        const x = Math.cos(angle);
-        const z = Math.sin(angle);
-        return {
-          x: width * 0.5 + x * radius,
-          y: height * 0.57 + z * radius * (0.45 + tilt * 0.45),
-          depth: z * (1 - Math.abs(tilt)),
-        };
-      }).sort((a, b) => a.depth - b.depth);
+      const orbs = getClockOrbs(motion.matches ? frozenTime : new Date())
+        .map((orb) => {
+          // Same 800px perspective camera as the reference, scaled to our layout.
+          const worldZ = orb.z * radius;
+          const perspective = 800 / (800 - worldZ);
+          return {
+            x: width * 0.5 + orb.x * radius * perspective,
+            y: height * 0.57 + orb.y * radius * perspective,
+            depth: orb.z,
+            perspective,
+          };
+        })
+        .sort((a, b) => a.depth - b.depth);
       for (const orb of orbs) {
-        const glowRadius = size * (0.18 + orb.depth * 0.025);
+        const glowRadius = size * 0.18 * orb.perspective;
         const glow = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowRadius);
         glow.addColorStop(0, "rgba(255, 255, 238, 1)");
         glow.addColorStop(0.045, "rgba(238, 255, 251, 1)");
@@ -53,8 +53,11 @@ export function Scene() {
     }
     function restart() {
       cancelAnimationFrame(frame);
-      last = 0;
       if (!document.hidden) frame = requestAnimationFrame(draw);
+    }
+    function onMotionChange() {
+      frozenTime = new Date();
+      restart();
     }
     function resize() {
       if (!canvas || !ctx) return;
@@ -69,12 +72,12 @@ export function Scene() {
     }
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
-    motion.addEventListener("change", restart);
+    motion.addEventListener("change", onMotionChange);
     document.addEventListener("visibilitychange", restart);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      motion.removeEventListener("change", restart);
+      motion.removeEventListener("change", onMotionChange);
       document.removeEventListener("visibilitychange", restart);
     };
   }, []);
