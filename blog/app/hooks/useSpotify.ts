@@ -1,106 +1,81 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useState } from "react";
 
-interface AccessToken {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  scope: string;
-}
-
-interface SpotifyArtist {
+export interface SpotifyItem {
   name: string;
-  external_urls: {
-    spotify: string;
-  };
-}
-
-interface SpotifyAlbum {
-  images: Array<{
-    url: string;
-    height: number;
-    width: number;
-  }>;
-}
-
-interface SpotifyTrack {
-  name: string;
-  artists: SpotifyArtist[];
-  album: SpotifyAlbum;
   duration_ms: number;
-  external_urls: {
-    spotify: string;
-  };
+  artists?: { name: string }[];
+  album?: { images: { url: string }[] };
+  images?: { url: string }[];
+  show?: { name: string };
+  external_urls?: { spotify?: string };
 }
-
-interface CurrentlyPlaying {
-  item?: SpotifyTrack;
-  currently_playing_type?: "track" | "episode";
+export interface CurrentlyPlaying {
+  item?: SpotifyItem | null;
+  currently_playing_type?: "track" | "episode" | "ad" | "unknown";
   progress_ms?: number;
   is_playing: boolean;
 }
 
+/** Mounted by the player screen only. Credentials expire and visibility pauses polling. */
 export function useSpotify() {
-  const [token, setToken] = useState<string | null>(null);
   const [data, setData] = useState<CurrentlyPlaying | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
-  // Fetch access token
   useEffect(() => {
-    async function fetchToken() {
+    let stopped = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let controller: AbortController | undefined;
+    let token: string | null = null;
+    let expiry = 0;
+    async function poll() {
+      if (stopped || document.hidden) return;
+      controller = new AbortController();
+      const signal = controller.signal;
       try {
-        const response = await fetch("/api/spotify/token");
-        if (!response.ok) {
-          throw new Error("Failed to fetch token");
+        if (!token || Date.now() >= expiry) {
+          const response = await fetch("/api/spotify/token", { signal });
+          if (!response.ok) throw new Error("Spotify connection unavailable");
+          const result = await response.json();
+          if (!result.access_token) throw new Error("Spotify connection unavailable");
+          token = result.access_token;
+          expiry = Date.now() + Math.max(1, (result.expires_in ?? 3600) - 60) * 1000;
         }
-        const tokenData: AccessToken = await response.json();
-        setToken(tokenData.access_token);
-      } catch (err) {
-        console.error("Error fetching token:", err);
-        setError(err instanceof Error ? err : new Error("Unknown error"));
-        setIsLoading(false);
+        const response = await fetch(
+          `/api/spotify/currently-playing?token=${encodeURIComponent(token!)}`,
+          { signal },
+        );
+        if (!response.ok) {
+          token = null;
+          throw new Error("Spotify status unavailable");
+        }
+        const result: CurrentlyPlaying | null = await response.json();
+        if (!stopped && !signal.aborted) {
+          setData(result);
+          setError(null);
+        }
+      } catch (cause) {
+        if (!stopped && !signal.aborted)
+          setError(cause instanceof Error ? cause : new Error("Spotify unavailable"));
+      } finally {
+        if (!stopped && !signal.aborted) {
+          setIsLoading(false);
+          timer = setTimeout(poll, 5000);
+        }
       }
     }
-
-    fetchToken();
+    const visibility = () => {
+      clearTimeout(timer);
+      controller?.abort();
+      if (!document.hidden) void poll();
+    };
+    void poll();
+    document.addEventListener("visibilitychange", visibility);
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+      controller?.abort();
+      document.removeEventListener("visibilitychange", visibility);
+    };
   }, []);
-
-  // Fetch currently playing data
-  const fetchCurrentlyPlaying = useCallback(async () => {
-    if (!token) return;
-
-    try {
-      const response = await fetch(`/api/spotify/currently-playing?token=${token}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch currently playing");
-      }
-      const playingData = await response.json();
-      setData(playingData);
-      setIsLoading(false);
-    } catch (err) {
-      console.error("Error fetching currently playing:", err);
-      setError(err instanceof Error ? err : new Error("Unknown error"));
-      setIsLoading(false);
-    }
-  }, [token]);
-
-  // Fetch currently playing when token is available
-  useEffect(() => {
-    if (token) {
-      fetchCurrentlyPlaying();
-    }
-  }, [token, fetchCurrentlyPlaying]);
-
-  // Refetch every 5 seconds
-  useEffect(() => {
-    if (!token) return;
-
-    const interval = setInterval(() => {
-      fetchCurrentlyPlaying();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [token, fetchCurrentlyPlaying]);
-
   return { data, isLoading, error };
 }

@@ -17,3 +17,8 @@ node_modules
 # debug
 bun-debug.log*
 bun-error.log*
+
+# browser tests
+playwright-report
+test-results
+.vercel
