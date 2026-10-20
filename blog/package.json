@@ -6,7 +6,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "test": "playwright test"
   },
   "dependencies": {
     "@dallascarraher/ui": "workspace:*",
@@ -20,6 +21,7 @@
     "simple-icons": "^16.31.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@react-router/dev": "^8.4.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.2",
