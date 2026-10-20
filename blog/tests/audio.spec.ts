@@ -1,7 +1,10 @@
 import { test, expect } from "@playwright/test";
 
 type AudioEvent = {
-  action: "start" | "stop" | "suspend";
+  action: "start" | "stop" | "suspend" | "ramp";
+  when?: number;
+  observedAt?: number;
+  value?: number;
   duration?: number;
   loop?: boolean;
   offset?: number;
@@ -24,6 +27,7 @@ test.beforeEach(async ({ page }) => {
         source.start = (...args) => {
           window.consoleAudioEvents.push({
             action: "start",
+            when: this.currentTime,
             duration: source.buffer?.duration,
             loop: source.loop,
             offset: args[1] ?? 0,
@@ -36,6 +40,20 @@ test.beforeEach(async ({ page }) => {
         };
         return source;
       }
+      createGain() {
+        const gain = super.createGain();
+        const ramp = gain.gain.linearRampToValueAtTime.bind(gain.gain);
+        gain.gain.linearRampToValueAtTime = (value, when) => {
+          window.consoleAudioEvents.push({
+            action: "ramp",
+            value,
+            when,
+            observedAt: this.currentTime,
+          });
+          return ramp(value, when);
+        };
+        return gain;
+      }
       suspend() {
         window.consoleAudioEvents.push({ action: "suspend" });
         return super.suspend();
@@ -44,9 +62,11 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-const starts = (events: AudioEvent[]) => events.filter((e) => e.action === "start");
+const starts = (events: AudioEvent[]) => events.filter((e) => e.action === "start" && !e.loop);
 
-test("menu sounds are opt-in one-shots with no ambience requests", async ({ page }) => {
+test("menu sound is opt-in, continuous across routes, and separate from one-shot cues", async ({
+  page,
+}) => {
   const requests: string[] = [];
   page.on("request", (request) => {
     if (request.url().includes("/audio/")) requests.push(request.url());
@@ -56,8 +76,15 @@ test("menu sounds are opt-in one-shots with no ambience requests", async ({ page
   await expect(page.getByRole("button", { name: "Turn sound on" })).toBeEnabled();
   expect(requests).toHaveLength(0);
   await page.getByRole("button", { name: "Turn sound on" }).click();
-  await expect.poll(() => requests.length).toBe(4);
-  expect(await page.evaluate(() => window.consoleAudioEvents)).toHaveLength(0);
+  await expect.poll(() => requests.length).toBe(5);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => window.consoleAudioEvents.filter((e) => e.action === "start" && e.loop).length,
+      ),
+    )
+    .toBe(1);
+  expect(starts(await page.evaluate(() => window.consoleAudioEvents))).toHaveLength(0);
   await page.keyboard.press("ArrowDown");
   await expect
     .poll(async () => starts(await page.evaluate(() => window.consoleAudioEvents)).length)
@@ -74,7 +101,12 @@ test("menu sounds are opt-in one-shots with no ambience requests", async ({ page
   expect(
     starts(await page.evaluate(() => window.consoleAudioEvents)).every((event) => !event.loop),
   ).toBe(true);
-  expect(requests.some((url) => url.includes("ambience"))).toBe(false);
+  const bed = (await page.evaluate(() => window.consoleAudioEvents)).filter(
+    (e) => e.action === "start" && e.loop,
+  );
+  expect(bed).toHaveLength(1);
+  expect(bed[0].duration).toBeCloseTo(112, 1);
+  expect(requests.filter((url) => url.includes("ambience"))).toHaveLength(1);
   await page.getByRole("button", { name: "Turn sound off" }).click();
   await expect
     .poll(() =>
@@ -130,7 +162,22 @@ test("sound starts once from the beginning, ends naturally, and replay replaces 
   expect(starts(events)[0].loop).toBe(false);
   expect(starts(events)[0].offset).toBe(0);
   await expect(intro).toHaveCount(0, { timeout: 9000 });
-  // The full original reverb tail may finish over the menu, without restarting.
+  // The waves fade in before the complete startup recording's reverb tail ends.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => window.consoleAudioEvents.filter((e) => e.action === "start" && e.loop).length,
+      ),
+    )
+    .toBe(1);
+  const transition = await page.evaluate(() => window.consoleAudioEvents);
+  const waves = transition.find((e) => e.action === "start" && e.loop)!;
+  expect(waves.duration).toBeCloseTo(112, 1);
+  const delta = waves.when! - starts(transition)[0].when!;
+  expect(delta).toBeGreaterThan(5);
+  expect(delta).toBeLessThan(starts(transition)[0].duration!);
+  const fade = transition.find((e) => e.action === "ramp")!;
+  expect(fade.when! - fade.observedAt!).toBeCloseTo(3, 1);
   expect(starts(await page.evaluate(() => window.consoleAudioEvents))).toHaveLength(1);
   await page.getByRole("button", { name: "Replay intro" }).click();
   await expect(intro).toBeVisible();
@@ -201,4 +248,66 @@ test("muting stops the intro sound and turning sound back on does not restart it
   await intro.getByRole("button", { name: "Turn sound on" }).click();
   await page.getByRole("button", { name: "Skip intro" }).click();
   expect(starts(await page.evaluate(() => window.consoleAudioEvents))).toHaveLength(1);
+});
+
+test("muting during a slow ambience fetch prevents late background playback", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("dc-booted", "1"));
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/audio/ambience.mp3", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Turn sound on" }).click();
+  await page.getByRole("button", { name: "Turn sound off" }).click();
+  release();
+  await page.getByRole("link", { name: "About", exact: true }).click();
+  expect(
+    (await page.evaluate(() => window.consoleAudioEvents)).filter((e) => e.action === "start"),
+  ).toHaveLength(0);
+});
+
+test("background waves pause when hidden and resume once when visible", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("dc-booted", "1"));
+  await page.goto("/");
+  await page.getByRole("button", { name: "Turn sound on" }).click();
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => window.consoleAudioEvents.filter((e) => e.action === "start" && e.loop).length,
+      ),
+    )
+    .toBe(1);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        window.consoleAudioEvents.some((e) => e.action === "stop" && (e.duration ?? 0) > 100),
+      ),
+    )
+    .toBe(true);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: false });
+    document.dispatchEvent(new Event("visibilitychange"));
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => window.consoleAudioEvents.filter((e) => e.action === "start" && e.loop).length,
+      ),
+    )
+    .toBe(2);
+  await page.getByRole("button", { name: "Turn sound off" }).click();
+  expect(
+    (await page.evaluate(() => window.consoleAudioEvents)).filter(
+      (e) => e.action === "stop" && (e.duration ?? 0) > 100,
+    ),
+  ).toHaveLength(2);
 });

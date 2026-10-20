@@ -25,7 +25,9 @@ export default function ConsoleShell() {
   const [bootId, setBootId] = useState(0);
   const entryRequest = useRef(0);
   const content = useRef<HTMLElement>(null);
-  const { enabled, ready, configure, toggle, play, stopCues } = useConsoleAudio();
+  const { enabled, ready, configure, toggle, play, stopCues } = useConsoleAudio(
+    !booting && !welcome && !loading,
+  );
   const active = menuItems.find((item) => item.href === location.pathname);
 
   const endBoot = useCallback(

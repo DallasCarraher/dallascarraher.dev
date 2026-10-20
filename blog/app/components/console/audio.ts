@@ -1,24 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Cue = "select" | "confirm" | "back" | "startup";
-const files: Record<Cue, string> = {
+type Sound = Cue | "ambience";
+const files: Record<Sound, string> = {
   select: "/audio/move.mp3",
   confirm: "/audio/enter.mp3",
   back: "/audio/back.mp3",
   startup: "/audio/startup.mp3",
+  ambience: "/audio/ambience.mp3",
 };
 
-export function useConsoleAudio() {
+export function useConsoleAudio(menuActive: boolean) {
   const [enabled, setEnabled] = useState(false);
   const [ready, setReady] = useState(false);
   const audio = useRef<AudioContext | null>(null);
   const preference = useRef(false);
-  const buffers = useRef(new Map<Cue, Promise<AudioBuffer | null>>());
+  const buffers = useRef(new Map<Sound, Promise<AudioBuffer | null>>());
   const voices = useRef(new Map<Cue, AudioBufferSourceNode>());
   const alive = useRef(true);
   const generation = useRef(0);
+  const menuVisible = useRef(menuActive);
+  const ambience = useRef<AudioBufferSourceNode | null>(null);
+  const ambienceGeneration = useRef(0);
+  const ambiencePending = useRef(false);
 
-  const load = useCallback((name: Cue, ctx: AudioContext) => {
+  const load = useCallback((name: Sound, ctx: AudioContext) => {
     let buffer = buffers.current.get(name);
     if (!buffer) {
       buffer = fetch(files[name])
@@ -44,6 +50,71 @@ export function useConsoleAudio() {
     voices.current.clear();
   }, []);
 
+  const stopAmbience = useCallback(() => {
+    ambienceGeneration.current++;
+    ambiencePending.current = false;
+    try {
+      ambience.current?.stop();
+    } catch {
+      /* Already stopped. */
+    }
+    ambience.current = null;
+  }, []);
+
+  const startAmbience = useCallback(async () => {
+    const ctx = audio.current;
+    if (
+      !ctx ||
+      !preference.current ||
+      !menuVisible.current ||
+      document.hidden ||
+      ambience.current ||
+      ambiencePending.current
+    )
+      return;
+    const request = ambienceGeneration.current;
+    ambiencePending.current = true;
+    try {
+      await ctx.resume();
+      const buffer = await load("ambience", ctx);
+      if (request !== ambienceGeneration.current) return;
+      ambiencePending.current = false;
+      if (
+        !buffer ||
+        !alive.current ||
+        !preference.current ||
+        !menuVisible.current ||
+        document.hidden ||
+        ctx.state !== "running"
+      )
+        return;
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      // A 112-second stereo recording with an eight-second baked crossfade at the join.
+      source.loop = true;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(1.5, ctx.currentTime + 3);
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      ambience.current = source;
+      source.onended = () => {
+        source.disconnect();
+        gain.disconnect();
+        if (ambience.current === source) ambience.current = null;
+      };
+      source.start();
+    } catch {
+      if (request === ambienceGeneration.current) ambiencePending.current = false;
+    }
+  }, [load]);
+
+  useEffect(() => {
+    menuVisible.current = menuActive;
+    if (menuActive && enabled) void startAmbience();
+    else stopAmbience();
+  }, [menuActive, enabled, startAmbience, stopAmbience]);
+
   // Called directly by a button gesture, before any startup animation is mounted.
   const configure = useCallback(
     async (value: boolean) => {
@@ -55,6 +126,7 @@ export function useConsoleAudio() {
         /* Optional preference. */
       }
       stopCues();
+      stopAmbience();
       if (!value) {
         void audio.current?.suspend();
         return false;
@@ -62,7 +134,7 @@ export function useConsoleAudio() {
       try {
         const ctx = audio.current ?? (audio.current = new AudioContext());
         await ctx.resume();
-        for (const name of ["select", "confirm", "back"] as const) void load(name, ctx);
+        for (const name of ["select", "confirm", "back", "ambience"] as const) void load(name, ctx);
         // A failed or slow asset must never lock the visitor outside the site.
         let timeout: ReturnType<typeof setTimeout> | undefined;
         const buffer = await Promise.race([
@@ -77,7 +149,7 @@ export function useConsoleAudio() {
         return false;
       }
     },
-    [load, stopCues],
+    [load, stopCues, stopAmbience],
   );
 
   useEffect(() => {
@@ -93,19 +165,21 @@ export function useConsoleAudio() {
     const visibility = () => {
       if (document.hidden) {
         stopCues();
+        stopAmbience();
         void audio.current?.suspend();
-      }
+      } else void startAmbience();
     };
     document.addEventListener("visibilitychange", visibility);
     return () => {
       alive.current = false;
       document.removeEventListener("visibilitychange", visibility);
       stopCues();
+      stopAmbience();
       void audio.current?.close();
       audio.current = null;
       cache.clear();
     };
-  }, [stopCues]);
+  }, [stopCues, stopAmbience, startAmbience]);
 
   const play = useCallback(
     (kind: Cue = "select") => {
@@ -116,6 +190,7 @@ export function useConsoleAudio() {
       } catch {
         return;
       }
+      if (kind !== "startup" && menuVisible.current) void startAmbience();
       const request = generation.current;
       void ctx
         .resume()
@@ -137,7 +212,7 @@ export function useConsoleAudio() {
           }
           const source = ctx.createBufferSource();
           source.buffer = buffer;
-          // Every sound is a one-shot. No ambience bed or automatically restarted loops.
+          // Startup and menu interaction cues remain one-shots.
           source.loop = false;
           const gain = ctx.createGain();
           gain.gain.value = kind === "startup" ? 0.7 : 0.8;
@@ -155,7 +230,7 @@ export function useConsoleAudio() {
           /* Sound must never block navigation. */
         });
     },
-    [load],
+    [load, startAmbience],
   );
 
   return {
