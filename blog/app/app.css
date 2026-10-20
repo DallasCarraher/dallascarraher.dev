@@ -576,14 +576,14 @@ progress::-moz-progress-bar {
 }
 @keyframes startup-name {
   0%,
-  5% {
+  3% {
     opacity: 0;
   }
-  12%,
-  31% {
+  10%,
+  28% {
     opacity: 1;
   }
-  43%,
+  44%,
   100% {
     opacity: 0;
   }
@@ -761,4 +761,86 @@ progress::-moz-progress-bar {
   overflow: auto;
   max-width: 100%;
   text-align: left;
+}
+
+.entry-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 31;
+  display: grid;
+  place-items: center;
+  background: #000;
+  padding: 28px;
+}
+.entry-choice {
+  width: min(100%, 410px);
+  text-align: center;
+  color: #aaa;
+  font:
+    18px Arial,
+    sans-serif;
+}
+.entry-eyebrow {
+  font-size: 14px;
+  color: #777;
+  letter-spacing: 0.1em;
+}
+.entry-choice h1 {
+  color: #ddd;
+  font-size: clamp(29px, 6vw, 38px);
+  font-weight: 400;
+  margin: 12px 0 28px;
+}
+.entry-note {
+  margin: 28px 0 24px;
+  font-size: 15px;
+  color: #888;
+}
+.entry-choice button {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  background: none;
+  border: 0;
+  color: #999;
+  font: inherit;
+  cursor: pointer;
+}
+.entry-choice button:first-of-type {
+  color: #64c7ec;
+  text-shadow: 0 0 15px #18a9e96b;
+}
+.entry-choice button:focus-visible {
+  outline: 1px solid #64c7ec;
+  outline-offset: 2px;
+}
+.entry-choice button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.entry-status {
+  display: block;
+  min-height: 36px;
+  margin-top: 22px;
+  color: #666;
+  font-size: 12px;
+}
+.replay-control {
+  color: #888;
+  background: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+.replay-control:hover {
+  color: var(--blue);
+}
+@media (max-width: 760px) {
+  .system-footer {
+    gap: 18px;
+  }
+  .replay-control {
+    font-size: 14px;
+  }
 }

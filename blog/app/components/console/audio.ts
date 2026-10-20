@@ -1,28 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Cue = "select" | "confirm" | "back" | "startup";
-const files = {
+const files: Record<Cue, string> = {
   select: "/audio/move.mp3",
   confirm: "/audio/enter.mp3",
   back: "/audio/back.mp3",
   startup: "/audio/startup.mp3",
-  ambience: "/audio/ambience.mp3",
 };
-type Sound = keyof typeof files;
 
 export function useConsoleAudio() {
   const [enabled, setEnabled] = useState(false);
   const [ready, setReady] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
   const audio = useRef<AudioContext | null>(null);
-  const ambient = useRef<AudioBufferSourceNode | null>(null);
   const preference = useRef(false);
-  const buffers = useRef(new Map<Sound, Promise<AudioBuffer | null>>());
+  const buffers = useRef(new Map<Cue, Promise<AudioBuffer | null>>());
   const voices = useRef(new Map<Cue, AudioBufferSourceNode>());
   const alive = useRef(true);
   const generation = useRef(0);
 
-  const load = useCallback((name: Sound, ctx: AudioContext) => {
+  const load = useCallback((name: Cue, ctx: AudioContext) => {
     let buffer = buffers.current.get(name);
     if (!buffer) {
       buffer = fetch(files[name])
@@ -36,38 +32,6 @@ export function useConsoleAudio() {
     return buffer;
   }, []);
 
-  const start = useCallback(async () => {
-    try {
-      const ctx = audio.current ?? (audio.current = new AudioContext());
-      await ctx.resume();
-      if (!alive.current) return;
-      setUnlocked(true);
-      const buffer = await load("ambience", ctx);
-      if (
-        !alive.current ||
-        !preference.current ||
-        !buffer ||
-        ambient.current ||
-        ctx.state !== "running"
-      )
-        return;
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.loop = true;
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.45, ctx.currentTime + 0.6);
-      source.connect(gain);
-      gain.connect(ctx.destination);
-      source.start();
-      ambient.current = source;
-      // Decode effects once, after sound has been explicitly enabled.
-      for (const name of ["select", "confirm", "back", "startup"] as const) void load(name, ctx);
-    } catch {
-      /* Audio remains optional on restricted or unsupported browsers. */
-    }
-  }, [load]);
-
   const stopCues = useCallback(() => {
     generation.current++;
     for (const source of voices.current.values()) {
@@ -80,62 +44,79 @@ export function useConsoleAudio() {
     voices.current.clear();
   }, []);
 
+  // Called directly by a button gesture, before any startup animation is mounted.
+  const configure = useCallback(
+    async (value: boolean) => {
+      preference.current = value;
+      setEnabled(value);
+      try {
+        localStorage.setItem("dc-sound", value ? "on" : "off");
+      } catch {
+        /* Optional preference. */
+      }
+      stopCues();
+      if (!value) {
+        void audio.current?.suspend();
+        return false;
+      }
+      try {
+        const ctx = audio.current ?? (audio.current = new AudioContext());
+        await ctx.resume();
+        for (const name of ["select", "confirm", "back"] as const) void load(name, ctx);
+        // A failed or slow asset must never lock the visitor outside the site.
+        let timeout: ReturnType<typeof setTimeout> | undefined;
+        const buffer = await Promise.race([
+          load("startup", ctx),
+          new Promise<null>((resolve) => {
+            timeout = setTimeout(() => resolve(null), 8000);
+          }),
+        ]);
+        clearTimeout(timeout);
+        return !!buffer && alive.current && preference.current && ctx.state === "running";
+      } catch {
+        return false;
+      }
+    },
+    [load, stopCues],
+  );
+
   useEffect(() => {
     alive.current = true;
     const cache = buffers.current;
     try {
       preference.current = localStorage.getItem("dc-sound") === "on";
     } catch {
-      /* Storage may be unavailable. */
+      /* Optional preference. */
     }
     setEnabled(preference.current);
     setReady(true);
-    const unlock = () => {
-      if (preference.current && !document.hidden) void start();
-    };
     const visibility = () => {
       if (document.hidden) {
         stopCues();
         void audio.current?.suspend();
-      } else if (preference.current) void start();
+      }
     };
-    window.addEventListener("pointerdown", unlock);
-    window.addEventListener("keydown", unlock);
     document.addEventListener("visibilitychange", visibility);
     return () => {
       alive.current = false;
-      window.removeEventListener("pointerdown", unlock);
-      window.removeEventListener("keydown", unlock);
       document.removeEventListener("visibilitychange", visibility);
       stopCues();
       void audio.current?.close();
       audio.current = null;
-      ambient.current = null;
       cache.clear();
     };
-  }, [start, stopCues]);
-
-  const toggle = () => {
-    preference.current = !preference.current;
-    setEnabled(preference.current);
-    try {
-      localStorage.setItem("dc-sound", preference.current ? "on" : "off");
-    } catch {
-      /* Optional preference. */
-    }
-    if (preference.current) void start();
-    else {
-      stopCues();
-      void audio.current?.suspend();
-    }
-  };
+  }, [stopCues]);
 
   const play = useCallback(
-    (kind: Cue = "select", offsetSeconds = 0) => {
-      const ctx = audio.current;
-      if (!preference.current || !ctx || document.hidden) return;
+    (kind: Cue = "select") => {
+      if (!preference.current || document.hidden) return;
+      let ctx: AudioContext;
+      try {
+        ctx = audio.current ?? (audio.current = new AudioContext());
+      } catch {
+        return;
+      }
       const request = generation.current;
-      const requestedAt = performance.now();
       void ctx
         .resume()
         .then(() => load(kind, ctx))
@@ -149,23 +130,20 @@ export function useConsoleAudio() {
             ctx.state !== "running"
           )
             return;
-          // Repeated cursor taps replace their prior tail rather than piling up.
-          const offset =
-            kind === "startup" ? offsetSeconds + (performance.now() - requestedAt) / 1000 : 0;
-          if (offset >= buffer.duration) return;
-          const previous = voices.current.get(kind);
           try {
-            previous?.stop();
+            voices.current.get(kind)?.stop();
           } catch {
             /* Already ended. */
           }
           const source = ctx.createBufferSource();
           source.buffer = buffer;
+          // Every sound is a one-shot. No ambience bed or automatically restarted loops.
+          source.loop = false;
           const gain = ctx.createGain();
-          gain.gain.value = kind === "startup" ? 0.55 : 0.8;
+          gain.gain.value = kind === "startup" ? 0.7 : 0.8;
           source.connect(gain);
           gain.connect(ctx.destination);
-          source.start(0, offset);
+          source.start(0, 0);
           voices.current.set(kind, source);
           source.onended = () => {
             source.disconnect();
@@ -174,11 +152,18 @@ export function useConsoleAudio() {
           };
         })
         .catch(() => {
-          /* No audio must block navigation. */
+          /* Sound must never block navigation. */
         });
     },
     [load],
   );
 
-  return { enabled, ready, unlocked, toggle, play, stopCues };
+  return {
+    enabled,
+    ready,
+    configure,
+    toggle: () => void configure(!preference.current),
+    play,
+    stopCues,
+  };
 }

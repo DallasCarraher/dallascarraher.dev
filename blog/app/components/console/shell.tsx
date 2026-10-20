@@ -20,23 +20,32 @@ export default function ConsoleShell() {
   );
   const [booting, setBooting] = useState(false);
   const visited = useRef(false);
-  const bootStartedAt = useRef(0);
+  const [welcome, setWelcome] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bootId, setBootId] = useState(0);
+  const entryRequest = useRef(0);
   const content = useRef<HTMLElement>(null);
-  const { enabled, ready, unlocked, toggle, play, stopCues } = useConsoleAudio();
+  const { enabled, ready, configure, toggle, play, stopCues } = useConsoleAudio();
   const active = menuItems.find((item) => item.href === location.pathname);
 
-  const endBoot = useCallback(() => {
-    stopCues();
-    setBooting(false);
-    try {
-      sessionStorage.setItem("dc-booted", "1");
-    } catch {
-      /* Intro still ends. */
-    }
-    requestAnimationFrame(() =>
-      content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
-    );
-  }, [stopCues]);
+  const endBoot = useCallback(
+    (natural = false) => {
+      entryRequest.current++;
+      if (!natural) stopCues();
+      setBooting(false);
+      setWelcome(false);
+      setLoading(false);
+      try {
+        sessionStorage.setItem("dc-booted", "1");
+      } catch {
+        /* Intro still ends. */
+      }
+      requestAnimationFrame(() =>
+        content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
+      );
+    },
+    [stopCues],
+  );
 
   useEffect(() => {
     if (visited.current) return;
@@ -47,17 +56,16 @@ export default function ConsoleShell() {
     } catch {
       /* Use this mount only. */
     }
-    // Hydrate the intro from browser-only session and media preferences.
-    if (home && !seen && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      bootStartedAt.current = performance.now();
+    if (home && !seen) {
+      // The entry choice supplies the browser gesture required for sound.
       // oxlint-disable-next-line react/set-state-in-effect
-      setBooting(true);
+      setWelcome(true);
     }
   }, [home]);
 
   useEffect(() => {
     if (!booting) return;
-    const timer = window.setTimeout(endBoot, STARTUP_DURATION);
+    const timer = window.setTimeout(() => endBoot(true), STARTUP_DURATION);
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const onMotion = () => {
       if (motion.matches) endBoot();
@@ -69,22 +77,41 @@ export default function ConsoleShell() {
     };
   }, [booting, endBoot]);
 
-  useEffect(() => {
-    if (booting && enabled && unlocked)
-      play("startup", (performance.now() - bootStartedAt.current) / 1000);
-    return () => {
-      if (booting) stopCues();
-    };
-  }, [booting, enabled, unlocked, play, stopCues]);
+  const beginBoot = async (withSound: boolean) => {
+    const request = ++entryRequest.current;
+    stopCues();
+    setWelcome(true);
+    setLoading(true);
+    const audioReady = await configure(withSound);
+    if (request !== entryRequest.current) return;
+    setLoading(false);
+    setWelcome(false);
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) {
+      endBoot();
+      return;
+    }
+    setBootId((id) => id + 1);
+    setBooting(true);
+    if (audioReady) play("startup");
+  };
 
   useEffect(() => {
-    if (booting) return;
+    if (!booting) return;
+    const hidden = () => {
+      if (document.hidden) endBoot();
+    };
+    document.addEventListener("visibilitychange", hidden);
+    return () => document.removeEventListener("visibilitychange", hidden);
+  }, [booting, endBoot]);
+
+  useEffect(() => {
+    if (booting || welcome) return;
     const target = home
       ? content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")
       : content.current?.querySelector<HTMLHeadingElement>("h1");
     target?.focus({ preventScroll: true });
     content.current?.scrollTo(0, 0);
-  }, [location.pathname, home, booting]);
+  }, [location.pathname, home, booting, welcome]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -96,17 +123,20 @@ export default function ConsoleShell() {
         target.closest("input, textarea, select, [contenteditable=true]")
       )
         return;
-      if (booting) {
+      if (booting || welcome) {
         if (event.key === "Tab") {
           const buttons = [
-            ...document.querySelectorAll<HTMLButtonElement>(".boot-screen button:not([disabled])"),
+            ...document.querySelectorAll<HTMLButtonElement>(
+              ".entry-screen button:not([disabled]), .boot-screen button:not([disabled])",
+            ),
           ];
           const index = buttons.indexOf(target as HTMLButtonElement);
           event.preventDefault();
           buttons[(index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length]?.focus();
         } else if (
-          event.key === "Escape" ||
-          (["Enter", " "].includes(event.key) && target.tagName !== "BUTTON")
+          booting &&
+          (event.key === "Escape" ||
+            (["Enter", " "].includes(event.key) && target.tagName !== "BUTTON"))
         ) {
           event.preventDefault();
           endBoot();
@@ -128,7 +158,7 @@ export default function ConsoleShell() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [home, selected, navigate, play, booting, endBoot]);
+  }, [home, selected, navigate, play, booting, welcome, endBoot]);
 
   const select = (index: number) => {
     if (selected !== index) play("select");
@@ -137,7 +167,7 @@ export default function ConsoleShell() {
 
   return (
     <div className={`console-shell ${home ? "is-home" : "is-content"}`}>
-      <div className="console-chrome" inert={booting}>
+      <div className="console-chrome" inert={booting || welcome || loading}>
         <div className="console-stage">
           <Scene />
           <main
@@ -174,6 +204,13 @@ export default function ConsoleShell() {
             )}
           </div>
           <button
+            className="replay-control"
+            onClick={() => void beginBoot(enabled)}
+            disabled={loading}
+          >
+            Replay intro
+          </button>
+          <button
             className="sound-control"
             disabled={!ready}
             onClick={toggle}
@@ -187,9 +224,30 @@ export default function ConsoleShell() {
           </button>
         </footer>
       </div>
+      {welcome && (
+        <div className="entry-screen" role="dialog" aria-modal="true" aria-labelledby="entry-title">
+          <div className="entry-choice">
+            <p className="entry-eyebrow">Welcome to</p>
+            <h1 id="entry-title">Dallas Carraher</h1>
+            <p>A little nostalgia before you explore.</p>
+            <p className="entry-note">Choose sound before the startup begins.</p>
+            <button autoFocus disabled={!ready || loading} onClick={() => void beginBoot(true)}>
+              {loading ? "Loading startup…" : "Enter with sound"}
+            </button>
+            <button disabled={!ready} onClick={() => void beginBoot(false)}>
+              Enter without sound
+            </button>
+            <span className="entry-status" role="status">
+              {loading
+                ? "Preparing audio. You can also enter without sound."
+                : "Headphones recommended"}
+            </span>
+          </div>
+        </div>
+      )}
       {booting && (
         <div className="boot-screen" role="dialog" aria-modal="true" aria-label="System startup">
-          <StartupScene />
+          <StartupScene key={bootId} />
           <p className="boot-name">Dallas Carraher</p>
           <button
             className="boot-sound"
@@ -200,7 +258,7 @@ export default function ConsoleShell() {
           >
             Sound {enabled ? "on" : "off"}
           </button>
-          <button autoFocus onClick={endBoot}>
+          <button autoFocus onClick={() => endBoot()}>
             Skip intro <span>↵</span>
           </button>
         </div>

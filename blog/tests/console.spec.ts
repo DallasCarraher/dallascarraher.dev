@@ -6,6 +6,7 @@ async function skipBoot(page: Page) {
 
 test("startup can be skipped and stays skipped for this session", async ({ page }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: "Enter without sound" }).click();
   await expect(page.getByRole("dialog", { name: "System startup" })).toBeVisible();
   await page.getByRole("button", { name: "Skip intro" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -76,6 +77,7 @@ test("sound preference persists and can be disabled", async ({ page }) => {
 test("reduced motion bypasses startup and disables CSS animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
+  await page.getByRole("button", { name: "Enter without sound" }).click();
   await expect(page.getByRole("link", { name: "About", exact: true })).toBeFocused();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   expect(
