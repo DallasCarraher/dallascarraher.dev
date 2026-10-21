@@ -1,0 +1,117 @@
+.is-disc-browser .console-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-content: center;
+  padding: 30px 6% 20px;
+}
+.is-disc-browser .screen {
+  max-width: 600px;
+  padding: 0;
+}
+.disc-selector {
+  text-align: center;
+}
+.disc-selector .eyebrow {
+  margin-bottom: 12px;
+}
+.disc-selector h1 {
+  color: var(--blue);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  margin: 0 0 24px;
+  text-shadow: var(--glow);
+}
+.game-disc-stage {
+  position: relative;
+  width: min(340px, 68vw, 44svh);
+  aspect-ratio: 1;
+  margin: 0 auto 26px;
+  border-radius: 50%;
+  box-shadow: 0 0 65px #28bded1c;
+}
+.game-disc {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Mask out the spindle hole while preserving the printed silver hub. */
+  mask-image: radial-gradient(circle, transparent 0 8.4%, #000 8.8% 70.5%, transparent 70.7%);
+}
+.game-disc[data-dragging] {
+  cursor: grabbing;
+}
+.game-disc img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: rotate(var(--disc-rotation, 0deg));
+  pointer-events: none;
+  will-change: transform;
+}
+.game-disc-stage:focus-within {
+  outline: 1px solid var(--blue);
+  outline-offset: 8px;
+}
+.disc-caption .small-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.disc-caption h2 {
+  margin: 0 0 5px;
+  color: #d6ce91;
+  font-size: 25px;
+  font-weight: 400;
+  text-shadow: 0 0 12px #b9af5530;
+}
+.disc-caption > p:last-child {
+  margin: 0;
+  font-size: 15px;
+}
+.disc-instructions {
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.console-shell.is-disc-browser .control-hints {
+  display: flex;
+}
+.is-disc-browser button.back-control {
+  border: 0;
+  padding: 0;
+  background: none;
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .is-disc-browser .console-stage {
+    padding-top: 15px;
+  }
+  .disc-selector h1 {
+    margin-bottom: 12px;
+    font-size: 22px;
+  }
+  .game-disc-stage {
+    width: 34svh;
+    margin-bottom: 12px;
+  }
+  .disc-caption .small-label {
+    margin-bottom: 6px;
+  }
+  .disc-caption h2 {
+    font-size: 20px;
+  }
+  .disc-instructions {
+    margin-top: 10px;
+  }
+}

@@ -5,6 +5,7 @@ import { Scene } from "./scene";
 import { StartupScene, STARTUP_DURATION } from "./startup";
 import { useConsoleAudio } from "./audio";
 import { ThirdPlaceDuck } from "./third-place-duck";
+import { DiscSelector, DISC_CODE } from "./disc-selector";
 
 type ConsoleContext = { selected: number; select: (index: number) => void; confirm: () => void };
 export const useConsole = () => useOutletContext<ConsoleContext>();
@@ -20,6 +21,9 @@ export default function ConsoleShell() {
     ),
   );
   const [booting, setBooting] = useState(false);
+  const [discBrowser, setDiscBrowser] = useState(false);
+  const secretKeys = useRef<string[]>([]);
+  const showingDiscs = home && discBrowser;
   const visited = useRef(false);
   const [welcome, setWelcome] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,6 +34,14 @@ export default function ConsoleShell() {
     !booting && !welcome && !loading,
   );
   const active = menuItems.find((item) => item.href === location.pathname);
+  const closeDiscs = useCallback(() => {
+    setDiscBrowser(false);
+    secretKeys.current = [];
+    play("back");
+    requestAnimationFrame(() =>
+      content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
+    );
+  }, [play]);
 
   const endBoot = useCallback(
     (natural = false) => {
@@ -81,6 +93,8 @@ export default function ConsoleShell() {
   }, [booting, endBoot]);
 
   const beginBoot = async (withSound: boolean) => {
+    setDiscBrowser(false);
+    secretKeys.current = [];
     const request = ++entryRequest.current;
     stopCues();
     setWelcome(true);
@@ -127,6 +141,7 @@ export default function ConsoleShell() {
       )
         return;
       if (booting || welcome) {
+        secretKeys.current = [];
         if (event.key === "Tab") {
           const buttons = [
             ...document.querySelectorAll<HTMLButtonElement>(
@@ -146,6 +161,25 @@ export default function ConsoleShell() {
         }
         return;
       }
+      if (showingDiscs) {
+        if (["Escape", "Backspace"].includes(event.key)) {
+          event.preventDefault();
+          closeDiscs();
+        }
+        return;
+      }
+      if (home && !event.repeat) {
+        secretKeys.current = [...secretKeys.current, event.key].slice(-DISC_CODE.length);
+        if (secretKeys.current.join(",") === DISC_CODE.join(",")) {
+          event.preventDefault();
+          secretKeys.current = [];
+          play("confirm");
+          setDiscBrowser(true);
+          return;
+        }
+      } else if (!home) {
+        secretKeys.current = [];
+      }
       if (!home && ["Escape", "Backspace"].includes(event.key)) {
         event.preventDefault();
         play("back");
@@ -161,7 +195,7 @@ export default function ConsoleShell() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [home, selected, navigate, play, booting, welcome, endBoot]);
+  }, [home, selected, navigate, play, booting, welcome, endBoot, showingDiscs, closeDiscs]);
 
   const select = (index: number) => {
     if (selected !== index) play("select");
@@ -170,30 +204,41 @@ export default function ConsoleShell() {
 
   return (
     <div
-      className={`console-shell ${home ? "is-home" : "is-content"} ${location.pathname === "/about" ? "is-about" : ""}`}
+      className={`console-shell ${home ? "is-home" : "is-content"} ${showingDiscs ? "is-disc-browser" : ""} ${location.pathname === "/about" ? "is-about" : ""}`}
     >
       <div className="console-chrome" inert={booting || welcome || loading}>
         <div className="console-stage">
-          <Scene fixture={location.pathname === "/about"} />
+          {!showingDiscs && <Scene fixture={location.pathname === "/about"} />}
           <main
             ref={content}
             id="main-content"
             className="screen"
-            aria-label={home ? "Main menu" : active?.label}
+            aria-label={showingDiscs ? "Disc selection" : home ? "Main menu" : active?.label}
           >
             <div key={location.pathname} className="screen-transition">
-              <Outlet
-                context={
-                  { selected, select, confirm: () => play("confirm") } satisfies ConsoleContext
-                }
-              />
+              {showingDiscs ? (
+                <DiscSelector />
+              ) : (
+                <Outlet
+                  context={
+                    { selected, select, confirm: () => play("confirm") } satisfies ConsoleContext
+                  }
+                />
+              )}
             </div>
           </main>
         </div>
         {!home && <ThirdPlaceDuck key={location.pathname} />}
         <footer className="system-footer">
           <div className="control-hints">
-            {home ? (
+            {showingDiscs ? (
+              <button className="back-control" onClick={closeDiscs}>
+                <svg className="controller-circle" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="7" />
+                </svg>{" "}
+                Back
+              </button>
+            ) : home ? (
               <span className="keyboard-hint">
                 <svg className="controller-cross" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="m6 6 12 12M18 6 6 18" />
