@@ -1,0 +1,66 @@
+.third-place-duck {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: calc(100px + env(safe-area-inset-bottom));
+  z-index: 20;
+}
+
+.duck-button {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 60px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #f4f3ed;
+  touch-action: manipulation;
+}
+
+.duck-button svg {
+  display: block;
+  width: 48px;
+  height: 40px;
+  filter: drop-shadow(0 0 5px #ffffff24);
+  transition: transform 180ms steps(2, end);
+}
+
+.duck-button:hover svg,
+.duck-button:focus-visible svg,
+.duck-button[aria-expanded="true"] svg {
+  transform: translateY(-3px) rotate(-4deg);
+}
+
+.duck-greeting {
+  position: absolute;
+  right: 5px;
+  bottom: 100%;
+  width: 210px;
+  max-width: calc(100vw - 48px);
+  margin: 0 0 12px;
+  padding: 15px 18px;
+  border: 1px solid #eeeee6;
+  border-radius: 3px;
+  background: #eeeee6;
+  color: #17191c;
+  font: 14px/1.6 monospace;
+  text-align: left;
+  box-shadow: 0 0 16px #ffffff15;
+}
+
+.duck-greeting::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 21px;
+  border: 8px solid transparent;
+  border-top-color: #eeeee6;
+  border-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .third-place-duck {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}

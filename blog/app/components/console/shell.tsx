@@ -4,6 +4,7 @@ import { menuItems } from "../../content/site";
 import { Scene } from "./scene";
 import { StartupScene, STARTUP_DURATION } from "./startup";
 import { useConsoleAudio } from "./audio";
+import { ThirdPlaceDuck } from "./third-place-duck";
 
 type ConsoleContext = { selected: number; select: (index: number) => void; confirm: () => void };
 export const useConsole = () => useOutletContext<ConsoleContext>();
@@ -187,6 +188,7 @@ export default function ConsoleShell() {
             </div>
           </main>
         </div>
+        {!home && <ThirdPlaceDuck key={location.pathname} />}
         <footer className="system-footer">
           <div className="control-hints">
             {home ? (
