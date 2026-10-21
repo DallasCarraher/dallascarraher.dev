@@ -12,6 +12,21 @@ export function Scene({ fixture = false }: { fixture?: boolean }) {
     if (!scene) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    // Rasterize the soft particle once; reuse it at each particle's projected size.
+    const glowSprite = document.createElement("canvas");
+    glowSprite.width = glowSprite.height = 256;
+    const glowContext = glowSprite.getContext("2d");
+    if (!glowContext) return;
+    const glow = glowContext.createRadialGradient(128, 128, 0, 128, 128, 128);
+    glow.addColorStop(0, "rgba(255, 255, 238, 1)");
+    glow.addColorStop(0.045, "rgba(238, 255, 251, 1)");
+    glow.addColorStop(0.09, "rgba(164, 236, 255, .95)");
+    glow.addColorStop(0.19, "rgba(67, 197, 255, .65)");
+    glow.addColorStop(0.36, "rgba(0, 132, 232, .35)");
+    glow.addColorStop(0.65, "rgba(0, 59, 166, .12)");
+    glow.addColorStop(1, "rgba(0, 30, 100, 0)");
+    glowContext.fillStyle = glow;
+    glowContext.fillRect(0, 0, 256, 256);
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     // Reduced motion freezes the current clock pattern until motion is re-enabled.
@@ -45,10 +60,7 @@ export function Scene({ fixture = false }: { fixture?: boolean }) {
           const points = project(at);
           if (at.getMinutes() === date.getMinutes()) {
             const intensity = (1 - age / 360) ** 2;
-            ctx.strokeStyle = `rgba(35, 127, 230, ${intensity * 0.36})`;
-            ctx.lineWidth = Math.max(0.6, size * 0.008 * intensity);
-            ctx.shadowColor = "#168cde";
-            ctx.shadowBlur = size * 0.018;
+            ctx.beginPath();
             points.forEach((point, index) => {
               // Do not streak across a clock rollover.
               if (
@@ -56,31 +68,31 @@ export function Scene({ fixture = false }: { fixture?: boolean }) {
                 radius * 0.5
               )
                 return;
-              ctx.beginPath();
               ctx.moveTo(previous[index].x, previous[index].y);
               ctx.lineTo(point.x, point.y);
-              ctx.stroke();
             });
+            // Layer a faint halo and a bright core without per-segment blur filters.
+            const lineWidth = Math.max(0.6, size * 0.008 * intensity);
+            ctx.strokeStyle = `rgba(22, 140, 222, ${intensity * 0.045})`;
+            ctx.lineWidth = lineWidth + size * 0.018;
+            ctx.stroke();
+            ctx.strokeStyle = `rgba(35, 127, 230, ${intensity * 0.36})`;
+            ctx.lineWidth = lineWidth;
+            ctx.stroke();
           }
           previous = points;
         }
-        ctx.shadowBlur = 0;
       }
       const orbs = project(date).sort((a, b) => a.depth - b.depth);
       for (const orb of orbs) {
         const glowRadius = size * (fixture ? 0.105 : 0.18) * orb.perspective;
-        const glow = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowRadius);
-        glow.addColorStop(0, "rgba(255, 255, 238, 1)");
-        glow.addColorStop(0.045, "rgba(238, 255, 251, 1)");
-        glow.addColorStop(0.09, "rgba(164, 236, 255, .95)");
-        glow.addColorStop(0.19, "rgba(67, 197, 255, .65)");
-        glow.addColorStop(0.36, "rgba(0, 132, 232, .35)");
-        glow.addColorStop(0.65, "rgba(0, 59, 166, .12)");
-        glow.addColorStop(1, "rgba(0, 30, 100, 0)");
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(orb.x, orb.y, glowRadius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.drawImage(
+          glowSprite,
+          orb.x - glowRadius,
+          orb.y - glowRadius,
+          glowRadius * 2,
+          glowRadius * 2,
+        );
       }
       if (!motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
     }
