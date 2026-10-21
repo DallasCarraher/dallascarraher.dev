@@ -43,6 +43,26 @@ export function StartupScene() {
       noise.putImageData(pixels, 0, 0);
     }
     const grain = ctx.createPattern(texture, "repeat");
+    // X, Circle, Triangle, Square: keep the button colors distinct in the bloom.
+    const buttonLights = ["65,125,255", "255,62,62", "45,255,145", "255,105,205"].map(
+      (color, index) => {
+        const sprite = document.createElement("canvas");
+        sprite.width = sprite.height = 128;
+        const light = sprite.getContext("2d");
+        if (light) {
+          const bloom = light.createRadialGradient(64, 64, 0, 64, 64, 64);
+          bloom.addColorStop(0, "rgba(255,255,255,1)");
+          bloom.addColorStop(0.045, `rgba(${color},1)`);
+          bloom.addColorStop(0.14, `rgba(${color},.85)`);
+          bloom.addColorStop(0.36, `rgba(${color},.28)`);
+          bloom.addColorStop(0.7, `rgba(${color},.065)`);
+          bloom.addColorStop(1, `rgba(${color},0)`);
+          light.fillStyle = bloom;
+          light.fillRect(0, 0, 128, 128);
+        }
+        return { sprite, phase: (index * Math.PI) / 2 + Math.PI / 4 };
+      },
+    );
     const indices = [
       [0, 3, 2, 1],
       [0, 1, 5, 4],
@@ -186,6 +206,29 @@ export function StartupScene() {
         glow.addColorStop(1, "transparent");
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, width, height);
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        // Sample the paths in world space so trails share the grid's camera roll,
+        // perspective and dive, without depending on the display's frame rate.
+        for (const { sprite, phase } of buttonLights) {
+          for (let sample = 24; sample >= 0; sample--) {
+            const at = t - sample * 0.012;
+            if (at < 0) continue;
+            const angle = phase + at * 0.48;
+            const orbit = 4.4 - clamp((at - 2.05) / 1.65) * 1.6;
+            const [x, y, depth] = project([
+              Math.cos(angle) * orbit,
+              4.2 + Math.sin(at * 0.9 + phase) * 0.65,
+              Math.sin(angle) * orbit,
+            ]);
+            if (depth < 0.5) continue;
+            const radius = Math.min((focal * 1.05) / depth, Math.min(width, height) * 0.24);
+            const exposure = sample === 0 ? 1 : (1 - sample / 25) ** 2 * 0.09;
+            ctx.globalAlpha = opacity * clamp(t / 0.55) * exposure;
+            ctx.drawImage(sprite, x - radius, y - radius, radius * 2, radius * 2);
+          }
+        }
+        ctx.restore();
         ctx.globalAlpha = 1;
       }
       if (t > 4.3) {
