@@ -191,7 +191,7 @@ export function StartupScene() {
       if (t > 4.3) {
         const reveal = clamp((t - 4.3) / 1.9);
         const ease = 1 - Math.pow(1 - reveal, 3);
-        const scene = document.querySelector(".scene canvas")?.getBoundingClientRect();
+        const scene = document.querySelector(".scene")?.getBoundingClientRect();
         const scale = scene
           ? Math.min(scene.width, scene.height) * 0.32
           : Math.min(width, height) * 0.12;

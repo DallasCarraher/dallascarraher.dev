@@ -7,6 +7,8 @@ export function Scene() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    const scene = canvas.parentElement;
+    if (!scene) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -18,7 +20,7 @@ export function Scene() {
 
     function draw() {
       if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(-width * 0.25, -height * 0.25, width * 1.5, height * 1.5);
       const size = Math.min(width, height);
       const radius = size * 0.32;
       const date = motion.matches ? frozenTime : new Date();
@@ -89,18 +91,20 @@ export function Scene() {
       restart();
     }
     function resize() {
-      if (!canvas || !ctx) return;
-      const bounds = canvas.getBoundingClientRect();
+      if (!canvas || !ctx || !scene) return;
+      const bounds = scene.getBoundingClientRect();
       width = bounds.width;
       height = bounds.height;
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      canvas.width = Math.round(width * 1.5 * ratio);
+      canvas.height = Math.round(height * 1.5 * ratio);
+      const scaleX = canvas.width / (width * 1.5);
+      const scaleY = canvas.height / (height * 1.5);
+      ctx.setTransform(scaleX, 0, 0, scaleY, width * 0.25 * scaleX, height * 0.25 * scaleY);
       restart();
     }
     const observer = new ResizeObserver(resize);
-    observer.observe(canvas);
+    observer.observe(scene);
     motion.addEventListener("change", onMotionChange);
     document.addEventListener("visibilitychange", restart);
     return () => {

@@ -65,6 +65,32 @@ async function canvasPixels(page: Page) {
   return canvas.evaluate((el: HTMLCanvasElement) => el.toDataURL());
 }
 
+test("particle glows fade beyond the layout box without hitting the canvas edge", async ({
+  page,
+}) => {
+  await page.clock.setFixedTime(new Date(2026, 9, 20, 21, 4, 10));
+  await page.addInitScript(() => sessionStorage.setItem("dc-booted", "1"));
+  await page.goto("/");
+  await canvasPixels(page);
+  const pixels = await page.locator(".scene canvas").evaluate((el: HTMLCanvasElement) => {
+    const { width, height } = el;
+    const data = el.getContext("2d")!.getImageData(0, 0, width, height).data;
+    let belowScene = false;
+    let touchesEdge = false;
+    const sceneBottom = Math.ceil((height * 5) / 6);
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        if (!data[(y * width + x) * 4 + 3]) continue;
+        if (y >= sceneBottom) belowScene = true;
+        if (x === 0 || y === 0 || x === width - 1 || y === height - 1) touchesEdge = true;
+      }
+    }
+    return { belowScene, touchesEdge };
+  });
+  expect(pixels.belowScene).toBe(true);
+  expect(pixels.touchesEdge).toBe(false);
+});
+
 test("refresh keeps the same clock pattern instead of restarting a loop", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-10-20T19:22:34.567Z"));
   await page.addInitScript(() => sessionStorage.setItem("dc-booted", "1"));
