@@ -197,15 +197,57 @@ kbd {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  z-index: 20;
-  background: repeating-linear-gradient(
-    0deg,
-    #00000023 0,
-    #00000023 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  box-shadow: inset 0 0 110px #00000040;
+  z-index: 40;
+  /* Approximately 480 visible raster lines, with a floor for small screens. */
+  --raster: max(2px, calc(100svh / 480));
+  background: radial-gradient(ellipse at center, transparent 42%, #00000066 100%);
+}
+.crt-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, #0000 52%, #00000055 76%, #00000026),
+    linear-gradient(90deg, #ff000003, #00ff0001, #0000ff03);
+  background-size:
+    100% var(--raster),
+    3px 100%;
+}
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* A static glass haze; no artificial full-screen flicker. */
+  background: #99acbc03;
+  box-shadow: inset 0 0 100px #00000040;
+}
+.is-about .console-stage {
+  width: min(1250px, 100%);
+  grid-template-columns: 54% 46%;
+  padding-inline: 4%;
+}
+.is-about .scene {
+  height: min(650px, 76svh);
+}
+.is-about .content-page > h1 {
+  color: #d5cf70;
+  text-shadow:
+    0 0 3px #ddd98b80,
+    0 0 15px #b5a75a40;
+}
+.is-about .intro-copy {
+  text-shadow: var(--glow);
+}
+@media (max-width: 760px) and (orientation: portrait) {
+  .is-about .console-stage {
+    padding-inline: 7%;
+  }
+  .is-content.is-about .scene {
+    width: min(100%, 380px);
+    height: 34svh;
+    min-height: 230px;
+    margin-top: 12px;
+  }
 }
 .eyebrow {
   font-size: 11px;

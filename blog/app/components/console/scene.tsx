@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
+import { drawFixture } from "./fixture";
 import { getClockOrbs } from "./clock";
 
 /** Seven clock-driven particles, with the reference’s motion and perspective. */
-export function Scene() {
+export function Scene({ fixture = false }: { fixture?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = ref.current;
@@ -22,14 +23,15 @@ export function Scene() {
       if (!ctx || !canvas) return;
       ctx.clearRect(-width * 0.25, -height * 0.25, width * 1.5, height * 1.5);
       const size = Math.min(width, height);
-      const radius = size * 0.32;
+      const radius = size * (fixture ? 0.19 : 0.32);
       const date = motion.matches ? frozenTime : new Date();
+      if (fixture) drawFixture(ctx, width, height, date.getTime() / 1000);
       const project = (at: Date) =>
         getClockOrbs(at).map((orb) => {
           const perspective = 800 / (800 - orb.z * radius);
           return {
             x: width * 0.5 + orb.x * radius * perspective,
-            y: height * 0.57 + orb.y * radius * perspective,
+            y: height * (fixture ? 0.5 : 0.57) + orb.y * radius * perspective,
             depth: orb.z,
             perspective,
           };
@@ -66,7 +68,7 @@ export function Scene() {
       }
       const orbs = project(date).sort((a, b) => a.depth - b.depth);
       for (const orb of orbs) {
-        const glowRadius = size * 0.18 * orb.perspective;
+        const glowRadius = size * (fixture ? 0.105 : 0.18) * orb.perspective;
         const glow = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowRadius);
         glow.addColorStop(0, "rgba(255, 255, 238, 1)");
         glow.addColorStop(0.045, "rgba(238, 255, 251, 1)");
@@ -113,7 +115,7 @@ export function Scene() {
       motion.removeEventListener("change", onMotionChange);
       document.removeEventListener("visibilitychange", restart);
     };
-  }, []);
+  }, [fixture]);
   return (
     <div className="scene" aria-hidden="true">
       <canvas ref={ref} />

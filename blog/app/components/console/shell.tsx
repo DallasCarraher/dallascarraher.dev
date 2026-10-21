@@ -169,10 +169,12 @@ export default function ConsoleShell() {
   };
 
   return (
-    <div className={`console-shell ${home ? "is-home" : "is-content"}`}>
+    <div
+      className={`console-shell ${home ? "is-home" : "is-content"} ${location.pathname === "/about" ? "is-about" : ""}`}
+    >
       <div className="console-chrome" inert={booting || welcome || loading}>
         <div className="console-stage">
-          <Scene />
+          <Scene fixture={location.pathname === "/about"} />
           <main
             ref={content}
             id="main-content"

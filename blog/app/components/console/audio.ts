@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type Cue = "select" | "confirm" | "back" | "startup";
 type Sound = Cue | "ambience";
 const files: Record<Sound, string> = {
-  select: "/audio/move.mp3",
-  confirm: "/audio/enter.mp3",
+  select: "/audio/select.mp3",
+  confirm: "/audio/confirm.mp3",
   back: "/audio/back.mp3",
   startup: "/audio/startup.mp3",
   ambience: "/audio/ambience.mp3",
@@ -215,7 +215,7 @@ export function useConsoleAudio(menuActive: boolean) {
           // Startup and menu interaction cues remain one-shots.
           source.loop = false;
           const gain = ctx.createGain();
-          gain.gain.value = kind === "startup" ? 0.7 : 0.8;
+          gain.gain.value = { startup: 0.7, select: 0.4, confirm: 0.25, back: 0.8 }[kind];
           source.connect(gain);
           gain.connect(ctx.destination);
           source.start(0, 0);
