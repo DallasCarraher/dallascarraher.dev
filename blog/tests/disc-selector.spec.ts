@@ -107,3 +107,65 @@ test("keyboard spinning respects reduced motion", async ({ page }) => {
   await page.waitForTimeout(150);
   expect(await rotation(page)).toBe(30);
 });
+
+test("mobile duck unlocks after five seconds and cancels an interrupted hold", async ({
+  page,
+  context,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "Touch shortcut is for mobile");
+  const now = new Date();
+  await page.clock.install({ time: now });
+  await page.clock.pauseAt(now);
+  const duck = page.getByRole("button", { name: "A little duck has something to say" });
+  await expect(duck).toBeVisible();
+  const bounds = (await duck.boundingBox())!;
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  const session = await context.newCDPSession(page);
+  const start = () =>
+    session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+  const end = () => session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+
+  await start();
+  await page.clock.fastForward(4000);
+  await end();
+  await page.clock.fastForward(5000);
+  await expect(disc(page)).toHaveCount(0);
+  await expect(page.locator(".duck-greeting")).toBeVisible();
+
+  await start();
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchMove",
+    touchPoints: [{ x: x + 25, y }],
+  });
+  await page.clock.fastForward(5000);
+  await expect(disc(page)).toHaveCount(0);
+  await end();
+
+  await start();
+  await page.clock.fastForward(4999);
+  await expect(disc(page)).toHaveCount(0);
+  await page.clock.fastForward(1);
+  await expect(disc(page)).toBeFocused();
+  await end();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(page.getByRole("navigation")).toBeVisible();
+
+  await page.goto("/about");
+  await expect(page.getByRole("heading", { name: "About me", exact: true })).toBeFocused();
+  const contentBounds = (await duck.boundingBox())!;
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [
+      {
+        x: contentBounds.x + contentBounds.width / 2,
+        y: contentBounds.y + contentBounds.height / 2,
+      },
+    ],
+  });
+  await page.clock.fastForward(5000);
+  await expect(page).toHaveURL(/\/$/);
+  await expect(disc(page)).toBeVisible();
+  await end();
+});

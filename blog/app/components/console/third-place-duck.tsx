@@ -1,11 +1,33 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import "./third-place-duck.css";
 
-export function ThirdPlaceDuck() {
+export function ThirdPlaceDuck({
+  onSecretHold,
+  menu = false,
+}: {
+  onSecretHold?: () => void;
+  menu?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
   const bubbleId = useId();
   const duck = useRef<HTMLDivElement>(null);
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const hold = useRef<{ id: number; x: number; y: number } | null>(null);
+  const cancelHold = useCallback(() => {
+    clearTimeout(holdTimer.current);
+    hold.current = null;
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", cancelHold);
+    window.addEventListener("blur", cancelHold);
+    return () => {
+      cancelHold();
+      document.removeEventListener("visibilitychange", cancelHold);
+      window.removeEventListener("blur", cancelHold);
+    };
+  }, [cancelHold]);
 
   useEffect(() => {
     if (!open) return;
@@ -34,7 +56,7 @@ export function ThirdPlaceDuck() {
   return (
     <div
       ref={duck}
-      className="third-place-duck"
+      className={`third-place-duck ${menu ? "is-menu-duck" : ""}`}
       onPointerEnter={(event) => {
         if (event.pointerType === "mouse") setOpen(true);
       }}
@@ -52,6 +74,30 @@ export function ThirdPlaceDuck() {
         aria-expanded={open}
         aria-controls={bubbleId}
         aria-describedby={open ? bubbleId : undefined}
+        onPointerDown={(event) => {
+          cancelHold();
+          if (!onSecretHold || event.pointerType !== "touch" || !event.isPrimary) return;
+          hold.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
+          holdTimer.current = setTimeout(() => {
+            hold.current = null;
+            onSecretHold();
+          }, 5000);
+        }}
+        onPointerMove={(event) => {
+          const start = hold.current;
+          if (
+            start?.id === event.pointerId &&
+            Math.hypot(event.clientX - start.x, event.clientY - start.y) > 12
+          )
+            cancelHold();
+        }}
+        onPointerUp={cancelHold}
+        onPointerCancel={cancelHold}
+        onLostPointerCapture={cancelHold}
+        onPointerLeave={cancelHold}
+        onContextMenu={(event) => {
+          if (onSecretHold) event.preventDefault();
+        }}
         onClick={() => {
           setPinned(!pinned);
           setOpen(!pinned);
@@ -60,6 +106,7 @@ export function ThirdPlaceDuck() {
           if (event.currentTarget.matches(":focus-visible")) setOpen(true);
         }}
         onBlur={() => {
+          cancelHold();
           setPinned(false);
           setOpen(false);
         }}

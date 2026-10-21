@@ -228,7 +228,18 @@ export default function ConsoleShell() {
             </div>
           </main>
         </div>
-        {!home && <ThirdPlaceDuck key={location.pathname} />}
+        {!showingDiscs && (
+          <ThirdPlaceDuck
+            key={location.pathname}
+            menu={home}
+            onSecretHold={() => {
+              secretKeys.current = [];
+              play("confirm");
+              setDiscBrowser(true);
+              if (!home) navigate("/");
+            }}
+          />
+        )}
         <footer className="system-footer">
           <div className="control-hints">
             {showingDiscs ? (
