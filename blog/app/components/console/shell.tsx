@@ -21,7 +21,8 @@ export default function ConsoleShell() {
     ),
   );
   const [booting, setBooting] = useState(false);
-  const [discBrowser, setDiscBrowser] = useState(false);
+  const directCollection = new URLSearchParams(location.search).get("collection") === "games";
+  const [discBrowser, setDiscBrowser] = useState(directCollection);
   const discSelector = useRef<DiscSelectorHandle>(null);
   const secretKeys = useRef<string[]>([]);
   const showingDiscs = home && discBrowser;
@@ -37,12 +38,13 @@ export default function ConsoleShell() {
   const active = menuItems.find((item) => item.href === location.pathname);
   const closeDiscs = useCallback(() => {
     setDiscBrowser(false);
+    if (directCollection) navigate("/", { replace: true });
     secretKeys.current = [];
     play("back");
     requestAnimationFrame(() =>
       content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
     );
-  }, [play]);
+  }, [play, directCollection, navigate]);
 
   const endBoot = useCallback(
     (natural = false) => {
@@ -72,12 +74,12 @@ export default function ConsoleShell() {
     } catch {
       /* Use this mount only. */
     }
-    if (home && !seen) {
+    if (home && !seen && !directCollection) {
       // The entry choice supplies the browser gesture required for sound.
       // oxlint-disable-next-line react/set-state-in-effect
       setWelcome(true);
     }
-  }, [home]);
+  }, [home, directCollection]);
 
   useEffect(() => {
     if (!booting) return;
@@ -133,7 +135,7 @@ export default function ConsoleShell() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement;
+      const target = event.target instanceof HTMLElement ? event.target : document.body;
       if (
         event.altKey ||
         event.metaKey ||
@@ -141,8 +143,20 @@ export default function ConsoleShell() {
         target.closest("input, textarea, select, [contenteditable=true]")
       )
         return;
+      // Listen before startup/menu handling so the shortcut works from any screen.
+      if (!showingDiscs && !event.repeat) {
+        secretKeys.current = [...secretKeys.current, event.key].slice(-DISC_CODE.length);
+        if (secretKeys.current.join(",") === DISC_CODE.join(",")) {
+          event.preventDefault();
+          secretKeys.current = [];
+          endBoot();
+          play("confirm");
+          setDiscBrowser(true);
+          if (!home) navigate("/");
+          return;
+        }
+      }
       if (booting || welcome) {
-        secretKeys.current = [];
         if (event.key === "Tab") {
           const buttons = [
             ...document.querySelectorAll<HTMLButtonElement>(
@@ -168,18 +182,6 @@ export default function ConsoleShell() {
           if (!discSelector.current?.back()) closeDiscs();
         }
         return;
-      }
-      if (home && !event.repeat) {
-        secretKeys.current = [...secretKeys.current, event.key].slice(-DISC_CODE.length);
-        if (secretKeys.current.join(",") === DISC_CODE.join(",")) {
-          event.preventDefault();
-          secretKeys.current = [];
-          play("confirm");
-          setDiscBrowser(true);
-          return;
-        }
-      } else if (!home) {
-        secretKeys.current = [];
       }
       if (!home && ["Escape", "Backspace"].includes(event.key)) {
         event.preventDefault();

@@ -62,6 +62,41 @@ test("only the full sequence replaces the menu, and Back restores it", async ({ 
   await expect(page.getByRole("navigation")).toBeVisible();
 });
 
+test("arrow shortcut works from content pages, startup, and the welcome screen", async ({
+  page,
+  context,
+}) => {
+  await page.goto("/about");
+  await expect(page.getByRole("heading", { name: "About me", exact: true })).toBeFocused();
+  await unlock(page);
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await page.evaluate(() => sessionStorage.removeItem("dc-booted"));
+  await page.reload();
+  await page.getByRole("button", { name: "Replay intro", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "System startup" })).toBeVisible();
+  await unlock(page);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  const freshPage = await context.newPage();
+  await freshPage.goto("/");
+  await expect(freshPage.getByRole("dialog", { name: "Dallas Carraher", exact: true })).toBeVisible();
+  await unlock(freshPage);
+  await expect(freshPage.getByRole("dialog")).toHaveCount(0);
+});
+
+test("direct collection link bypasses startup and closes to the menu", async ({ context }) => {
+  const page = await context.newPage();
+  await page.goto("/?collection=games");
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeFocused();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator(".menu-link[aria-current]")).toBeFocused();
+});
+
 test("dragging rotates the disc, a flick coasts, and grabbing stops it", async ({ page }) => {
   await openDisc(page);
   const bounds = (await disc(page).boundingBox())!;
