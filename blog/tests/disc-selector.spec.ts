@@ -80,7 +80,9 @@ test("arrow shortcut works from content pages, startup, and the welcome screen",
 
   const freshPage = await context.newPage();
   await freshPage.goto("/");
-  await expect(freshPage.getByRole("dialog", { name: "Dallas Carraher", exact: true })).toBeVisible();
+  await expect(
+    freshPage.getByRole("dialog", { name: "Dallas Carraher", exact: true }),
+  ).toBeVisible();
   await unlock(freshPage);
   await expect(freshPage.getByRole("dialog")).toHaveCount(0);
 });
@@ -137,6 +139,78 @@ test("touch dragging works with pointer capture", async ({ page, context }) => {
   await expect.poll(() => rotation(page)).toBeGreaterThanOrEqual(89);
   await expect(disc(page)).not.toHaveAttribute("data-dragging");
 });
+
+for (const pointer of ["mouse", "touch"] as const) {
+  test(`${pointer} flicks accumulate momentum, reverse strokes brake, and holding stops`, async ({
+    page,
+    context,
+  }) => {
+    await openDisc(page);
+    const now = new Date();
+    await page.clock.install({ time: now });
+    await page.clock.pauseAt(now);
+    const bounds = (await disc(page).boundingBox())!;
+    const cx = bounds.x + bounds.width / 2;
+    const cy = bounds.y + bounds.height / 2;
+    const r = bounds.width * 0.35;
+    const session = await context.newCDPSession(page);
+    const point = (angle: number) => ({
+      x: cx + Math.cos((angle * Math.PI) / 180) * r,
+      y: cy + Math.sin((angle * Math.PI) / 180) * r,
+    });
+    const start = async () => {
+      if (pointer === "touch")
+        await session.send("Input.dispatchTouchEvent", {
+          type: "touchStart",
+          touchPoints: [point(0)],
+        });
+      else {
+        await page.mouse.move(cx + r, cy);
+        await page.mouse.down();
+      }
+    };
+    const end = async () => {
+      if (pointer === "touch")
+        await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      else await page.mouse.up();
+    };
+    const flick = async (direction = 1) => {
+      await start();
+      for (const angle of [30, 60, 90]) {
+        await page.clock.runFor(20);
+        const p = point(angle * direction);
+        if (pointer === "touch")
+          await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [p] });
+        else await page.mouse.move(p.x, p.y);
+      }
+      await end();
+    };
+    const coastDistance = async () => {
+      const before = await rotation(page);
+      await page.clock.runFor(120);
+      return (await rotation(page)) - before;
+    };
+
+    await flick();
+    const first = await coastDistance();
+    expect(first).toBeGreaterThan(50);
+    await flick();
+    const second = await coastDistance();
+    expect(second).toBeGreaterThan(first * 1.6);
+    await flick(-1);
+    const braked = await coastDistance();
+    expect(braked).toBeLessThan(second * 0.7);
+    expect(braked).toBeGreaterThan(0);
+
+    await start();
+    const held = await rotation(page);
+    await page.clock.runFor(250);
+    expect(await rotation(page)).toBe(held);
+    await end();
+    await page.clock.runFor(250);
+    expect(await rotation(page)).toBe(held);
+  });
+}
 
 test("keyboard spinning respects reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });

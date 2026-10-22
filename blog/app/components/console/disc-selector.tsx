@@ -263,7 +263,7 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
             ? "Opening case…"
             : phase === "closing"
               ? "Returning to the shelf…"
-              : "Drag to spin · ← / → to turn · Enter to flick"}
+              : "Flick to build speed · Hold to stop · ← / → to spin"}
       </p>
       <a className="collection-credit" href={game.source} target="_blank" rel="noreferrer">
         Artwork from LaunchBox ↗
