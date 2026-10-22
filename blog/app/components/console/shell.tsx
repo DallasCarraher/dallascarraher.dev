@@ -5,7 +5,7 @@ import { Scene } from "./scene";
 import { StartupScene, STARTUP_DURATION } from "./startup";
 import { useConsoleAudio } from "./audio";
 import { ThirdPlaceDuck } from "./third-place-duck";
-import { DiscSelector, DISC_CODE } from "./disc-selector";
+import { DiscSelector, DISC_CODE, type DiscSelectorHandle } from "./disc-selector";
 
 type ConsoleContext = { selected: number; select: (index: number) => void; confirm: () => void };
 export const useConsole = () => useOutletContext<ConsoleContext>();
@@ -21,7 +21,9 @@ export default function ConsoleShell() {
     ),
   );
   const [booting, setBooting] = useState(false);
-  const [discBrowser, setDiscBrowser] = useState(false);
+  const directCollection = new URLSearchParams(location.search).get("collection") === "games";
+  const [discBrowser, setDiscBrowser] = useState(directCollection);
+  const discSelector = useRef<DiscSelectorHandle>(null);
   const secretKeys = useRef<string[]>([]);
   const showingDiscs = home && discBrowser;
   const visited = useRef(false);
@@ -36,12 +38,13 @@ export default function ConsoleShell() {
   const active = menuItems.find((item) => item.href === location.pathname);
   const closeDiscs = useCallback(() => {
     setDiscBrowser(false);
+    if (directCollection) navigate("/", { replace: true });
     secretKeys.current = [];
     play("back");
     requestAnimationFrame(() =>
       content.current?.querySelector<HTMLAnchorElement>(".menu-link[aria-current]")?.focus(),
     );
-  }, [play]);
+  }, [play, directCollection, navigate]);
 
   const endBoot = useCallback(
     (natural = false) => {
@@ -71,12 +74,12 @@ export default function ConsoleShell() {
     } catch {
       /* Use this mount only. */
     }
-    if (home && !seen) {
+    if (home && !seen && !directCollection) {
       // The entry choice supplies the browser gesture required for sound.
       // oxlint-disable-next-line react/set-state-in-effect
       setWelcome(true);
     }
-  }, [home]);
+  }, [home, directCollection]);
 
   useEffect(() => {
     if (!booting) return;
@@ -132,7 +135,7 @@ export default function ConsoleShell() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement;
+      const target = event.target instanceof HTMLElement ? event.target : document.body;
       if (
         event.altKey ||
         event.metaKey ||
@@ -140,8 +143,20 @@ export default function ConsoleShell() {
         target.closest("input, textarea, select, [contenteditable=true]")
       )
         return;
+      // Listen before startup/menu handling so the shortcut works from any screen.
+      if (!showingDiscs && !event.repeat) {
+        secretKeys.current = [...secretKeys.current, event.key].slice(-DISC_CODE.length);
+        if (secretKeys.current.join(",") === DISC_CODE.join(",")) {
+          event.preventDefault();
+          secretKeys.current = [];
+          endBoot();
+          play("confirm");
+          setDiscBrowser(true);
+          if (!home) navigate("/");
+          return;
+        }
+      }
       if (booting || welcome) {
-        secretKeys.current = [];
         if (event.key === "Tab") {
           const buttons = [
             ...document.querySelectorAll<HTMLButtonElement>(
@@ -164,21 +179,9 @@ export default function ConsoleShell() {
       if (showingDiscs) {
         if (["Escape", "Backspace"].includes(event.key)) {
           event.preventDefault();
-          closeDiscs();
+          if (!discSelector.current?.back()) closeDiscs();
         }
         return;
-      }
-      if (home && !event.repeat) {
-        secretKeys.current = [...secretKeys.current, event.key].slice(-DISC_CODE.length);
-        if (secretKeys.current.join(",") === DISC_CODE.join(",")) {
-          event.preventDefault();
-          secretKeys.current = [];
-          play("confirm");
-          setDiscBrowser(true);
-          return;
-        }
-      } else if (!home) {
-        secretKeys.current = [];
       }
       if (!home && ["Escape", "Backspace"].includes(event.key)) {
         event.preventDefault();
@@ -217,7 +220,7 @@ export default function ConsoleShell() {
           >
             <div key={location.pathname} className="screen-transition">
               {showingDiscs ? (
-                <DiscSelector />
+                <DiscSelector ref={discSelector} />
               ) : (
                 <Outlet
                   context={
@@ -243,7 +246,12 @@ export default function ConsoleShell() {
         <footer className="system-footer">
           <div className="control-hints">
             {showingDiscs ? (
-              <button className="back-control" onClick={closeDiscs}>
+              <button
+                className="back-control"
+                onClick={() => {
+                  if (!discSelector.current?.back()) closeDiscs();
+                }}
+              >
                 <svg className="controller-circle" viewBox="0 0 24 24" aria-hidden="true">
                   <circle cx="12" cy="12" r="7" />
                 </svg>{" "}
