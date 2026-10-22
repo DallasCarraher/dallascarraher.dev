@@ -5,7 +5,7 @@ import { Scene } from "./scene";
 import { StartupScene, STARTUP_DURATION } from "./startup";
 import { useConsoleAudio } from "./audio";
 import { ThirdPlaceDuck } from "./third-place-duck";
-import { DiscSelector, DISC_CODE } from "./disc-selector";
+import { DiscSelector, DISC_CODE, type DiscSelectorHandle } from "./disc-selector";
 
 type ConsoleContext = { selected: number; select: (index: number) => void; confirm: () => void };
 export const useConsole = () => useOutletContext<ConsoleContext>();
@@ -22,6 +22,7 @@ export default function ConsoleShell() {
   );
   const [booting, setBooting] = useState(false);
   const [discBrowser, setDiscBrowser] = useState(false);
+  const discSelector = useRef<DiscSelectorHandle>(null);
   const secretKeys = useRef<string[]>([]);
   const showingDiscs = home && discBrowser;
   const visited = useRef(false);
@@ -164,7 +165,7 @@ export default function ConsoleShell() {
       if (showingDiscs) {
         if (["Escape", "Backspace"].includes(event.key)) {
           event.preventDefault();
-          closeDiscs();
+          if (!discSelector.current?.back()) closeDiscs();
         }
         return;
       }
@@ -217,7 +218,7 @@ export default function ConsoleShell() {
           >
             <div key={location.pathname} className="screen-transition">
               {showingDiscs ? (
-                <DiscSelector />
+                <DiscSelector ref={discSelector} />
               ) : (
                 <Outlet
                   context={
@@ -243,7 +244,12 @@ export default function ConsoleShell() {
         <footer className="system-footer">
           <div className="control-hints">
             {showingDiscs ? (
-              <button className="back-control" onClick={closeDiscs}>
+              <button
+                className="back-control"
+                onClick={() => {
+                  if (!discSelector.current?.back()) closeDiscs();
+                }}
+              >
                 <svg className="controller-circle" viewBox="0 0 24 24" aria-hidden="true">
                   <circle cx="12" cy="12" r="7" />
                 </svg>{" "}

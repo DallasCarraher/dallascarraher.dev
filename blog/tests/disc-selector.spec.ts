@@ -23,6 +23,14 @@ const rotation = (page: Page) =>
 
 async function unlock(page: Page) {
   for (const key of code) await page.keyboard.press(key);
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeFocused();
+}
+
+async function openDisc(page: Page) {
+  await unlock(page);
+  await page.getByRole("button", { name: "Open case", exact: true }).click();
   await expect(disc(page)).toBeFocused();
 }
 
@@ -37,12 +45,12 @@ test("only the full sequence replaces the menu, and Back restores it", async ({ 
   await expect(disc(page)).toHaveCount(0);
   await unlock(page);
   await expect(page.getByRole("navigation")).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Select a disc" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Pick something good." })).toBeVisible();
   await expect
     .poll(() =>
-      disc(page)
-        .locator("img")
-        .evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth === 1280),
+      page
+        .locator(".is-selected .case-front img")
+        .evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0),
     )
     .toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -55,7 +63,7 @@ test("only the full sequence replaces the menu, and Back restores it", async ({ 
 });
 
 test("dragging rotates the disc, a flick coasts, and grabbing stops it", async ({ page }) => {
-  await unlock(page);
+  await openDisc(page);
   const bounds = (await disc(page).boundingBox())!;
   const cx = bounds.x + bounds.width / 2;
   const cy = bounds.y + bounds.height / 2;
@@ -76,7 +84,7 @@ test("dragging rotates the disc, a flick coasts, and grabbing stops it", async (
 });
 
 test("touch dragging works with pointer capture", async ({ page, context }) => {
-  await unlock(page);
+  await openDisc(page);
   const bounds = (await disc(page).boundingBox())!;
   const cx = bounds.x + bounds.width / 2;
   const cy = bounds.y + bounds.height / 2;
@@ -97,7 +105,7 @@ test("touch dragging works with pointer capture", async ({ page, context }) => {
 
 test("keyboard spinning respects reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await unlock(page);
+  await openDisc(page);
   await page.keyboard.press("ArrowRight");
   expect(await rotation(page)).toBe(30);
   await page.keyboard.press("ArrowLeft");
@@ -106,6 +114,85 @@ test("keyboard spinning respects reduced motion", async ({ page }) => {
   expect(await rotation(page)).toBe(30);
   await page.waitForTimeout(150);
   expect(await rotation(page)).toBe(30);
+});
+
+test("cover flow browses games, flips a case, and opens the selected disc", async ({ page }) => {
+  await unlock(page);
+  await page.keyboard.press("ArrowRight");
+  const jakII = page.getByRole("button", { name: "Open Jak II case", exact: true });
+  await expect(jakII).toBeFocused();
+  await expect(page.getByRole("heading", { name: "Jak II", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "View back", exact: true }).click();
+  await expect(page.locator(".disc-selector")).toHaveClass(/case-is-flipped/);
+  await page.getByRole("button", { name: "View front", exact: true }).click();
+  await jakII.click();
+  await expect(page.locator(".disc-selector")).toHaveClass(/collection-opening/);
+  const selectedDisc = page.getByRole("button", { name: "Spin Jak II disc", exact: true });
+  await expect(selectedDisc).toBeFocused();
+  await expect(selectedDisc.locator("img")).toHaveAttribute("src", /jak-ii\/disc.webp/);
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(jakII).toBeFocused();
+  await page.getByRole("button", { name: "Next game", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Open Jak 3 case", exact: true })).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(page.getByRole("button", { name: "Open Jak 3 case", exact: true })).toBeFocused();
+});
+
+test("swiping changes the selection without opening a case", async ({
+  page,
+  context,
+  isMobile,
+}) => {
+  await unlock(page);
+  const bounds = (await page.locator(".cover-flow").boundingBox())!;
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  if (isMobile) {
+    const session = await context.newCDPSession(page);
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+    await session.send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [{ x: x - 65, y }],
+    });
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  } else {
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x - 65, y, { steps: 6 });
+    await page.mouse.up();
+  }
+  await expect(page.getByRole("button", { name: "Open Jak II case", exact: true })).toBeFocused();
+  await expect(page.locator(".disc-selector")).toHaveClass(/collection-browse/);
+});
+
+test("landscape collection and disc keep the footer in view", async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await unlock(page);
+  const fits = () =>
+    page
+      .locator(".system-footer")
+      .evaluate((el) => el.getBoundingClientRect().bottom <= innerHeight + 1);
+  expect(await fits()).toBe(true);
+  await page.getByRole("button", { name: "Open case", exact: true }).click();
+  await expect(disc(page)).toBeFocused();
+  expect(await fits()).toBe(true);
+});
+
+test("Escape can interrupt case opening and restore collection focus", async ({ page }) => {
+  await unlock(page);
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".disc-selector")).toHaveClass(/collection-opening/);
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeFocused();
+  await expect(disc(page)).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("navigation")).toBeVisible();
 });
 
 test("mobile duck unlocks after five seconds and cancels an interrupted hold", async ({
@@ -147,7 +234,9 @@ test("mobile duck unlocks after five seconds and cancels an interrupted hold", a
   await page.clock.fastForward(4999);
   await expect(disc(page)).toHaveCount(0);
   await page.clock.fastForward(1);
-  await expect(disc(page)).toBeFocused();
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeFocused();
   await end();
   await page.getByRole("button", { name: "Back", exact: true }).click();
   await expect(page.getByRole("navigation")).toBeVisible();
@@ -166,6 +255,8 @@ test("mobile duck unlocks after five seconds and cancels an interrupted hold", a
   });
   await page.clock.fastForward(5000);
   await expect(page).toHaveURL(/\/$/);
-  await expect(disc(page)).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Open Jak and Daxter case", exact: true }),
+  ).toBeVisible();
   await end();
 });

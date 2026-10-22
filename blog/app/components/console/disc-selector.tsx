@@ -1,4 +1,13 @@
-import { useEffect, useRef, type PointerEvent } from "react";
+import {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type CSSProperties,
+  type Ref,
+} from "react";
+import { games, type Game } from "./games";
+import { SpinningDisc } from "./spinning-disc";
 import "./disc-selector.css";
 
 export const DISC_CODE = [
@@ -17,147 +26,248 @@ export const DISC_CODE = [
   "ArrowRight",
 ];
 
-export function DiscSelector() {
-  const disc = useRef<HTMLButtonElement>(null);
-  const rotation = useRef(0);
-  const velocity = useRef(0);
-  const drag = useRef<{ id: number; angle: number; time: number } | null>(null);
-  const frame = useRef(0);
-  const reducedMotion = useRef(false);
+export type DiscSelectorHandle = { back: () => boolean };
+type Phase = "browse" | "opening" | "disc" | "closing";
 
-  const paint = () => {
-    disc.current?.style.setProperty("--disc-rotation", `${rotation.current}deg`);
-  };
+function GameCase({ game }: { game: Game }) {
+  return (
+    <span className="game-case" aria-hidden="true">
+      <span className="case-back">
+        <img src={game.back} alt="" draggable={false} />
+      </span>
+      <span className="case-spine">
+        <img src={game.spine} alt="" draggable={false} />
+      </span>
+      <span className="case-tray">
+        <span className="case-tray-ring" />
+        <img className="case-seated-disc" src={game.disc} alt="" draggable={false} />
+        <span className="case-hub" />
+        <span className="case-tray-mark">DVD ROM</span>
+      </span>
+      <span className="case-lid">
+        <span className="case-front">
+          <img src={game.front} alt="" draggable={false} />
+        </span>
+        <span className="case-lid-inside">
+          <i />
+          <i />
+          <i />
+        </span>
+      </span>
+    </span>
+  );
+}
 
-  const coast = () => {
-    cancelAnimationFrame(frame.current);
-    if (reducedMotion.current) return;
-    let previous = performance.now();
-    const tick = (now: number) => {
-      const elapsed = Math.min(now - previous, 32);
-      previous = now;
-      rotation.current += velocity.current * elapsed;
-      velocity.current *= Math.exp(-elapsed / 900);
-      paint();
-      if (Math.abs(velocity.current) > 0.003) frame.current = requestAnimationFrame(tick);
-    };
-    frame.current = requestAnimationFrame(tick);
-  };
+export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
+  const [selected, setSelected] = useState(0);
+  const [phase, setPhase] = useState<Phase>("browse");
+  const [flipped, setFlipped] = useState(false);
+  const cards = useRef<(HTMLButtonElement | null)[]>([]);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
+  const suppressClick = useRef(false);
+  const game = games[selected];
+  const browsing = phase === "browse";
+  const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => {
-    disc.current?.focus({ preventScroll: true });
-    const motion = matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => {
-      reducedMotion.current = motion.matches;
-      if (motion.matches) cancelAnimationFrame(frame.current);
-    };
-    const stop = () => {
-      cancelAnimationFrame(frame.current);
-      velocity.current = 0;
-    };
-    update();
-    motion.addEventListener("change", update);
-    document.addEventListener("visibilitychange", stop);
-    return () => {
-      stop();
-      motion.removeEventListener("change", update);
-      document.removeEventListener("visibilitychange", stop);
-    };
-  }, []);
+    if (phase === "browse") cards.current[selected]?.focus({ preventScroll: true });
+  }, [selected, phase]);
 
-  const angleAt = (event: PointerEvent<HTMLButtonElement>) => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - bounds.left - bounds.width / 2;
-    const y = event.clientY - bounds.top - bounds.height / 2;
-    if (Math.hypot(x, y) < bounds.width * 0.09) return null;
-    return Math.atan2(y, x) * (180 / Math.PI);
+  const choose = (index: number) => {
+    if (!browsing) return;
+    setFlipped(false);
+    setSelected((index + games.length) % games.length);
   };
-
-  const release = (event: PointerEvent<HTMLButtonElement>) => {
-    if (drag.current?.id !== event.pointerId) return;
-    const flick = event.type !== "pointercancel" && performance.now() - drag.current.time < 100;
-    drag.current = null;
-    event.currentTarget.removeAttribute("data-dragging");
-    if (event.currentTarget.hasPointerCapture(event.pointerId))
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    if (flick) coast();
+  const open = () => {
+    if (!browsing) return;
+    setFlipped(false);
+    setPhase(reduce() ? "disc" : "opening");
+    clearTimeout(timer.current);
+    if (!reduce()) timer.current = setTimeout(() => setPhase("disc"), 1500);
   };
-
-  const nudge = (direction: number) => {
-    rotation.current += direction * 30;
-    velocity.current = direction * 0.3;
-    paint();
-    coast();
+  const back = () => {
+    if (browsing) return false;
+    clearTimeout(timer.current);
+    setPhase(reduce() ? "browse" : "closing");
+    if (!reduce()) timer.current = setTimeout(() => setPhase("browse"), 650);
+    return true;
   };
+  useImperativeHandle(ref, () => ({ back }));
 
   return (
-    <section className="disc-selector" aria-labelledby="disc-selector-title">
-      <p className="eyebrow">
-        <span>SECRET UNLOCKED</span> / DISC BROWSER
-      </p>
-      <h1 id="disc-selector-title">Select a disc</h1>
-      <div className="game-disc-stage">
-        <button
-          ref={disc}
-          className="game-disc"
-          aria-label="Spin Jak and Daxter disc"
-          aria-describedby="disc-instructions"
-          onPointerDown={(event) => {
-            if (!event.isPrimary || event.button !== 0) return;
-            const angle = angleAt(event);
-            if (angle === null) return;
-            cancelAnimationFrame(frame.current);
-            velocity.current = 0;
-            event.currentTarget.focus({ preventScroll: true });
-            event.currentTarget.setPointerCapture(event.pointerId);
-            event.currentTarget.setAttribute("data-dragging", "true");
-            drag.current = { id: event.pointerId, angle, time: performance.now() };
-          }}
-          onPointerMove={(event) => {
-            const last = drag.current;
-            if (last?.id !== event.pointerId) return;
-            const angle = angleAt(event);
-            if (angle === null) return;
-            const now = performance.now();
-            const delta = ((angle - last.angle + 540) % 360) - 180;
-            rotation.current += delta;
-            velocity.current = Math.max(-2, Math.min(2, delta / Math.max(8, now - last.time)));
-            drag.current = { id: event.pointerId, angle, time: now };
-            paint();
-          }}
-          onPointerUp={release}
-          onPointerCancel={release}
-          onLostPointerCapture={() => {
-            drag.current = null;
-            disc.current?.removeAttribute("data-dragging");
-          }}
-          onKeyDown={(event) => {
-            if (["ArrowLeft", "ArrowRight"].includes(event.key)) {
-              event.preventDefault();
-              nudge(event.key === "ArrowLeft" ? -1 : 1);
-            }
-          }}
-          onClick={(event) => {
-            if (event.detail === 0) nudge(1);
-          }}
-        >
-          <img
-            src="/images/discs/jak-and-daxter.png"
-            alt="Jak and Daxter: The Precursor Legacy, PlayStation 2 disc"
-            width="1280"
-            height="1280"
-            draggable={false}
-          />
-        </button>
+    <section
+      className={`disc-selector collection-${phase} ${flipped ? "case-is-flipped" : ""}`}
+      aria-labelledby="disc-selector-title"
+      onKeyDown={(event) => {
+        if (["Escape", "Backspace"].includes(event.key) && !browsing) {
+          event.preventDefault();
+          event.stopPropagation();
+          back();
+        } else if (browsing && ["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+          event.preventDefault();
+          if (event.key === "Home") choose(0);
+          else if (event.key === "End") choose(games.length - 1);
+          else choose(selected + (event.key === "ArrowLeft" ? -1 : 1));
+        }
+      }}
+    >
+      <div className="collection-header">
+        <p className="eyebrow">
+          <span>SECRET COLLECTION</span> / PLAYSTATION 2
+        </p>
+        <span className="collection-count">
+          {String(selected + 1).padStart(2, "0")}{" "}
+          <span>/ {String(games.length).padStart(2, "0")}</span>
+        </span>
       </div>
-      <div className="disc-caption">
-        <p className="small-label">PLAYSTATION 2 · DISC 01 / 01</p>
-        <h2>Jak and Daxter</h2>
-        <p>The Precursor Legacy</p>
+      <h1 id="disc-selector-title">
+        {browsing ? "Pick something good." : "A little piece of nostalgia."}
+      </h1>
+      <div
+        className="cover-flow"
+        role="group"
+        aria-label="Game collection"
+        onPointerDown={(event) => {
+          if (!browsing || !event.isPrimary || event.button !== 0) return;
+          suppressClick.current = false;
+          swipe.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        }}
+        onPointerUp={(event) => {
+          const start = swipe.current;
+          swipe.current = null;
+          if (!start || start.id !== event.pointerId || !browsing) return;
+          const dx = event.clientX - start.x;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(event.clientY - start.y)) {
+            suppressClick.current = true;
+            choose(selected + (dx < 0 ? 1 : -1));
+          }
+        }}
+        onPointerCancel={() => {
+          swipe.current = null;
+        }}
+      >
+        <div className="collection-floor" aria-hidden="true" />
+        {games.map((item, index) => {
+          const half = Math.floor(games.length / 2);
+          const offset = ((index - selected + half + games.length) % games.length) - half;
+          return (
+            <button
+              key={item.id}
+              ref={(node) => {
+                cards.current[index] = node;
+              }}
+              type="button"
+              className={`cover-flow-card ${index === selected ? "is-selected" : ""}`}
+              style={
+                {
+                  "--offset": offset,
+                  "--side": Math.sign(offset),
+                  zIndex: games.length - Math.abs(offset),
+                } as CSSProperties
+              }
+              tabIndex={browsing && index === selected ? 0 : -1}
+              disabled={!browsing}
+              aria-label={index === selected ? `Open ${item.title} case` : `Select ${item.title}`}
+              aria-pressed={index === selected}
+              onClick={() => {
+                if (suppressClick.current) {
+                  suppressClick.current = false;
+                  return;
+                }
+                if (index === selected) open();
+                else choose(index);
+              }}
+            >
+              <GameCase game={item} />
+              <img
+                className="case-reflection"
+                src={item.front}
+                alt=""
+                draggable={false}
+                aria-hidden="true"
+              />
+            </button>
+          );
+        })}
+        {phase !== "browse" && (
+          <div className="disc-lift" key={game.id}>
+            {phase === "disc" ? (
+              <SpinningDisc game={game} />
+            ) : (
+              <div className="game-disc-stage disc-in-transit" aria-hidden="true">
+                <img src={game.disc} alt="" draggable={false} />
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flow-navigation" hidden={!browsing}>
+          <button
+            aria-label="Previous game"
+            onClick={() => choose(selected - 1)}
+            disabled={games.length < 2}
+          >
+            ‹
+          </button>
+          <button
+            aria-label="Next game"
+            onClick={() => choose(selected + 1)}
+            disabled={games.length < 2}
+          >
+            ›
+          </button>
+        </div>
       </div>
-      <p id="disc-instructions" className="disc-instructions">
-        Drag to spin · ← / → to turn · Enter to flick
+      <div className="disc-caption" aria-live="polite" aria-atomic="true">
+        <p className="small-label">
+          {game.year} <span>·</span> NAUGHTY DOG <span>·</span> DVD ROM
+        </p>
+        <h2>{game.title}</h2>
+        <p>{game.subtitle}</p>
+      </div>
+      <div className="collection-actions">
+        {browsing ? (
+          <>
+            <div className="collection-dots" aria-label="Choose a game">
+              {games.map((item, index) => (
+                <button
+                  key={item.id}
+                  aria-label={`Browse ${item.title}`}
+                  aria-pressed={index === selected}
+                  onClick={() => choose(index)}
+                >
+                  <span />
+                </button>
+              ))}
+            </div>
+            <div className="case-actions">
+              <button className="open-case-control" onClick={open}>
+                Open case <span aria-hidden="true">↗</span>
+              </button>
+              <button onClick={() => setFlipped(!flipped)}>
+                {flipped ? "View front" : "View back"} <span aria-hidden="true">↶</span>
+              </button>
+            </div>
+          </>
+        ) : (
+          <button className="return-to-collection" onClick={back}>
+            ← Return to collection
+          </button>
+        )}
+      </div>
+      <p id="disc-instructions" className="disc-instructions" role="status">
+        {browsing
+          ? "Swipe or use ← / → to browse · Select to open"
+          : phase === "opening"
+            ? "Opening case…"
+            : phase === "closing"
+              ? "Returning to the shelf…"
+              : "Drag to spin · ← / → to turn · Enter to flick"}
       </p>
+      <a className="collection-credit" href={game.source} target="_blank" rel="noreferrer">
+        Artwork from LaunchBox ↗
+      </a>
     </section>
   );
 }
