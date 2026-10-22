@@ -6,7 +6,10 @@ const FRICTION = 4200;
 const SAMPLE_WINDOW = 90;
 type Drag = {
   id: number;
-  angle: number | null;
+  point: { x: number; y: number };
+  radius: number;
+  mode: "pending" | "angular" | "horizontal" | "vertical";
+  distance: number;
   travel: number;
   started: number;
   moved: number;
@@ -71,26 +74,77 @@ export function SpinningDisc({ game }: { game: Game }) {
     };
   }, []);
 
-  const angleAt = (event: PointerEvent<HTMLButtonElement>) => {
+  const pointAt = (event: PointerEvent<HTMLButtonElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - bounds.left - bounds.width / 2;
-    const y = event.clientY - bounds.top - bounds.height / 2;
-    if (Math.hypot(x, y) < bounds.width * 0.09) return null;
-    return Math.atan2(y, x) * (180 / Math.PI);
+    return {
+      x: event.clientX - bounds.left - bounds.width / 2,
+      y: event.clientY - bounds.top - bounds.height / 2,
+    };
+  };
+
+  const move = (event: PointerEvent<HTMLButtonElement>) => {
+    const gesture = drag.current;
+    if (gesture?.id !== event.pointerId) return;
+    const point = pointAt(event);
+    const dx = point.x - gesture.point.x;
+    const dy = point.y - gesture.point.y;
+    const distance = Math.hypot(dx, dy);
+    if (distance < 0.5) return;
+    const radius = Math.hypot(gesture.point.x, gesture.point.y);
+    const cross = gesture.point.x * dy - gesture.point.y * dx;
+    if (gesture.mode === "pending") {
+      if (distance < 3) return;
+      // Circular rim gestures stay physical. Straight/radial swipes and center grabs
+      // use a forgiving jog-wheel gesture instead of falling into a dead zone.
+      const tangential = Math.abs(cross) / Math.max(1, radius * distance);
+      gesture.mode =
+        radius > gesture.radius * 0.45 && tangential > 0.4
+          ? "angular"
+          : Math.abs(dx) >= Math.abs(dy)
+            ? "horizontal"
+            : "vertical";
+    }
+    let delta: number;
+    if (gesture.mode === "angular") {
+      if (Math.min(radius, Math.hypot(point.x, point.y)) < gesture.radius * 0.3) {
+        delta = (cross / Math.pow(gesture.radius * 0.5, 2)) * (180 / Math.PI);
+      } else {
+        const angle = Math.atan2(point.y, point.x) - Math.atan2(gesture.point.y, gesture.point.x);
+        delta = ((angle * (180 / Math.PI) + 540) % 360) - 180;
+      }
+    } else {
+      delta = (gesture.mode === "horizontal" ? dx : dy) * (180 / (gesture.radius * 1.5));
+    }
+    gesture.point = point;
+    if (Math.abs(delta) < 0.01) return;
+    const now = performance.now();
+    const gap = now - gesture.moved;
+    if (gap >= 240) gesture.momentum = 0;
+    if (gap > SAMPLE_WINDOW) gesture.samples = [{ time: now - 40, travel: gesture.travel }];
+    gesture.moved = now;
+    gesture.distance += distance;
+    gesture.travel += delta;
+    gesture.samples.push({ time: now, travel: gesture.travel });
+    while (gesture.samples.length > 2 && gesture.samples[1].time < now - SAMPLE_WINDOW)
+      gesture.samples.shift();
+    rotation.current += delta;
+    paint();
   };
 
   const release = (event: PointerEvent<HTMLButtonElement>) => {
+    if (event.type === "pointerup") move(event);
     const gesture = drag.current;
     if (gesture?.id !== event.pointerId) return;
     const now = performance.now();
     const first = gesture.samples[0];
     const last = gesture.samples.at(-1)!;
     const flick =
-      event.type !== "pointercancel" && now - gesture.moved < 120 && Math.abs(gesture.travel) > 2;
+      event.type !== "pointercancel" && now - gesture.moved < 240 && gesture.distance > 3;
     // Add the new stroke to the momentum carried into this grab. Reverse strokes brake it.
     velocity.current = flick
       ? gesture.momentum * Math.exp(-(now - gesture.started) / FRICTION) +
-        (last.travel - first.travel) / Math.max(8, now - first.time)
+        ((last.travel - first.travel) / Math.max(8, last.time - first.time)) *
+          Math.exp(-Math.max(0, now - gesture.moved - 60) / 160)
       : 0;
     drag.current = null;
     event.currentTarget.removeAttribute("data-dragging");
@@ -115,8 +169,8 @@ export function SpinningDisc({ game }: { game: Game }) {
         aria-describedby="disc-instructions"
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0 || drag.current) return;
-          const angle = angleAt(event);
-          if (angle === null) return;
+          event.preventDefault();
+          const point = pointAt(event);
           cancelAnimationFrame(frame.current);
           const now = performance.now();
           event.currentTarget.focus({ preventScroll: true });
@@ -124,7 +178,10 @@ export function SpinningDisc({ game }: { game: Game }) {
           event.currentTarget.setAttribute("data-dragging", "true");
           drag.current = {
             id: event.pointerId,
-            angle,
+            point,
+            radius: event.currentTarget.getBoundingClientRect().width / 2,
+            mode: "pending",
+            distance: 0,
             travel: 0,
             started: now,
             moved: now,
@@ -133,29 +190,7 @@ export function SpinningDisc({ game }: { game: Game }) {
           };
           velocity.current = 0;
         }}
-        onPointerMove={(event) => {
-          const gesture = drag.current;
-          if (gesture?.id !== event.pointerId) return;
-          const angle = angleAt(event);
-          if (angle === null || gesture.angle === null) {
-            gesture.angle = angle;
-            gesture.samples = [{ time: performance.now(), travel: gesture.travel }];
-            return;
-          }
-          const now = performance.now();
-          const delta = ((angle - gesture.angle + 540) % 360) - 180;
-          gesture.angle = angle;
-          if (Math.abs(delta) < 0.01) return;
-          // A deliberate hold grabs the disc; quick re-grabs keep its stored momentum.
-          if (now - gesture.moved >= 120) gesture.momentum = 0;
-          gesture.moved = now;
-          gesture.travel += delta;
-          gesture.samples.push({ time: now, travel: gesture.travel });
-          while (gesture.samples.length > 2 && gesture.samples[1].time < now - SAMPLE_WINDOW)
-            gesture.samples.shift();
-          rotation.current += delta;
-          paint();
-        }}
+        onPointerMove={move}
         onPointerUp={release}
         onPointerCancel={release}
         onLostPointerCapture={() => {

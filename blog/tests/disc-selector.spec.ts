@@ -141,6 +141,67 @@ test("touch dragging works with pointer capture", async ({ page, context }) => {
 });
 
 for (const pointer of ["mouse", "touch"] as const) {
+  test(`${pointer} straight swipes work across the hub and outside the disc`, async ({
+    page,
+    context,
+  }) => {
+    await openDisc(page);
+    const now = new Date();
+    await page.clock.install({ time: now });
+    await page.clock.pauseAt(now);
+    const bounds = (await disc(page).boundingBox())!;
+    const cx = bounds.x + bounds.width / 2;
+    const cy = bounds.y + bounds.height / 2;
+    const size = bounds.width;
+    const session = await context.newCDPSession(page);
+    for (const [from, to] of [
+      [
+        [-0.35, 0],
+        [0.65, 0],
+      ],
+      [
+        [0, 0],
+        [0.25, 0],
+      ],
+      [
+        [0, -0.35],
+        [0, 0.35],
+      ],
+    ]) {
+      const start = { x: cx + from[0] * size, y: cy + from[1] * size };
+      if (pointer === "mouse") {
+        await page.mouse.move(start.x, start.y);
+        await page.mouse.down();
+      } else
+        await session.send("Input.dispatchTouchEvent", {
+          type: "touchStart",
+          touchPoints: [start],
+        });
+      // Hold first to isolate this stroke from the previous one.
+      await page.clock.runFor(260);
+      const before = await rotation(page);
+      for (let step = 1; step <= 4; step++) {
+        const p = {
+          x: start.x + ((to[0] - from[0]) * size * step) / 4,
+          y: start.y + ((to[1] - from[1]) * size * step) / 4,
+        };
+        await page.clock.runFor(20);
+        if (pointer === "mouse") await page.mouse.move(p.x, p.y);
+        else
+          await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [p] });
+      }
+      expect(await rotation(page)).toBeGreaterThan(before + 20);
+      // A natural pause while releasing should still produce a flick.
+      await page.clock.runFor(160);
+      if (pointer === "mouse") await page.mouse.up();
+      else await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      const released = await rotation(page);
+      await page.clock.runFor(120);
+      expect(await rotation(page)).toBeGreaterThan(released + 5);
+      await expect(disc(page)).not.toHaveAttribute("data-dragging");
+    }
+  });
+
   test(`${pointer} flicks accumulate momentum, reverse strokes brake, and holding stops`, async ({
     page,
     context,
