@@ -8,6 +8,7 @@ import {
 } from "react";
 import { games, type Game } from "./games";
 import { SpinningDisc } from "./spinning-disc";
+import { CaseInspector } from "./case-inspector";
 import "./disc-selector.css";
 
 export const DISC_CODE = [
@@ -38,6 +39,9 @@ function GameCase({ game }: { game: Game }) {
       <span className="case-spine">
         <img src={game.spine} alt="" draggable={false} />
       </span>
+      <span className="case-edge case-edge-top" />
+      <span className="case-edge case-edge-bottom" />
+      <span className="case-edge case-edge-right" />
       <span className="case-tray">
         <span className="case-tray-ring" />
         <img className="case-seated-disc" src={game.disc} alt="" draggable={false} />
@@ -62,7 +66,9 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
   const [selected, setSelected] = useState(0);
   const [phase, setPhase] = useState<Phase>("browse");
   const [flipped, setFlipped] = useState(false);
+  const [inspecting, setInspecting] = useState(false);
   const cards = useRef<(HTMLButtonElement | null)[]>([]);
+  const title = useRef<HTMLHeadingElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
@@ -73,6 +79,7 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
   useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => {
     if (phase === "browse") cards.current[selected]?.focus({ preventScroll: true });
+    else if (phase !== "disc") title.current?.focus({ preventScroll: true });
   }, [selected, phase]);
 
   const choose = (index: number) => {
@@ -88,6 +95,10 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
     if (!reduce()) timer.current = setTimeout(() => setPhase("disc"), 1500);
   };
   const back = () => {
+    if (inspecting) {
+      setInspecting(false);
+      return true;
+    }
     if (browsing) return false;
     clearTimeout(timer.current);
     setPhase(reduce() ? "browse" : "closing");
@@ -101,6 +112,7 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
       className={`disc-selector collection-${phase} ${flipped ? "case-is-flipped" : ""}`}
       aria-labelledby="disc-selector-title"
       onKeyDown={(event) => {
+        if (inspecting) return;
         if (["Escape", "Backspace"].includes(event.key) && !browsing) {
           event.preventDefault();
           event.stopPropagation();
@@ -122,7 +134,7 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
           <span>/ {String(games.length).padStart(2, "0")}</span>
         </span>
       </div>
-      <h1 id="disc-selector-title">
+      <h1 ref={title} tabIndex={-1} id="disc-selector-title">
         {browsing ? "Pick something good." : "A little piece of nostalgia."}
       </h1>
       <div
@@ -248,6 +260,9 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
               <button onClick={() => setFlipped(!flipped)}>
                 {flipped ? "View front" : "View back"} <span aria-hidden="true">↶</span>
               </button>
+              <button onClick={() => setInspecting(true)}>
+                Inspect artwork <span aria-hidden="true">⤢</span>
+              </button>
             </div>
           </>
         ) : (
@@ -268,6 +283,18 @@ export function DiscSelector({ ref }: { ref?: Ref<DiscSelectorHandle> }) {
       <a className="collection-credit" href={game.source} target="_blank" rel="noreferrer">
         Artwork from LaunchBox ↗
       </a>
+      {inspecting && (
+        <CaseInspector
+          game={game}
+          onClose={() => setInspecting(false)}
+          onOpen={() => {
+            setInspecting(false);
+            open();
+          }}
+        >
+          <GameCase game={game} />
+        </CaseInspector>
+      )}
     </section>
   );
 }

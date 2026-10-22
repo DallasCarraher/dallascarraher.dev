@@ -148,7 +148,7 @@ for (const pointer of ["mouse", "touch"] as const) {
     await openDisc(page);
     const now = new Date();
     await page.clock.install({ time: now });
-    await page.clock.pauseAt(now);
+    await page.clock.pauseAt(new Date(now.getTime() + 100));
     const bounds = (await disc(page).boundingBox())!;
     const cx = bounds.x + bounds.width / 2;
     const cy = bounds.y + bounds.height / 2;
@@ -209,7 +209,7 @@ for (const pointer of ["mouse", "touch"] as const) {
     await openDisc(page);
     const now = new Date();
     await page.clock.install({ time: now });
-    await page.clock.pauseAt(now);
+    await page.clock.pauseAt(new Date(now.getTime() + 100));
     const bounds = (await disc(page).boundingBox())!;
     const cx = bounds.x + bounds.width / 2;
     const cy = bounds.y + bounds.height / 2;
@@ -312,6 +312,81 @@ test("cover flow browses games, flips a case, and opens the selected disc", asyn
   await expect(page.getByRole("button", { name: "Open Jak 3 case", exact: true })).toBeFocused();
 });
 
+test("case inspector supports free rotation, roll, zoom, presets, and focus restoration", async ({
+  page,
+}) => {
+  await unlock(page);
+  const inspect = page.getByRole("button", { name: "Inspect artwork", exact: true });
+  await inspect.click();
+  const modal = page.getByRole("dialog", { name: "Jak and Daxter", exact: true });
+  await expect(modal).toBeVisible();
+  const surface = page.getByRole("button", { name: "Rotate Jak and Daxter case", exact: true });
+  await expect(surface).toBeFocused();
+  const transform = () => page.locator(".inspector-model").getAttribute("style");
+  const initial = await transform();
+  const bounds = (await surface.boundingBox())!;
+  const cx = bounds.x + bounds.width / 2;
+  const cy = bounds.y + bounds.height / 2;
+  await page.mouse.move(cx, cy);
+  await page.mouse.down();
+  await page.mouse.move(cx + 65, cy + 45, { steps: 8 });
+  await page.mouse.up();
+  expect(await transform()).not.toBe(initial);
+  const tilted = await transform();
+  await page.getByRole("button", { name: "Roll case right", exact: true }).click();
+  expect(await transform()).not.toBe(tilted);
+  await page.getByRole("slider", { name: "Case zoom", exact: true }).press("End");
+  await expect(page.locator(".inspector-model")).toHaveAttribute("style", /scale\(2.8\)/);
+  await modal.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(page.locator(".inspector-model")).toHaveAttribute("style", /matrix3d\(-1/);
+  await modal.getByRole("button", { name: "Reset view", exact: true }).click();
+  await expect(page.locator(".inspector-model")).toHaveAttribute(
+    "style",
+    /scale\(1\) matrix3d\(1,\s*0,\s*0,\s*0,\s*0,\s*1/,
+  );
+  await page.keyboard.press("Escape");
+  await expect(modal).toHaveCount(0);
+  await expect(inspect).toBeFocused();
+  await inspect.click();
+  await modal.getByRole("button", { name: "Open case", exact: false }).click();
+  await expect(disc(page)).toBeFocused();
+});
+
+test("case inspector pinch and twist gestures zoom and roll on touch", async ({
+  page,
+  context,
+}) => {
+  await unlock(page);
+  await page.getByRole("button", { name: "Inspect artwork", exact: true }).click();
+  const surface = page.getByRole("button", { name: "Rotate Jak and Daxter case", exact: true });
+  const bounds = (await surface.boundingBox())!;
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  const before = await page.locator(".inspector-model").getAttribute("style");
+  const session = await context.newCDPSession(page);
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [
+      { x: x - 35, y, id: 1 },
+      { x: x + 35, y, id: 2 },
+    ],
+  });
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchMove",
+    touchPoints: [
+      { x: x - 60, y: y - 20, id: 1 },
+      { x: x + 60, y: y + 20, id: 2 },
+    ],
+  });
+  await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  expect(await page.locator(".inspector-model").getAttribute("style")).not.toBe(before);
+  expect(
+    Number(await page.getByRole("slider", { name: "Case zoom" }).inputValue()),
+  ).toBeGreaterThan(1.5);
+  await page.getByRole("button", { name: "Close case inspector", exact: true }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
 test("swiping changes the selection without opening a case", async ({
   page,
   context,
@@ -373,7 +448,7 @@ test("mobile duck unlocks after five seconds and cancels an interrupted hold", a
   test.skip(!isMobile, "Touch shortcut is for mobile");
   const now = new Date();
   await page.clock.install({ time: now });
-  await page.clock.pauseAt(now);
+  await page.clock.pauseAt(new Date(now.getTime() + 100));
   const duck = page.getByRole("button", { name: "A little duck has something to say" });
   await expect(duck).toBeVisible();
   const bounds = (await duck.boundingBox())!;
