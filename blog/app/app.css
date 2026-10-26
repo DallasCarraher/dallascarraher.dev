@@ -805,24 +805,17 @@ progress::-moz-progress-bar {
     18px Arial,
     sans-serif;
 }
-.entry-eyebrow {
-  font-size: 14px;
-  color: #777;
-  letter-spacing: 0.1em;
-}
 .entry-choice h1 {
   color: #ddd;
   font-size: clamp(29px, 6vw, 38px);
   font-weight: 400;
-  margin: 12px 0 28px;
-}
-.entry-note {
-  margin: 28px 0 24px;
-  font-size: 15px;
-  color: #888;
+  margin: 0 0 32px;
 }
 .entry-choice button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   min-height: 52px;
   background: none;
@@ -849,6 +842,17 @@ progress::-moz-progress-bar {
   margin-top: 22px;
   color: #666;
   font-size: 12px;
+}
+.entry-mobile-note {
+  display: none;
+}
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .entry-desktop-note {
+    display: none;
+  }
+  .entry-mobile-note {
+    display: inline;
+  }
 }
 .replay-control {
   color: #888;
