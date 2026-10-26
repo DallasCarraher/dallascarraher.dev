@@ -299,20 +299,28 @@ export default function ConsoleShell() {
       {welcome && (
         <div className="entry-screen" role="dialog" aria-modal="true" aria-labelledby="entry-title">
           <div className="entry-choice">
-            <p className="entry-eyebrow">Welcome to</p>
             <h1 id="entry-title">Dallas Carraher</h1>
-            <p>A little nostalgia before you explore.</p>
-            <p className="entry-note">Choose sound before the startup begins.</p>
             <button autoFocus disabled={!ready || loading} onClick={() => void beginBoot(true)}>
+              <svg className="controller-cross" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m6 6 12 12M18 6 6 18" />
+              </svg>
               {loading ? "Loading startup…" : "Enter with sound"}
             </button>
             <button disabled={!ready} onClick={() => void beginBoot(false)}>
+              <svg className="controller-circle" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="7" />
+              </svg>
               Enter without sound
             </button>
             <span className="entry-status" role="status">
-              {loading
-                ? "Preparing audio. You can also enter without sound."
-                : "Headphones recommended"}
+              {loading ? (
+                "Preparing audio…"
+              ) : (
+                <>
+                  <span className="entry-desktop-note">Headphones recommended</span>
+                  <span className="entry-mobile-note">Turn off silent mode to hear sound</span>
+                </>
+              )}
             </span>
           </div>
         </div>
