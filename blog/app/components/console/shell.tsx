@@ -275,13 +275,15 @@ export default function ConsoleShell() {
               </Link>
             )}
           </div>
-          <button
-            className="replay-control"
-            onClick={() => void beginBoot(enabled)}
-            disabled={loading}
-          >
-            Replay intro
-          </button>
+          {home && (
+            <button
+              className="replay-control"
+              onClick={() => void beginBoot(enabled)}
+              disabled={loading}
+            >
+              Replay intro
+            </button>
+          )}
           <button
             className="sound-control"
             disabled={!ready}
