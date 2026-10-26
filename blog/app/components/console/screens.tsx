@@ -55,10 +55,6 @@ export function Projects() {
   return (
     <section className="content-page">
       <ScreenHeading title="Projects" />
-      <div className="storage-header">
-        <span>MEMORY CARD (01)</span>
-        <span>{projects.length.toString().padStart(2, "0")} SAVES</span>
-      </div>
       {projects.length ? (
         <div className="entry-list">
           {projects.map((project) => (
