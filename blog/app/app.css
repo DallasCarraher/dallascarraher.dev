@@ -238,26 +238,6 @@ kbd {
 .is-about .intro-copy {
   text-shadow: var(--glow);
 }
-@media (max-width: 760px) and (orientation: portrait) {
-  .is-about .console-stage {
-    padding-inline: 7%;
-  }
-  .is-content.is-about .scene {
-    width: min(100%, 380px);
-    height: 34svh;
-    min-height: 230px;
-    margin-top: 12px;
-  }
-}
-.eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: #888;
-  margin: 0 0 18px;
-}
-.eyebrow > span {
-  color: var(--blue);
-}
 .content-page > h1 {
   color: var(--amber);
   font-size: clamp(28px, 3vw, 38px);
@@ -322,30 +302,6 @@ kbd {
   line-height: 1.6;
   color: var(--blue);
   margin-bottom: 8px;
-}
-.screen-note {
-  margin-top: 36px;
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  font-size: 10px;
-  color: #94a2b6;
-}
-.screen-note span:first-child {
-  font: 8px monospace;
-  letter-spacing: 0.1em;
-  padding-top: 2px;
-}
-.storage-header {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 16px;
-  font: 8px monospace;
-  letter-spacing: 0.12em;
-  color: #8e9fb7;
 }
 .empty-state {
   padding: 30px 0 28px;
@@ -718,20 +674,42 @@ progress::-moz-progress-bar {
     display: none;
   }
   .is-content .scene {
-    height: 190px;
-    min-height: 150px;
+    height: clamp(110px, 22svh, 170px);
+    min-height: 0;
     width: 240px;
     margin: 0 auto;
   }
+  .is-content .console-stage {
+    justify-content: flex-start;
+    padding-inline: 7%;
+  }
   .is-content .screen {
-    padding: 10px 0 25px;
+    padding: 8px 0 24px;
+  }
+  .is-content .profile-card {
+    margin-bottom: 20px;
   }
   .content-page > h1 {
     font-size: 30px;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
   }
-  .screen-note {
-    margin-top: 28px;
+}
+@media (max-width: 760px), (max-height: 560px) and (orientation: landscape) {
+  .is-content .console-chrome {
+    height: 100svh;
+    height: 100dvh;
+    min-height: 0;
+  }
+  .is-content .console-stage {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .is-content .system-footer {
+    flex-shrink: 0;
+    background: var(--background);
+    position: relative;
+    z-index: 21;
   }
 }
 @media (pointer: coarse) {
