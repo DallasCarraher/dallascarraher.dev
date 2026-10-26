@@ -198,7 +198,7 @@ for (const viewport of [
       await page.goto(`/${path}`);
       const back = page.getByRole("link", { name: "Back", exact: true });
       await expect(back).toBeInViewport({ ratio: 1 });
-      await expect(page.getByRole("button", { name: "Replay intro" })).toBeInViewport({ ratio: 1 });
+      await expect(page.getByRole("button", { name: "Replay intro" })).toHaveCount(0);
       await expect(page.locator(".sound-control")).toBeInViewport({ ratio: 1 });
       const stage = page.locator(".console-stage");
       await stage.evaluate((el) => el.scrollTo(0, el.scrollHeight));
