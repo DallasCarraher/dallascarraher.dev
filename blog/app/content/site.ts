@@ -14,7 +14,7 @@ export const socialLinks = [
 export interface Project {
   title: string;
   description: string;
-  href: string;
+  href?: string;
 }
 export interface Post {
   title: string;
@@ -22,6 +22,11 @@ export interface Post {
   href: string;
 }
 export const projects: Project[] = [
+  {
+    title: "Project Signal",
+    description:
+      "A foundation for ideas without edges. One shared space, many ways to create, and a much bigger picture taking shape.",
+  },
   {
     title: "Minecraft Companion Bot",
     description:

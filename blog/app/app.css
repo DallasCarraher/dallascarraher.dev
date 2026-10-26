@@ -361,6 +361,29 @@ kbd {
   right: 16px;
   color: var(--blue);
 }
+.coming-soon {
+  margin-top: 14px;
+  color: var(--blue);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.coming-soon span::after {
+  content: "COMING SOON";
+  animation: decode-coming-soon 4s steps(1, end) infinite;
+}
+@keyframes decode-coming-soon {
+  0% { content: "X7#%9@ 4?0!"; }
+  5% { content: "C$8/2& %3#N"; }
+  10% { content: "CO!7@* S%4?"; }
+  15% { content: "COM#8+ SO!%"; }
+  20% { content: "COMI?@ SOO#"; }
+  25%, 85% { content: "COMING SOON"; }
+  90% { content: "C%M1NG S#0N"; }
+  95% { content: "#7&/9@ 4?0!"; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon span::after { animation: none; }
+}
 .contact-links {
   margin-top: 30px;
 }

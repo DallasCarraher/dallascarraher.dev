@@ -57,19 +57,23 @@ export function Projects() {
       <ScreenHeading title="Projects" />
       {projects.length ? (
         <div className="entry-list">
-          {projects.map((project) => (
-            <a
-              key={project.href}
-              className="entry-card"
-              href={project.href}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
-              <span aria-hidden="true">↗</span>
-            </a>
-          ))}
+          {projects.map((project) =>
+            project.href ? (
+              <a key={project.title} className="entry-card" href={project.href} target="_blank" rel="noreferrer">
+                <h2>{project.title}</h2>
+                <p>{project.description}</p>
+                <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <article key={project.title} className="entry-card">
+                <h2>{project.title}</h2>
+                <p>{project.description}</p>
+                <div className="coming-soon" aria-label="Coming soon">
+                  <span aria-hidden="true" />
+                </div>
+              </article>
+            ),
+          )}
         </div>
       ) : (
         <EmptyState icon="▤" title="No saved projects yet">
