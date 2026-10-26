@@ -32,6 +32,7 @@ export default function ConsoleShell() {
   const [bootId, setBootId] = useState(0);
   const entryRequest = useRef(0);
   const content = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const { enabled, ready, configure, toggle, play, stopCues } = useConsoleAudio(
     !booting && !welcome && !loading,
   );
@@ -131,6 +132,7 @@ export default function ConsoleShell() {
       : content.current?.querySelector<HTMLHeadingElement>("h1");
     target?.focus({ preventScroll: true });
     content.current?.scrollTo(0, 0);
+    stage.current?.scrollTo(0, 0);
   }, [location.pathname, home, booting, welcome]);
 
   useEffect(() => {
@@ -210,7 +212,7 @@ export default function ConsoleShell() {
       className={`console-shell ${home ? "is-home" : "is-content"} ${showingDiscs ? "is-disc-browser" : ""} ${location.pathname === "/about" ? "is-about" : ""}`}
     >
       <div className="console-chrome" inert={booting || welcome || loading}>
-        <div className="console-stage">
+        <div ref={stage} className="console-stage">
           {!showingDiscs && <Scene fixture={location.pathname === "/about"} />}
           <main
             ref={content}

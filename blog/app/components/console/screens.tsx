@@ -2,23 +2,8 @@ import type { ReactNode } from "react";
 import { posts, projects, socialLinks } from "../../content/site";
 import { useSpotify } from "../../hooks/useSpotify";
 
-export function ScreenHeading({
-  number,
-  label,
-  title,
-}: {
-  number: string;
-  label: string;
-  title: string;
-}) {
-  return (
-    <>
-      <div className="eyebrow">
-        <span>{number}</span> / {label}
-      </div>
-      <h1 tabIndex={-1}>{title}</h1>
-    </>
-  );
+export function ScreenHeading({ title }: { title: string }) {
+  return <h1 tabIndex={-1}>{title}</h1>;
 }
 function EmptyState({
   icon,
@@ -42,7 +27,7 @@ function EmptyState({
 export function About() {
   return (
     <section className="content-page">
-      <ScreenHeading number="01" label="PLAYER PROFILE" title="About me" />
+      <ScreenHeading title="About me" />
       <div className="profile-card">
         <div className="portrait-frame">
           <img
@@ -53,7 +38,6 @@ export function About() {
           />
         </div>
         <div>
-          <p className="small-label">PLAYER 01</p>
           <h2>Dallas Carraher</h2>
           <span className="profile-status">
             <i /> Online, somewhere.
@@ -64,17 +48,13 @@ export function About() {
       <p className="body-copy">
         A place for things I make, notes along the way, and whatever’s on repeat.
       </p>
-      <div className="screen-note">
-        <span>MEMORY SLOT 01</span>
-        <span>More to come.</span>
-      </div>
     </section>
   );
 }
 export function Projects() {
   return (
     <section className="content-page">
-      <ScreenHeading number="02" label="MEMORY CARD" title="Projects" />
+      <ScreenHeading title="Projects" />
       <div className="storage-header">
         <span>MEMORY CARD (01)</span>
         <span>{projects.length.toString().padStart(2, "0")} SAVES</span>
@@ -109,7 +89,7 @@ export function Projects() {
 export function Blog() {
   return (
     <section className="content-page">
-      <ScreenHeading number="03" label="SAVE JOURNAL" title="Blog" />
+      <ScreenHeading title="Blog" />
       {posts.length ? (
         <div className="entry-list">
           {posts.map((post) => (
@@ -125,10 +105,6 @@ export function Blog() {
           Notes, ideas, and things worth saving. Coming when they’re ready.
         </EmptyState>
       )}
-      <div className="screen-note">
-        <span>JOURNAL STATUS</span>
-        <span>Awaiting first entry.</span>
-      </div>
     </section>
   );
 }
@@ -144,7 +120,7 @@ export function NowPlaying() {
   const progress = Math.min(data?.progress_ms ?? 0, item?.duration_ms ?? 0);
   return (
     <section className="content-page">
-      <ScreenHeading number="04" label="AUDIO PLAYER" title="Now playing" />
+      <ScreenHeading title="Now playing" />
       <div className="player-status" role="status">
         {isLoading
           ? "CONNECTING TO SPOTIFY…"
@@ -220,17 +196,13 @@ export function NowPlaying() {
           The next track will appear here when I press play.
         </EmptyState>
       )}
-      <div className="screen-note">
-        <span>LIVE FROM SPOTIFY</span>
-        <span>Listening status only</span>
-      </div>
     </section>
   );
 }
 export function Contact() {
   return (
     <section className="content-page">
-      <ScreenHeading number="05" label="NETWORK" title="Stay connected" />
+      <ScreenHeading title="Stay connected" />
       <p className="body-copy">Find me on the other side.</p>
       <div className="contact-links">
         {socialLinks.map((link, index) => (
@@ -245,10 +217,6 @@ export function Contact() {
             </span>
           </a>
         ))}
-      </div>
-      <div className="screen-note">
-        <span>CONNECTION TYPE</span>
-        <span>Human to human.</span>
       </div>
     </section>
   );

@@ -178,3 +178,37 @@ test("landscape viewport keeps content within the page", async ({ page }) => {
   await page.getByRole("link", { name: "Back", exact: false }).click();
   await expect(page.getByRole("navigation")).toBeVisible();
 });
+
+for (const viewport of [
+  { width: 390, height: 664 },
+  { width: 320, height: 568 },
+  { width: 844, height: 390 },
+]) {
+  test(`subpage controls stay visible at ${viewport.width}×${viewport.height}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.route("**/api/spotify/token", (route) =>
+      route.fulfill({ json: { access_token: "test", expires_in: 3600 } }),
+    );
+    await page.route("**/api/spotify/currently-playing?*", (route) =>
+      route.fulfill({ json: null }),
+    );
+    for (const path of ["about", "projects", "blog", "now-playing", "contact"]) {
+      await page.goto(`/${path}`);
+      const back = page.getByRole("link", { name: "Back", exact: true });
+      await expect(back).toBeInViewport({ ratio: 1 });
+      await expect(page.getByRole("button", { name: "Replay intro" })).toBeInViewport({ ratio: 1 });
+      await expect(page.locator(".sound-control")).toBeInViewport({ ratio: 1 });
+      const stage = page.locator(".console-stage");
+      await stage.evaluate((el) => el.scrollTo(0, el.scrollHeight));
+      await expect(page.locator(".content-page > :last-child")).toBeInViewport({ ratio: 1 });
+      await expect(back).toBeInViewport({ ratio: 1 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+        true,
+      );
+    }
+    await page.getByRole("link", { name: "Back", exact: true }).click();
+    await expect(page.getByRole("navigation")).toBeVisible();
+  });
+}
